@@ -39,7 +39,7 @@ public enum Suit {
         return allSuits;
     }
 
-    public String getShortDescription() {
+    public String getShortName() {
         return shortName;
     }
 }
