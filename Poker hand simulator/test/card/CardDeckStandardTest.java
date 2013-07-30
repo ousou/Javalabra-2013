@@ -28,22 +28,24 @@ public class CardDeckStandardTest {
         assertEquals(52, deck.getNumberOfRemainingCards());
         assertFalse(deck.isEmpty());
     }
-    
+
     @Test
     public void testRetrieveCards() {
         ICardDeck deck = new CardDeckStandard();
         Card card = null;
         Card prevCard;
-        
+
         for (int i = 0; i < 52; i++) {
             prevCard = card;
             assertFalse(deck.isEmpty());
             card = deck.getCard();
             assertNotNull(card);
             assertNotSame(prevCard, card);
+            assertEquals(52 - i - 1, deck.getNumberOfRemainingCards());
         }
-        
+
         assertNull(deck.getCard());
-        assertTrue(deck.isEmpty());       
+        assertTrue(deck.isEmpty());
+        assertEquals(0, deck.getNumberOfRemainingCards());
     }
 }
