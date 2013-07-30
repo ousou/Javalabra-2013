@@ -33,7 +33,6 @@ public enum Rank {
     
     private String shortName;
     private int value;        
-    private static List<Rank> allRanks;
 
     private Rank(String shortName, int value) {
         this.shortName = shortName;
@@ -46,11 +45,7 @@ public enum Rank {
      * @return List of all ranks.
      */
     public static List<Rank> getAllRanks() {
-        if (allRanks == null) {
-            allRanks = new ArrayList<Rank>(Arrays.asList(values()));
-        }
-        
-        return allRanks;
+        return new ArrayList<Rank>(Arrays.asList(values()));
     }
 
     public String getShortName() {
