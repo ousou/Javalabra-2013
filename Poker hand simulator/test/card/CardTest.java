@@ -33,11 +33,11 @@ public class CardTest {
 
     @Test
     public void testCompareTo2() {
-        Card c1 = new Card(Suit.CLUB, Rank.ACE);
+        Card c1 = new Card(Suit.CLUB, Rank.SEVEN);
         Card c2 = new Card(Suit.CLUB, Rank.DEUCE);
 
-        assertEquals(-1, c1.compareTo(c2));
-        assertEquals(1, c2.compareTo(c1));
+        assertEquals(5, c1.compareTo(c2));
+        assertEquals(-5, c2.compareTo(c1));
     }
 
     @Test
