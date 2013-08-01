@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Represents a standard five card poker hand with cards from a 52 card deck.
+ * 
  * @author Sebastian Björkqvist
  */
 public class FiveCardPokerHand {

@@ -570,4 +570,175 @@ public class FiveCardPokerHandComparatorTest {
         
         assertTrue(comparator.compare(fullHouse1, fullHouse2) < 0);          
     }
+    
+    @Test
+    public void testFullHouseVsFullHouse2() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        fullHouse1.addCard(new Card(Suit.CLUB, Rank.SIX));
+        fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.SIX));
+        fullHouse1.addCard(new Card(Suit.SPADE, Rank.SIX));
+        fullHouse1.addCard(new Card(Suit.CLUB, Rank.KING));
+        fullHouse1.addCard(new Card(Suit.SPADE, Rank.KING));
+        
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        fullHouse2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        fullHouse2.addCard(new Card(Suit.SPADE, Rank.QUEEN));
+        fullHouse2.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        fullHouse2.addCard(new Card(Suit.HEART, Rank.TEN));
+        fullHouse2.addCard(new Card(Suit.CLUB, Rank.TEN));        
+        
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) > 0);          
+    }
+    
+    @Test
+    public void testFullHouseVsFullHouse3() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        fullHouse1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.ACE));
+        fullHouse1.addCard(new Card(Suit.SPADE, Rank.ACE));
+        fullHouse1.addCard(new Card(Suit.CLUB, Rank.DEUCE));
+        fullHouse1.addCard(new Card(Suit.SPADE, Rank.DEUCE));
+        
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        fullHouse2.addCard(new Card(Suit.HEART, Rank.KING));
+        fullHouse2.addCard(new Card(Suit.SPADE, Rank.KING));
+        fullHouse2.addCard(new Card(Suit.CLUB, Rank.KING));
+        fullHouse2.addCard(new Card(Suit.HEART, Rank.DEUCE));
+        fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.DEUCE));        
+        
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) < 0);          
+    }
+    
+    @Test
+    public void testFourOfAKindVsFourOfAKind() {
+        FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
+        fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.ACE));
+        fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.ACE));
+        fourOfAKind1.addCard(new Card(Suit.HEART, Rank.ACE));
+        fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.DEUCE));
+        
+        FiveCardPokerHand fourOfAKind2 = new FiveCardPokerHand();
+        fourOfAKind2.addCard(new Card(Suit.HEART, Rank.KING));
+        fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.KING));
+        fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.KING));
+        fourOfAKind2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.KING));        
+        
+        assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) < 0);          
+    }
+    
+    @Test
+    public void testFourOfAKindVsFourOfAKind2() {
+        FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
+        fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.SEVEN));
+        fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.SEVEN));
+        fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.SEVEN));
+        fourOfAKind1.addCard(new Card(Suit.HEART, Rank.SEVEN));
+        fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.DEUCE));
+        
+        FiveCardPokerHand fourOfAKind2 = new FiveCardPokerHand();
+        fourOfAKind2.addCard(new Card(Suit.HEART, Rank.SIX));
+        fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.SIX));
+        fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.SIX));
+        fourOfAKind2.addCard(new Card(Suit.HEART, Rank.ACE));
+        fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX));        
+        
+        assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) < 0);          
+    }
+    
+    @Test
+    public void testStraightFlushVsStraightFlush() {
+        FiveCardPokerHand straightFlush1 = new FiveCardPokerHand();
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.THREE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.FIVE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.FOUR));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.DEUCE));
+        
+        FiveCardPokerHand straightFlush2 = new FiveCardPokerHand();
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.SIX));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.SEVEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.EIGHT));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FIVE));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR));        
+        
+        assertTrue(comparator.compare(straightFlush1, straightFlush2) > 0);          
+    }
+    
+    @Test
+    public void testStraightFlushVsStraightFlush2() {
+        FiveCardPokerHand straightFlush1 = new FiveCardPokerHand();
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.SIX));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.THREE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.FIVE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.FOUR));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.DEUCE));
+        
+        FiveCardPokerHand straightFlush2 = new FiveCardPokerHand();
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.SIX));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.SEVEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.EIGHT));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FIVE));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR));        
+        
+        assertTrue(comparator.compare(straightFlush1, straightFlush2) > 0);          
+    }
+    
+    @Test
+    public void testStraightFlushVsStraightFlush3() {
+        FiveCardPokerHand straightFlush1 = new FiveCardPokerHand();
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.KING));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.JACK));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.TEN));
+        
+        FiveCardPokerHand straightFlush2 = new FiveCardPokerHand();
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.KING));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.JACK));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.TEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.NINE));        
+        
+        assertTrue(comparator.compare(straightFlush1, straightFlush2) < 0);          
+    }
+    
+    @Test
+    public void testStraightFlushVsStraightFlush4() {
+        FiveCardPokerHand straightFlush1 = new FiveCardPokerHand();
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.KING));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.JACK));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.TEN));
+        
+        FiveCardPokerHand straightFlush2 = new FiveCardPokerHand();
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.ACE));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.DEUCE));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FIVE));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.THREE));        
+        
+        assertTrue(comparator.compare(straightFlush1, straightFlush2) < 0);          
+    }
+    
+    @Test
+    public void testStraightFlushVsStraightFlushTie() {
+        FiveCardPokerHand straightFlush1 = new FiveCardPokerHand();
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.NINE));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.KING));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.JACK));
+        straightFlush1.addCard(new Card(Suit.CLUB, Rank.TEN));
+        
+        FiveCardPokerHand straightFlush2 = new FiveCardPokerHand();
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.KING));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.JACK));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.TEN));
+        straightFlush2.addCard(new Card(Suit.HEART, Rank.NINE));        
+        
+        assertTrue(comparator.compare(straightFlush1, straightFlush2) == 0);          
+    }
 }
