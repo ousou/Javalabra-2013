@@ -741,4 +741,52 @@ public class FiveCardPokerHandComparatorTest {
         
         assertTrue(comparator.compare(straightFlush1, straightFlush2) == 0);          
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCompareNonFullHands() {
+        FiveCardPokerHand hand1 = new FiveCardPokerHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.NINE));
+        hand1.addCard(new Card(Suit.CLUB, Rank.KING));
+        hand1.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        hand1.addCard(new Card(Suit.CLUB, Rank.JACK));
+        
+        FiveCardPokerHand hand2 = new FiveCardPokerHand();
+        hand2.addCard(new Card(Suit.HEART, Rank.KING));
+        hand2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        hand2.addCard(new Card(Suit.HEART, Rank.JACK));
+        hand2.addCard(new Card(Suit.HEART, Rank.TEN));
+        hand2.addCard(new Card(Suit.HEART, Rank.NINE));        
+        
+        comparator.compare(hand1, hand2);        
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCompareNonFullHands2() {
+        FiveCardPokerHand hand1 = new FiveCardPokerHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.NINE));
+        hand1.addCard(new Card(Suit.CLUB, Rank.KING));
+        hand1.addCard(new Card(Suit.CLUB, Rank.QUEEN));
+        hand1.addCard(new Card(Suit.CLUB, Rank.JACK));
+        hand1.addCard(new Card(Suit.HEART, Rank.JACK));        
+        
+        FiveCardPokerHand hand2 = new FiveCardPokerHand();
+        hand2.addCard(new Card(Suit.HEART, Rank.KING));
+        hand2.addCard(new Card(Suit.HEART, Rank.QUEEN));
+        hand2.addCard(new Card(Suit.HEART, Rank.TEN));
+        hand2.addCard(new Card(Suit.HEART, Rank.NINE));        
+        
+        comparator.compare(hand1, hand2);        
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCompareNonFullHands3() {
+        FiveCardPokerHand hand1 = new FiveCardPokerHand();       
+        
+        FiveCardPokerHand hand2 = new FiveCardPokerHand();
+        hand2.addCard(new Card(Suit.HEART, Rank.KING));
+        hand2.addCard(new Card(Suit.HEART, Rank.TEN));
+        hand2.addCard(new Card(Suit.HEART, Rank.NINE));        
+        
+        comparator.compare(hand1, hand2);        
+    }
 }
