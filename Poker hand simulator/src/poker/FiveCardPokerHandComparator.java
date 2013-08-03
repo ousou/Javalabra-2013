@@ -1,12 +1,12 @@
 package poker;
 
 import card.Card;
+import card.CardAce14Comparator;
 import card.Rank;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -240,8 +240,12 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * @param o2 Hand 2
      * @param handType hand Type
      * @return A negative value, positive or zero value if o1 is better, worse or equal to o2.
+     * @exception IllegalArgumentException if one of the hands doesn't have five cards.
      */
     private int compareHandsOfSameType(FiveCardPokerHand o1, FiveCardPokerHand o2, PokerHandType handType) {        
+        if (o1.getNumberOfCards() != 5 || o2.getNumberOfCards() != 5) {
+            throw new IllegalArgumentException("One of the hands doesn't have five cards!");
+        }
         List<Card> cards1 = o1.getCards();
         List<Card> cards2 = o2.getCards();
         Collections.sort(cards1);
@@ -253,17 +257,17 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             case PAIR:
                 return checkBetterPair(cards1, cards2);
             case TWO_PAIR:
-                throw new UnsupportedOperationException("Not done yet");
+                return checkBetterTwoPair(cards1, cards2);
             case THREE_OF_A_KIND:
-                throw new UnsupportedOperationException("Not done yet");                
+                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);                
             case STRAIGHT:
                 return checkBetterStraightOrStraightFlush(cards1, cards2);            
             case FLUSH:
                 return checkBetterFlushOrHighCard(cards1, cards2);    
             case FULL_HOUSE:
-                throw new UnsupportedOperationException("Not done yet");
+                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);   
             case FOUR_OF_A_KIND:
-                throw new UnsupportedOperationException("Not done yet");                
+                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);                  
             case STRAIGHT_FLUSH:
                 return checkBetterStraightOrStraightFlush(cards1, cards2);    
             default:
@@ -333,9 +337,72 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
         
         return 0;        
     }
-
+    /**
+     * Checks which of two pair hands are better.
+     * 
+     * @param cards1
+     * @param cards2
+     * @return
+     */
     private int checkBetterPair(List<Card> cards1, List<Card> cards2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cards1 = pairedHandSorter(cards1);
+        cards2 = pairedHandSorter(cards2);
+        
+        CardAce14Comparator ace14Comparator = new CardAce14Comparator();
+        
+        Card hand1PairCard = cards1.get(0);
+        Card hand2PairCard = cards2.get(0);
+        
+        if (hand1PairCard.getRank() != hand2PairCard.getRank()) {
+            return ace14Comparator.compare(hand1PairCard, hand2PairCard);
+        }
+        
+        for (int i = 2; i < 5; i++) {
+            Card hand1Card = cards1.get(i);
+            Card hand2Card = cards2.get(i);
+            if (hand1Card.getRank() != hand2Card.getRank()) {
+                return ace14Comparator.compare(hand1Card, hand2Card);                
+            }
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * Checks which of two two pair hands are better.
+     * 
+     * @param cards1
+     * @param cards2
+     * @return 
+     */
+    private int checkBetterTwoPair(List<Card> cards1, List<Card> cards2) {
+        cards1 = pairedHandSorter(cards1);
+        cards2 = pairedHandSorter(cards2);
+        
+        CardAce14Comparator ace14Comparator = new CardAce14Comparator();
+   
+        // The relevant cards are the first, third and fifth cards.
+        for (int i = 0; i < 5; i = i + 2) {
+            Card hand1Card = cards1.get(i);
+            Card hand2Card = cards2.get(i);
+            if (hand1Card.getRank() != hand2Card.getRank()) {
+                return ace14Comparator.compare(hand1Card, hand2Card);                
+            }
+        }
+        
+        return 0;
+    }    
+    
+    private int checkBetterThreeOfAKindFullHouseOrFourOfAKind(List<Card> cards1, List<Card> cards2) {
+        cards1 = pairedHandSorter(cards1);
+        cards2 = pairedHandSorter(cards2);
+        
+        /* Three of a kind, full house and four of a kind-hands can't tie 
+         * when using a 52 card deck, so we only need to compare the first 
+         * cards in the hands after they've been sorted correctly.
+         */
+        
+        return new CardAce14Comparator().compare(cards1.get(0), cards2.get(0));           
     }
     
     /**
@@ -356,18 +423,62 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      */
     private List<Card> pairedHandSorter(List<Card> cards) {
         List<Card> sorted = new ArrayList<Card>();
-        Map<Rank, Integer> occurencesOfRank = new EnumMap<Rank, Integer>(Rank.class);
-        Map<Integer, List<Rank>> ranksWithOccurence = new HashMap<Integer, List<Rank>>();
+        Map<Rank, List<Card>> occurencesOfRank = new EnumMap<Rank, List<Card>>(Rank.class);
         
         for (int i = 0; i < cards.size(); i++) {
-            Rank rank = cards.get(i).getRank();
-            if (occurencesOfRank.containsKey(rank)) {
-                occurencesOfRank.put(rank, occurencesOfRank.get(rank) + 1);
-            } else {
-                occurencesOfRank.put(rank, 1);
+            Card card = cards.get(i);            
+            Rank rank = card.getRank();
+            if (!occurencesOfRank.containsKey(rank)) {
+                occurencesOfRank.put(rank, new ArrayList<Card>());
+            }
+            occurencesOfRank.get(rank).add(card);
+        }
+        
+        List<List<Card>> listsOfCardsByRank = new ArrayList<List<Card>>();
+        listsOfCardsByRank.addAll(occurencesOfRank.values());
+        
+        Collections.sort(listsOfCardsByRank, new CardListComparator());
+        
+        for (List<Card> listOfCards : listsOfCardsByRank) {
+            for (Card card : listOfCards) {
+                sorted.add(card);
             }
         }
         
         return sorted;
+    }
+    
+    private static class CardListComparator implements Comparator<List<Card>> {
+
+        /**
+         * Sorts lists of cards.
+         * 
+         * This method assumes that the cards in each of the lists
+         * are of the same rank.
+         * 
+         * See method pairedHandSorter for details.
+         * 
+         * @param o1
+         * @param o2
+         * @return 
+         */
+        @Override
+        public int compare(List<Card> o1, List<Card> o2) {            
+            int list1Size = o1.size();
+            int list2Size = o2.size();            
+            
+            if (list1Size != list2Size) {
+                return list2Size - list1Size;
+            }
+            if (list1Size == 0 && list2Size == 0) {
+                return 0;
+            }
+            
+            Card list1Card = o1.get(0);
+            Card list2Card = o2.get(0);
+            
+            return new CardAce14Comparator().compare(list1Card, list2Card);
+        }
+        
     }
 }
