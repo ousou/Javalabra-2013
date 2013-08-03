@@ -40,7 +40,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(highCard.addCard(new Card(Suit.DIAMOND, Rank.TEN)));
         assertTrue(highCard.addCard(new Card(Suit.SPADE, Rank.NINE)));
 
-        assertEquals(0, comparator.determineHandType(highCard));
+        assertEquals(PokerHandType.HIGH_CARD, comparator.determineHandType(highCard));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(pair1.addCard(new Card(Suit.DIAMOND, Rank.KING)));
         assertTrue(pair1.addCard(new Card(Suit.SPADE, Rank.NINE)));
 
-        assertEquals(1, comparator.determineHandType(pair1));
+        assertEquals(PokerHandType.PAIR, comparator.determineHandType(pair1));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(twoPair2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
         assertTrue(twoPair2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
         
-        assertEquals(2, comparator.determineHandType(twoPair2));
+        assertEquals(PokerHandType.TWO_PAIR, comparator.determineHandType(twoPair2));
     }
     
     @Test
@@ -76,7 +76,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(threeOfAKind2.addCard(new Card(Suit.CLUB, Rank.EIGHT)));        
         assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));        
         
-        assertEquals(3, comparator.determineHandType(threeOfAKind2));        
+        assertEquals(PokerHandType.THREE_OF_A_KIND, comparator.determineHandType(threeOfAKind2));        
     }
     
     @Test
@@ -88,7 +88,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straight1.addCard(new Card(Suit.DIAMOND, Rank.DEUCE)));
         assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.THREE)));
         
-        assertEquals(4, comparator.determineHandType(straight1));
+        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight1));
     }
     
     @Test
@@ -100,7 +100,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straight2.addCard(new Card(Suit.DIAMOND, Rank.NINE)));
         assertTrue(straight2.addCard(new Card(Suit.CLUB, Rank.EIGHT)));        
         
-        assertEquals(4, comparator.determineHandType(straight2));        
+        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight2));        
     }
     
     @Test
@@ -112,7 +112,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straight1.addCard(new Card(Suit.DIAMOND, Rank.JACK)));
         assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.TEN)));    
         
-        assertEquals(4, comparator.determineHandType(straight1));        
+        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight1));        
     }
     
     @Test
@@ -124,7 +124,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(flush1.addCard(new Card(Suit.CLUB, Rank.QUEEN)));
         assertTrue(flush1.addCard(new Card(Suit.CLUB, Rank.KING)));
         
-        assertEquals(5, comparator.determineHandType(flush1));
+        assertEquals(PokerHandType.FLUSH, comparator.determineHandType(flush1));
     }
     
     @Test
@@ -136,7 +136,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.SIX)));
         assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.SIX)));
         
-        assertEquals(6, comparator.determineHandType(fullHouse1));
+        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse1));
     }
     
     @Test
@@ -148,7 +148,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.TEN)));
         assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.TEN)));         
         
-        assertEquals(6, comparator.determineHandType(fullHouse2));        
+        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));        
     }
     
     @Test
@@ -160,7 +160,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.TEN)));
         assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));  
         
-        assertEquals(6, comparator.determineHandType(fullHouse2));          
+        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));          
     }
     
     @Test
@@ -172,7 +172,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fourOfAKind1.addCard(new Card(Suit.HEART, Rank.SEVEN)));
         assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.DEUCE)));    
         
-        assertEquals(7, comparator.determineHandType(fourOfAKind1));
+        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind1));
     }
     
     @Test
@@ -184,7 +184,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fourOfAKind2.addCard(new Card(Suit.HEART, Rank.ACE)));
         assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));           
         
-        assertEquals(7, comparator.determineHandType(fourOfAKind2));        
+        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
     }
     
     @Test
@@ -196,7 +196,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.SIX)));
         assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));  
         
-        assertEquals(7, comparator.determineHandType(fourOfAKind2));        
+        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
     }
     
     @Test
@@ -208,7 +208,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straightFlush1.addCard(new Card(Suit.CLUB, Rank.JACK)));
         assertTrue(straightFlush1.addCard(new Card(Suit.CLUB, Rank.TEN)));
         
-        assertEquals(8, comparator.determineHandType(straightFlush1));
+        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush1));
     }
     
     @Test
@@ -220,7 +220,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR)));
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.THREE)));                
         
-        assertEquals(8, comparator.determineHandType(straightFlush2));        
+        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
     }
     
     @Test
@@ -232,7 +232,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR)));
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.SIX)));                
         
-        assertEquals(8, comparator.determineHandType(straightFlush2));        
+        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
     }
     
     @Test
@@ -347,11 +347,11 @@ public class FiveCardPokerHandComparatorTest {
 
 
         FiveCardPokerHand highCard2 = new FiveCardPokerHand();
-        assertTrue(highCard.addCard(new Card(Suit.CLUB, Rank.KING)));
-        assertTrue(highCard.addCard(new Card(Suit.SPADE, Rank.QUEEN)));
-        assertTrue(highCard.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
-        assertTrue(highCard.addCard(new Card(Suit.CLUB, Rank.THREE)));
-        assertTrue(highCard.addCard(new Card(Suit.CLUB, Rank.NINE)));
+        assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.KING)));
+        assertTrue(highCard2.addCard(new Card(Suit.SPADE, Rank.QUEEN)));
+        assertTrue(highCard2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.NINE)));
 
         assertTrue(comparator.compare(highCard, highCard2) < 0);
     }
@@ -662,6 +662,25 @@ public class FiveCardPokerHandComparatorTest {
     }
 
     @Test
+    public void testStraightVsStraight5() {
+        FiveCardPokerHand straight1 = new FiveCardPokerHand();
+        assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.ACE)));
+        assertTrue(straight1.addCard(new Card(Suit.CLUB, Rank.KING)));
+        assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.QUEEN)));
+        assertTrue(straight1.addCard(new Card(Suit.DIAMOND, Rank.JACK)));
+        assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.TEN)));
+
+        FiveCardPokerHand straight2 = new FiveCardPokerHand();
+        assertTrue(straight2.addCard(new Card(Suit.DIAMOND, Rank.KING)));
+        assertTrue(straight2.addCard(new Card(Suit.SPADE, Rank.JACK)));
+        assertTrue(straight2.addCard(new Card(Suit.CLUB, Rank.TEN)));
+        assertTrue(straight2.addCard(new Card(Suit.DIAMOND, Rank.QUEEN)));
+        assertTrue(straight2.addCard(new Card(Suit.CLUB, Rank.NINE)));
+
+        assertTrue(comparator.compare(straight1, straight2) < 0);
+    }
+
+    @Test
     public void testStraightVsStraightTie() {
         FiveCardPokerHand straight1 = new FiveCardPokerHand();
         assertTrue(straight1.addCard(new Card(Suit.CLUB, Rank.SIX)));
@@ -694,7 +713,7 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(flush2.addCard(new Card(Suit.DIAMOND, Rank.FIVE)));
         assertTrue(flush2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
         assertTrue(flush2.addCard(new Card(Suit.DIAMOND, Rank.FOUR)));
-        assertTrue(flush2.addCard(new Card(Suit.DIAMOND, Rank.DEUCE)));
+        assertTrue(flush2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));
 
         assertTrue(comparator.compare(flush1, flush2) > 0);
     }

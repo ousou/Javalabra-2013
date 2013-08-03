@@ -47,11 +47,11 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             return -1;
         }
         
-        int hand1Type = determineHandType(o1);
-        int hand2Type = determineHandType(o2);
+        PokerHandType hand1Type = determineHandType(o1);
+        PokerHandType hand2Type = determineHandType(o2);
         
         if (hand1Type != hand2Type) {
-            return hand2Type - hand1Type;
+            return hand2Type.getValue() - hand1Type.getValue();
         }
         
         return compareHandsOfSameType(o1, o2, hand1Type);        
@@ -77,7 +77,7 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * @throws IllegalArgumentException if the hand doesn't have five cards in
      * it.
      */
-    protected int determineHandType(FiveCardPokerHand hand) {
+    protected PokerHandType determineHandType(FiveCardPokerHand hand) {
         if (hand.getNumberOfCards() != 5) {
             throw new IllegalArgumentException("The hand must have exactly five cards");
         }
@@ -91,37 +91,37 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
         boolean isStraight = isStraight(cards);
 
         if (isFlush && isStraight) {
-            return 8;
+            return PokerHandType.STRAIGHT_FLUSH;
         }
         if (isFlush) {
-            return 5;
+            return PokerHandType.FLUSH;
         }
         if (isStraight) {
-            return 4;
+            return PokerHandType.STRAIGHT;
         }
         List<Integer> cardsOfSameRankList = cardsOfSameRankList(cards);
 
         // Four of a kind
         if (cardsOfSameRankList.get(0) == 4) {
-            return 7;
+            return PokerHandType.FOUR_OF_A_KIND;
         }
         // Full house and three of a kind
         if (cardsOfSameRankList.get(0) == 3) {
             if (cardsOfSameRankList.get(1) == 2) {
-                return 6;
+                return PokerHandType.FULL_HOUSE;
             }
-            return 3;
+            return PokerHandType.THREE_OF_A_KIND;
         }
         // Two pair and pair
         if (cardsOfSameRankList.get(0) == 2) {
             if (cardsOfSameRankList.get(1) == 2) {
-                return 2;
+                return PokerHandType.TWO_PAIR;
             }
-            return 1;
+            return PokerHandType.PAIR;
         }
 
         // If none of the above are true, the hand is a high card hand.
-        return 0;
+        return PokerHandType.HIGH_CARD;
     }
 
     /**
@@ -238,31 +238,60 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * @param handType hand Type
      * @return A negative value, positive or zero value if o1 is better, worse or equal to o2.
      */
-    private int compareHandsOfSameType(FiveCardPokerHand o1, FiveCardPokerHand o2, int handType) {        
+    private int compareHandsOfSameType(FiveCardPokerHand o1, FiveCardPokerHand o2, PokerHandType handType) {        
         List<Card> cards1 = o1.getCards();
         List<Card> cards2 = o2.getCards();
         Collections.sort(cards1);
         Collections.sort(cards2);
         
-        if (handType == 5) {
-            return checkBetterFlush(cards1, cards2);
+        switch (handType) {
+            case HIGH_CARD:
+                return checkBetterFlushOrHighCard(cards1, cards2);
+            case PAIR:
+                throw new UnsupportedOperationException("Not done yet");
+            case TWO_PAIR:
+                throw new UnsupportedOperationException("Not done yet");
+            case THREE_OF_A_KIND:
+                throw new UnsupportedOperationException("Not done yet");                
+            case STRAIGHT:
+                return checkBetterStraightOrStraightFlush(cards1, cards2);            
+            case FLUSH:
+                return checkBetterFlushOrHighCard(cards1, cards2);    
+            case FULL_HOUSE:
+                throw new UnsupportedOperationException("Not done yet");
+            case FOUR_OF_A_KIND:
+                throw new UnsupportedOperationException("Not done yet");                
+            case STRAIGHT_FLUSH:
+                return checkBetterStraightOrStraightFlush(cards1, cards2);    
+            default:
+                throw new RuntimeException("invalid handType");
         }
         
-        if (handType == 4 || handType == 8) {
-            
-        }
-        
-        return 0;
     }
 
     /**
      * Checks which of two flushes are better.
+     * 
+     * Assumes that the cards are sorted.
+     * 
      * @param cards1
      * @param cards2
      * @return 
      */
-    private int checkBetterFlush(List<Card> cards1, List<Card> cards2) {
-        for (int i = 4; i >= 0; i++) {
+    private int checkBetterFlushOrHighCard(List<Card> cards1, List<Card> cards2) {
+        /* If one hand contains an ace and the other one doesn't,
+         * the hand with an ace wins.
+         */
+        Rank hand1RankOfFirstCard = cards1.get(0).getRank();
+        Rank hand2RankOfFirstCard = cards2.get(0).getRank();        
+        if (hand1RankOfFirstCard == Rank.ACE && hand2RankOfFirstCard != Rank.ACE) {
+            return -1;
+        }
+        if (hand1RankOfFirstCard != Rank.ACE && hand2RankOfFirstCard == Rank.ACE) {
+            return 1;
+        }        
+        // Checking which hand has the higher cards.
+        for (int i = cards1.size() - 1; i >= 0; i--) {
             int hand1CardValue = cards1.get(i).getRank().getValue();
             int hand2CardValue = cards2.get(i).getRank().getValue();
             int difference = hand2CardValue - hand1CardValue;
@@ -271,5 +300,34 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             }
         }
         return 0;
+    }
+    /**
+     * Checks which of two straights or straight flushes are better.
+     * 
+     * Assumes that the cards are sorted.
+     * 
+     * @param cards1
+     * @param cards2
+     * @return
+     */
+    private int checkBetterStraightOrStraightFlush(List<Card> cards1, List<Card> cards2) {
+        int hand1LastCardValue = cards1.get(4).getRank().getValue();
+        int hand2LastCardValue = cards2.get(4).getRank().getValue(); 
+        int difference = hand2LastCardValue - hand1LastCardValue;
+        
+        if (difference != 0) {
+            return difference;
+        }
+        /* If the last card is a king, we might have two straights:
+         * 9-T-J-Q-K or A-T-J-Q-K, so we need to check which we have.
+         * 
+         * Here ofcourse the straight with the ace is better, so the hand
+         * that has the LOWER valued first card wins.
+         */
+        if (hand1LastCardValue == 13) {
+            return cards1.get(0).getRank().getValue() - cards2.get(0).getRank().getValue();
+        }
+        
+        return 0;        
     }
 }
