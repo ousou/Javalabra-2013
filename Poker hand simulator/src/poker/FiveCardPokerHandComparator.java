@@ -5,7 +5,10 @@ import card.Rank;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -248,7 +251,7 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             case HIGH_CARD:
                 return checkBetterFlushOrHighCard(cards1, cards2);
             case PAIR:
-                throw new UnsupportedOperationException("Not done yet");
+                return checkBetterPair(cards1, cards2);
             case TWO_PAIR:
                 throw new UnsupportedOperationException("Not done yet");
             case THREE_OF_A_KIND:
@@ -326,8 +329,45 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
          */
         if (hand1LastCardValue == 13) {
             return cards1.get(0).getRank().getValue() - cards2.get(0).getRank().getValue();
-        }
+        }   
         
         return 0;        
+    }
+
+    private int checkBetterPair(List<Card> cards1, List<Card> cards2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * Sorts paired or x of a kind-type hands in a particular order.
+     * 
+     * Used for determining which of two hands of the same hand type is better.
+     * The method puts the most relevant cards first, i.e. if a hand contains 
+     * three cards of the same rank, it puts them first on the list.
+     * 
+     * Examples:
+     * The list {A, K, K, 2, 2} becomes {K, K, 2, 2, A}
+     * The list {3, 3, 7, 8, 3} becomes {3, 3, 3, 8, 7}
+     * The list {2, 2, K, 2, 2} becomes {2, 2, 2, 2, K}
+     * The list {4, 5, Q, K, K} becomes {K, K, Q, 5, 4}
+     * 
+     * @param cards List of cards.
+     * @return A sorted list.
+     */
+    private List<Card> pairedHandSorter(List<Card> cards) {
+        List<Card> sorted = new ArrayList<Card>();
+        Map<Rank, Integer> occurencesOfRank = new EnumMap<Rank, Integer>(Rank.class);
+        Map<Integer, List<Rank>> ranksWithOccurence = new HashMap<Integer, List<Rank>>();
+        
+        for (int i = 0; i < cards.size(); i++) {
+            Rank rank = cards.get(i).getRank();
+            if (occurencesOfRank.containsKey(rank)) {
+                occurencesOfRank.put(rank, occurencesOfRank.get(rank) + 1);
+            } else {
+                occurencesOfRank.put(rank, 1);
+            }
+        }
+        
+        return sorted;
     }
 }
