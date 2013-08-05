@@ -1,6 +1,7 @@
 package poker;
 
 import card.Card;
+import java.util.List;
 
 /**
  * Represents a starting hand in Texas hold'em.
@@ -24,10 +25,30 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
      * 
      * @param card1 First card
      * @param card2 Second card
+     * @throws IllegalArgumentException if one of the cards are null, or
+     * if they are the same card.
      */
     public TexasHoldemStartingHand(Card card1, Card card2) {
         super(2, 0, 2);
         addCard(card1);
         addCard(card2);
     }
+    
+    /**
+     * Creates a new Texas hold'em hand with two cards.
+     * 
+     * @param card1 First card
+     * @param card2 Second card
+     * @throws IllegalArgumentException if one of the cards are null, or
+     * if they are the same card.
+     * @throws IllegalArgumentException if the list size isn't 2.
+     */
+    public TexasHoldemStartingHand(List<Card> cardsToAdd) {
+        this();
+        if (cardsToAdd == null || cardsToAdd.size() != 2) {
+            throw new IllegalArgumentException("List of cards must be of size 2");
+        }
+        addCard(cardsToAdd.get(0));
+        addCard(cardsToAdd.get(1));
+    }    
 }

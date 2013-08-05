@@ -19,6 +19,23 @@ public class FiveCardPokerHand {
     public FiveCardPokerHand() {
         cards = new ArrayList<Card>();
     }
+    
+    /**
+     * Creates a hand and adds the given cards to the hand.
+     * 
+     * @param cardsToAdd 
+     * @throws IllegalArgumentException if list is null
+     * @throws IllegalArgumentException if the same card is in the list more than once.
+     */
+    public FiveCardPokerHand(List<Card> cardsToAdd) {
+        this();
+        if (cardsToAdd == null) {
+            throw new IllegalArgumentException("List is null");
+        }
+        for (Card card : cardsToAdd) {
+            addCard(card);
+        }
+    }
 
     /**
      * Adds a card to the hand.
@@ -33,7 +50,7 @@ public class FiveCardPokerHand {
      * @throws IllegalArgumentException if the hand already contains the card to
      * be added.
      */
-    public boolean addCard(Card card) {
+    public final boolean addCard(Card card) {
         if (card == null) {
             return false;
         }

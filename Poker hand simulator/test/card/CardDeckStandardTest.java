@@ -1,5 +1,7 @@
 package card;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,5 +49,25 @@ public class CardDeckStandardTest {
         assertNull(deck.getCard());
         assertTrue(deck.isEmpty());
         assertEquals(0, deck.getNumberOfRemainingCards());
+    }
+    
+    @Test
+    public void testCreateDeckWithCardsRemoved() {
+        List<Card> removedCards = new ArrayList<Card>();
+        removedCards.add(new Card(Suit.CLUB, Rank.ACE));
+        removedCards.add(new Card(Suit.HEART, Rank.ACE));
+        removedCards.add(new Card(Suit.SPADE, Rank.THREE));
+        removedCards.add(new Card(Suit.DIAMOND, Rank.FIVE));        
+        ICardDeck deck = new CardDeckStandard(removedCards);
+        
+        while (!deck.isEmpty()) {
+            Card retrieved = deck.getCard();
+            assertFalse(removedCards.contains(retrieved));
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateDeckWithNullCardsRemoved() {
+        ICardDeck deck = new CardDeckStandard(null);        
     }
 }

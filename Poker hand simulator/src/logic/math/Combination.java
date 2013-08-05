@@ -1,10 +1,7 @@
-package logic;
+package logic.math;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +15,8 @@ public class Combination {
     /**
      * Creates all possible combinations with k elements from the
      * given list.
+     * 
+     * The method does not alter the original list.
      * 
      * @param <T> Given object
      * @param list Given list

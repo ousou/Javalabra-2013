@@ -406,6 +406,8 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * The method puts the most relevant cards first, i.e. if a hand contains 
      * three cards of the same rank, it puts them first on the list.
      * 
+     * The method assumes that the list of cards is sorted by rank.
+     * 
      * Examples:
      * The list {A, K, K, 2, 2} becomes {K, K, 2, 2, A}
      * The list {3, 3, 7, 8, 3} becomes {3, 3, 3, 8, 7}
@@ -413,14 +415,14 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * The list {4, 5, Q, K, K} becomes {K, K, Q, 5, 4}
      * 
      * @param cards List of cards.
-     * @return A sorted list.
+     * @return A list sorted by relevance.
      */
     private List<Card> pairedHandSorter(List<Card> cards) {
         List<Card> sorted = new ArrayList<Card>();
         Map<Rank, List<Card>> occurencesOfRank = new EnumMap<Rank, List<Card>>(Rank.class);
-        
+
         for (int i = 0; i < cards.size(); i++) {
-            Card card = cards.get(i);            
+            Card card = cards.get(i);
             Rank rank = card.getRank();
             if (!occurencesOfRank.containsKey(rank)) {
                 occurencesOfRank.put(rank, new ArrayList<Card>());
@@ -428,7 +430,7 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             occurencesOfRank.get(rank).add(card);
         }
         
-        List<List<Card>> listsOfCardsByRank = new ArrayList<List<Card>>();
+        List<List<Card>> listsOfCardsByRank = new ArrayList<List<Card>>();       
         listsOfCardsByRank.addAll(occurencesOfRank.values());
         
         Collections.sort(listsOfCardsByRank, new CardListComparator());
