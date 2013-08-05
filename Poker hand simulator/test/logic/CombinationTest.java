@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -40,12 +41,18 @@ public class CombinationTest {
 
     @Test
     public void testCountNumberOfCombinationsKEqualsN() {
-        assertEquals(1, Combination.countNumberOfCombinations(3, 3));
+        for (int i = 0; i < 10; i++) {
+            int listSize = new Random().nextInt(21);
+            assertEquals(1, Combination.countNumberOfCombinations(listSize, listSize));
+        }
     }
 
     @Test
     public void testCountNumberOfCombinationsKZero() {
-        assertEquals(1, Combination.countNumberOfCombinations(3, 0));
+        for (int i = 0; i < 10; i++) {
+            int listSize = new Random().nextInt(21);
+            assertEquals(1, Combination.countNumberOfCombinations(listSize, 0));
+        }
     }
 
     @Test
@@ -66,6 +73,16 @@ public class CombinationTest {
     @Test
     public void testCountNumberOfCombinationsFourFromNine() {
         assertEquals(126, Combination.countNumberOfCombinations(9, 4));
+    }
+
+    @Test
+    public void testCountNumberOfCombinationsSymmetry() {
+        int n = new Random().nextInt(11);
+        int k = 0;
+        while (k < n / 2) {
+            assertEquals(Combination.countNumberOfCombinations(n, k), Combination.countNumberOfCombinations(n, n - k));
+            k++;
+        }
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -211,10 +228,17 @@ public class CombinationTest {
 
             for (int j = 1; j <= listSize; j++) {
                 integers.add(j);
-            } 
+            }
             Collection<Collection<Integer>> result = Combination.takeKFromList(integers, k);
-            
-            assertEquals(Combination.countNumberOfCombinations(listSize, k), result.size());
+
+            // Checking that we have the right amount of combinations
+            assertEquals("Wrong amount of combinations with n = " + listSize + " and k = " + k, Combination.countNumberOfCombinations(listSize, k), result.size());
+
+            // Checking that all combinations are of the right size            
+            for (Collection<Integer> combination : result) {
+                assertEquals("Combination " + combination + " is of wrong size when n = "
+                        + listSize + " and k = " + k, k, combination.size());
+            }
         }
     }
 }

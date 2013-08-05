@@ -2,9 +2,6 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Class containing method for selecting n elements from a list.
@@ -51,9 +48,7 @@ public class Combination {
         if (n < 0 || k < 0 || k > n) {
             return 0;
         }
-        if (k == 0 || k == n) {
-            return 1;
-        }
+        
         long numerator = 1;
         
         for (int i = n; i > n - k; i--) {
