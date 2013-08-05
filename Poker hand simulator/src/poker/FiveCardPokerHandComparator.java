@@ -62,16 +62,10 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
 
     /**
      * Determines the hand type of a five card poker hand.
-     *
-     * Returns an integer representing the type of the hand, according to the
-     * list below:
-     *
-     * High card - 0, Pair - 1, Two pair - 2, Three of a kind - 3, Straight - 4
-     * Flush - 5, Full house - 6, Four of a kind - 7, Straight flush - 8
-     *
-     * A higher hand type number means a better hand, so with this method we can
-     * immediately determine which of two hands is better if they aren't of the
-     * same type.
+     * 
+     * All hand types have a value representing their strength. A higher value
+     * means a better hand, so using this method we can immediately determine 
+     * which of two hands is better if they aren't of the same type.
      *
      * The method has modifier protected so that the test class can access it.
      *
@@ -456,7 +450,7 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
          * This method assumes that the cards in each of the lists
          * are of the same rank.
          * 
-         * See method pairedHandSorter for details.
+         * @see pairedHandSorter for details.
          * 
          * @param o1
          * @param o2
