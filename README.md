@@ -1,6 +1,9 @@
 Javalabra-2013
 ==============
 
-Poker hand simulator
+Project: Poker hand simulator
 
-Testing first commit
+The program can pit two or more poker hands against each other with given
+board cards, and simulate the result multiple times.
+
+See project Wiki for more details.
