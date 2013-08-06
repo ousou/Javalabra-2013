@@ -93,7 +93,12 @@ public class PokerHandSimulator {
         this.removedCards = new ArrayList<Card>();
         addCardsFromStartingHandsToRemovedCards();
     }
-
+    
+    /**
+     * Verifies that the starting hands and the board do not have overlapping cards.
+     * 
+     * @throws IllegalArgumentException if overlapping cards are found.
+     */
     private void verifyHandsAndBoard() {
         Set<Card> allCards = new HashSet<Card>();
         int totalNumberOfCards = 0;
