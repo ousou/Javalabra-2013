@@ -26,6 +26,7 @@ public class PokerHandSimulator {
 
     private final List<AbstractStartingHand> startingHands;
     private final FiveCardBoard board;
+    private List<Card> removedCards;
     private boolean useBoard;
     private int numberOfSimulations;
 
@@ -45,6 +46,7 @@ public class PokerHandSimulator {
         this.useBoard = true;
         for (int i = 0; i < boardCards.size(); i++) {
             board.addCard(boardCards.get(i));
+            removedCards.add(boardCards.get(i));
         }
         verifyHandsAndBoard();
     }
@@ -87,7 +89,9 @@ public class PokerHandSimulator {
         }
         this.board = new FiveCardBoard();
         this.numberOfSimulations = numberOfSimulations;
-        this.startingHands = startingHands;
+        this.startingHands = new ArrayList<AbstractStartingHand>(startingHands);
+        this.removedCards = new ArrayList<Card>();
+        addCardsFromStartingHandsToRemovedCards();
     }
 
     private void verifyHandsAndBoard() {
@@ -123,7 +127,7 @@ public class PokerHandSimulator {
      */
     protected Set<Integer> simulateHand() {
         Set<Integer> indicesOfWinningHands = new HashSet<Integer>();        
-        ICardDeck deck = new CardDeckStandard();
+        ICardDeck deck = new CardDeckStandard(removedCards);
 
         if (!useBoard) {
             throw new UnsupportedOperationException("Non-community card games not supported yet.");
@@ -172,5 +176,20 @@ public class PokerHandSimulator {
         }        
         
         return indicesOfWinningHands;
+    }
+
+    /**
+     * Adding all cards from the starting hands to the list removedCards.
+     * 
+     * This is done so that we don't retrieve these cards from the deck
+     * when simulating.
+     * 
+     * If any board cards are given as input, they are added to this list too
+     * in the constructor.
+     */
+    private void addCardsFromStartingHandsToRemovedCards() {
+        for (AbstractStartingHand hand : startingHands) {
+            removedCards.addAll(hand.getCards());
+        }
     }
 }
