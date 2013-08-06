@@ -77,12 +77,11 @@ public class FiveCardPokerHandTest {
         assertFalse(cards.contains(c6));
     }
     
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testAddNullCard() {
         FiveCardPokerHand hand = new FiveCardPokerHand();
         
-        assertFalse(hand.addCard(null));
-        assertEquals(0, hand.getNumberOfCards());
+        hand.addCard(null);
     }
     
     @Test(expected = IllegalArgumentException.class)

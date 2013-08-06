@@ -3,11 +3,17 @@ package logic.simulator;
 import card.Card;
 import card.CardDeckStandard;
 import card.ICardDeck;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
+import poker.FiveCardPokerHand;
+import poker.FiveCardPokerHandComparator;
 
 /**
  * Simulates the result when pitting poker hands against each other.
@@ -55,13 +61,13 @@ public class PokerHandSimulator {
      * @throws IllegalArgumentException if numberOfSimulations isn't positive
      * @throws IllegalArgumentException if there are less than two
      * startingHands.
-     * @throws IllegalArgumentException if hands or the board have overlapping cards,
-     * or if some of the starting hands aren't full.
+     * @throws IllegalArgumentException if hands or the board have overlapping
+     * cards, or if some of the starting hands aren't full.
      */
     public PokerHandSimulator(List<AbstractStartingHand> startingHands, boolean useBoard, int numberOfSimulations) {
         this(startingHands, numberOfSimulations);
         this.useBoard = useBoard;
-        verifyHandsAndBoard();        
+        verifyHandsAndBoard();
     }
 
     /**
@@ -80,14 +86,14 @@ public class PokerHandSimulator {
             throw new IllegalArgumentException("There must be atleast two starting hands.");
         }
         this.board = new FiveCardBoard();
-        this.numberOfSimulations = numberOfSimulations;        
+        this.numberOfSimulations = numberOfSimulations;
         this.startingHands = startingHands;
-    }   
+    }
 
     private void verifyHandsAndBoard() {
         Set<Card> allCards = new HashSet<Card>();
         int totalNumberOfCards = 0;
-        
+
         for (AbstractStartingHand hand : startingHands) {
             if (!hand.isFull()) {
                 throw new IllegalArgumentException("One of the hands isn't full!");
@@ -99,11 +105,11 @@ public class PokerHandSimulator {
         List<Card> boardCards = board.getCards();
         allCards.addAll(boardCards);
         totalNumberOfCards += boardCards.size();
-        
+
         if (allCards.size() != totalNumberOfCards) {
             throw new IllegalArgumentException("The hands and the board have overlapping cards!");
         }
-    }    
+    }
 
     /**
      * Simulates a hand.
@@ -115,7 +121,8 @@ public class PokerHandSimulator {
      *
      * @return the indices of the winning hand(s) in the startingHands-list.
      */
-    private List<Integer> simulateHand() {
+    protected Set<Integer> simulateHand() {
+        Set<Integer> indicesOfWinningHands = new HashSet<Integer>();        
         ICardDeck deck = new CardDeckStandard();
 
         if (!useBoard) {
@@ -128,10 +135,42 @@ public class PokerHandSimulator {
             }
             board.addCard(nextCard);
         }
-        
-        
 
+        Map<FiveCardPokerHand, List<Integer>> bestFiveCardHandForThisIndex = new HashMap<FiveCardPokerHand, List<Integer>>();
+        FiveCardPokerHandComparator handComparator = new FiveCardPokerHandComparator();
+        List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
+        
+        /* Creating all possible hands for each starting hand, and determining the best possible
+         * hand each starting hand can form.
+         */
+        for (int i = 0; i < startingHands.size(); i++) {
+            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), board);
+            List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
+            Collections.sort(allHands, handComparator);
+            if (!allHands.isEmpty()) {
+                FiveCardPokerHand bestHand = allHands.get(0);
+                allBestHands.add(bestHand);
+                if (!bestFiveCardHandForThisIndex.containsKey(bestHand)) {
+                    bestFiveCardHandForThisIndex.put(bestHand, new ArrayList<Integer>());
+                }
+                bestFiveCardHandForThisIndex.get(bestHand).add(i);
+            }
+        }
+        
+        // Determining the winning hand by sorting the list of best hands.
+        Collections.sort(allBestHands, handComparator);
 
-        return null;
+        // Adding the index or indices of the best hand to the set.
+        indicesOfWinningHands.addAll(bestFiveCardHandForThisIndex.get(allBestHands.get(0)));
+        
+        // Checking if other hands tie with this hand, and if so, we add them to the indexset also
+        int nextIndex = 1;
+        while (nextIndex < allBestHands.size() && 
+                handComparator.compare(allBestHands.get(0), allBestHands.get(nextIndex)) == 0) {
+            indicesOfWinningHands.addAll(bestFiveCardHandForThisIndex.get(allBestHands.get(nextIndex)));
+            nextIndex++;
+        }        
+        
+        return indicesOfWinningHands;
     }
 }

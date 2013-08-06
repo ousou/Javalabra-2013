@@ -46,6 +46,12 @@ public class PossibleHandsCreator {
         this.board = board;
     }
     
+    /**
+     * Creates all the possible five card poker hands with the given
+     * starting hand and board.
+     * 
+     * @return List of five card poker hands.
+     */
     public List<FiveCardPokerHand> createAllPossibleHands() {
         int minimumAmountOfCardsUsed = startingHand.getMinimumAmountOfCardsUsed();
         int maximumAmountOfCardsUsed = startingHand.getMaximumAmountOfCardsUsed();

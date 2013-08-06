@@ -59,10 +59,12 @@ public class CardDeckStandardTest {
         removedCards.add(new Card(Suit.SPADE, Rank.THREE));
         removedCards.add(new Card(Suit.DIAMOND, Rank.FIVE));        
         ICardDeck deck = new CardDeckStandard(removedCards);
+        assertEquals(48, deck.getNumberOfRemainingCards());
         
         while (!deck.isEmpty()) {
             Card retrieved = deck.getCard();
-            assertFalse(removedCards.contains(retrieved));
+            assertFalse("A removed card is present in the deck", 
+                    removedCards.contains(retrieved));
         }
     }
     
