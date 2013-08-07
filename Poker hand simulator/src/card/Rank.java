@@ -48,10 +48,20 @@ public enum Rank {
         return new ArrayList<Rank>(Arrays.asList(values()));
     }
 
+    /**
+     * Gets the one-character representation of the rank.
+     * 
+     * @return String with length 1.
+     */
     public String getShortName() {
         return shortName;
     }
 
+    /**
+     * Gets the value of the rank.
+     * 
+     * @return An integer representing the value of the rank.
+     */
     public int getValue() {
         return value;
     }

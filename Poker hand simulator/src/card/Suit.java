@@ -33,6 +33,11 @@ public enum Suit {
         return new ArrayList<Suit>(Arrays.asList(values()));
     }
 
+    /**
+     * Gets the one-character representation of the suit.
+     * 
+     * @return A String of length 1.
+     */
     public String getShortName() {
         return shortName;
     }
