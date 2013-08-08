@@ -21,11 +21,14 @@ import poker.FiveCardPokerHandComparator;
  * The class supports only community card games at the moment.
  *
  * @author Sebastian Björkqvist
+ * 
+ * @todo Modify constructor to have PokerGameType as an argument,
+ * and check that all the hands are of this type.
  */
 public class PokerHandSimulator {
 
     private final List<AbstractStartingHand> startingHands;
-    private final FiveCardBoard board;
+    private FiveCardBoard board;
     private List<Card> removedCards;
     private boolean useBoard;
     private int numberOfSimulations;
