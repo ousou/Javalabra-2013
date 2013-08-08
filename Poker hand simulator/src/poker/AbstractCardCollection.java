@@ -120,5 +120,9 @@ public abstract class AbstractCardCollection {
         }
         return true;
     }
-    
+ 
+    @Override
+    public String toString() {
+        return cards.toString();
+    }
 }

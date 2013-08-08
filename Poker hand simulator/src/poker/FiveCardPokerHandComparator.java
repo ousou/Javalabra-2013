@@ -32,6 +32,8 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
      * The comparator compares only full five card hands. If one of the hands
      * isn't full and the other is, the full hand automatically wins. If both
      * hands have less than five cards, the method returns 0.
+     * 
+     * The hands can have overlapping cards.
      *
      * @param o1 FiveCardPokerHand
      * @param o2 FiveCardPokerHand
@@ -249,19 +251,19 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             case HIGH_CARD:
                 return checkBetterFlushOrHighCard(cards1, cards2);
             case PAIR:
-                return checkBetterPair(cards1, cards2);
+                return checkBetterPairedHand(cards1, cards2);
             case TWO_PAIR:
-                return checkBetterTwoPair(cards1, cards2);
+                return checkBetterPairedHand(cards1, cards2);
             case THREE_OF_A_KIND:
-                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);                
+                return checkBetterPairedHand(cards1, cards2);                
             case STRAIGHT:
                 return checkBetterStraightOrStraightFlush(cards1, cards2);            
             case FLUSH:
                 return checkBetterFlushOrHighCard(cards1, cards2);    
             case FULL_HOUSE:
-                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);   
+                return checkBetterPairedHand(cards1, cards2);   
             case FOUR_OF_A_KIND:
-                return checkBetterThreeOfAKindFullHouseOrFourOfAKind(cards1, cards2);                  
+                return checkBetterPairedHand(cards1, cards2);                  
             case STRAIGHT_FLUSH:
                 return checkBetterStraightOrStraightFlush(cards1, cards2);    
             default:
@@ -387,16 +389,25 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
         return 0;
     }    
     
-    private int checkBetterThreeOfAKindFullHouseOrFourOfAKind(List<Card> cards1, List<Card> cards2) {
+    private int checkBetterPairedHand(List<Card> cards1, List<Card> cards2) {
         cards1 = pairedHandSorter(cards1);
-        cards2 = pairedHandSorter(cards2);
+        cards2 = pairedHandSorter(cards2);        
         
-        /* Three of a kind, full house and four of a kind-hands can't tie 
-         * when using a 52 card deck, so we only need to compare the first 
-         * cards in the hands after they've been sorted correctly.
+        CardAce14Comparator ace14Comparator = new CardAce14Comparator();        
+
+        /* Since pairedHandSorter sorts the cards of a paired hand
+         * by relevance, we can just loop through the cards to determine the winner.
          */
         
-        return new CardAce14Comparator().compare(cards1.get(0), cards2.get(0));           
+        for (int i = 0; i < 5; i++) {
+            Card hand1Card = cards1.get(i);
+            Card hand2Card = cards2.get(i);
+            if (hand1Card.getRank() != hand2Card.getRank()) {
+                return ace14Comparator.compare(hand1Card, hand2Card);                
+            }      
+        }
+        
+        return 0;
     }
     
     /**

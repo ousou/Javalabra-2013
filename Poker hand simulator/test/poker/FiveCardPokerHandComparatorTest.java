@@ -1,6 +1,8 @@
 package poker;
 
 import card.Card;
+import card.CardDeckStandard;
+import card.ICardDeck;
 import card.Rank;
 import card.Suit;
 import java.util.ArrayList;
@@ -240,7 +242,10 @@ public class FiveCardPokerHandComparatorTest {
         List<FiveCardPokerHand> hands = new ArrayList<FiveCardPokerHand>();
         List<FiveCardPokerHand> expectedOrder = new ArrayList<FiveCardPokerHand>();
 
-        // Some hands have overlapping cards, but it doesn't matter while testing
+        /* Some hands have overlapping cards, but this is allowed, since
+         * this comparator also works for community card games where
+         * hands can have overlapping cards.
+         */
 
         FiveCardPokerHand highCard = new FiveCardPokerHand();
         assertTrue(highCard.addCard(new Card(Suit.SPADE, Rank.ACE)));
@@ -586,6 +591,63 @@ public class FiveCardPokerHandComparatorTest {
     }
 
     @Test
+    public void testThreeOfAKindVsThreeOfAKind3() {
+        FiveCardPokerHand threeOfAKind1 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.KING)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.NINE)));
+
+        FiveCardPokerHand threeOfAKind2 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.KING)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.ACE)));
+
+        assertTrue(comparator.compare(threeOfAKind1, threeOfAKind2) > 0);
+    }
+
+    @Test
+    public void testThreeOfAKindVsThreeOfAKind4() {
+        FiveCardPokerHand threeOfAKind1 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.QUEEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.CLUB, Rank.SEVEN)));        
+
+        FiveCardPokerHand threeOfAKind2 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.TEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.NINE)));
+
+        assertTrue(comparator.compare(threeOfAKind1, threeOfAKind2) < 0);
+    }
+
+    @Test
+    public void testThreeOfAKindVsThreeOfAKindTie() {
+        FiveCardPokerHand threeOfAKind1 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.QUEEN)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(threeOfAKind1.addCard(new Card(Suit.CLUB, Rank.SEVEN)));        
+
+        FiveCardPokerHand threeOfAKind2 = new FiveCardPokerHand();
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(threeOfAKind2.addCard(new Card(Suit.SPADE, Rank.QUEEN)));
+
+        assertTrue(comparator.compare(threeOfAKind1, threeOfAKind2) == 0);
+    }
+
+    @Test
     public void testStraightVsStraight() {
         FiveCardPokerHand straight1 = new FiveCardPokerHand();
         assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.QUEEN)));
@@ -833,6 +895,82 @@ public class FiveCardPokerHandComparatorTest {
     }
 
     @Test
+    public void testFullHouseVsFullHouse4() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.ACE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.DEUCE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.DEUCE)));
+
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.SPADE, Rank.THREE)));
+
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) > 0);
+    }
+
+    @Test
+    public void testFullHouseVsFullHouse5() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.KING)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.KING)));
+
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.SPADE, Rank.THREE)));
+
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) > 0);
+    }
+
+    @Test
+    public void testFullHouseVsFullHouse6() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.KING)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.KING)));
+
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.FIVE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.FIVE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.SPADE, Rank.THREE)));
+
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) < 0);
+    }
+
+    @Test
+    public void testFullHouseVsFullHouseTie() {
+        FiveCardPokerHand fullHouse1 = new FiveCardPokerHand();
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.THREE)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.KING)));
+        assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.KING)));
+
+        FiveCardPokerHand fullHouse2 = new FiveCardPokerHand();
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.KING)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.KING)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.THREE)));
+        assertTrue(fullHouse2.addCard(new Card(Suit.SPADE, Rank.THREE)));
+
+        assertTrue(comparator.compare(fullHouse1, fullHouse2) == 0);
+    }
+
+    @Test
     public void testFourOfAKindVsFourOfAKind() {
         FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
         assertTrue(fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.ACE)));
@@ -868,6 +1006,63 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));
 
         assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) < 0);
+    }
+
+    @Test
+    public void testFourOfAKindVsFourOfAKind3() {
+        FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.HEART, Rank.SEVEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.DEUCE)));
+
+        FiveCardPokerHand fourOfAKind2 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.SEVEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.HEART, Rank.SEVEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.ACE)));
+
+        assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) > 0);
+    }
+
+    @Test
+    public void testFourOfAKindVsFourOfAKind4() {
+        FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.TEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+
+        FiveCardPokerHand fourOfAKind2 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.ACE)));
+
+        assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) < 0);
+    }
+
+    @Test
+    public void testFourOfAKindVsFourOfAKindTie() {
+        FiveCardPokerHand fourOfAKind1 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.TEN)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fourOfAKind1.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+
+        FiveCardPokerHand fourOfAKind2 = new FiveCardPokerHand();
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.TEN)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.HEART, Rank.ACE)));
+        assertTrue(fourOfAKind2.addCard(new Card(Suit.SPADE, Rank.ACE)));
+
+        assertTrue(comparator.compare(fourOfAKind1, fourOfAKind2) == 0);
     }
 
     @Test
@@ -963,6 +1158,20 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.NINE)));
 
         assertTrue(comparator.compare(straightFlush1, straightFlush2) == 0);
+    }
+    
+    @Test
+    public void testRandomHandAgainstItself() {
+        for (int i = 0; i < 10000; i++) {
+            ICardDeck deck = new CardDeckStandard();
+            FiveCardPokerHand randomHand = new FiveCardPokerHand();
+            for (int j = 0; j < 5; j++) {
+                assertTrue(randomHand.addCard(deck.getCard()));
+            }
+        
+            assertEquals("Hand " + randomHand + " doesn't tie with itself"
+                    ,0, comparator.compare(randomHand, randomHand));
+        }
     }
 
     @Test

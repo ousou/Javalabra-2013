@@ -4,7 +4,7 @@ package poker;
  *
  * @author Sebastian Björkqvist
  * 
- * @todo Modify this to accept a PokerGameType, and make this not abstract.
+ * @todo Modify this to accept a PokerGameType.
  */
 public abstract class AbstractStartingHand extends AbstractCardCollection {
     
