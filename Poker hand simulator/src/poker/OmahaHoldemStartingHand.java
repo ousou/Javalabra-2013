@@ -17,7 +17,7 @@ public class OmahaHoldemStartingHand extends AbstractStartingHand {
      * Creates a new Omaha hold'em-hand.
      */
     public OmahaHoldemStartingHand() {
-        super(4, 2, 2);
+        super(4, 2, 2, PokerGameType.OMAHA);
     }
 
     /**

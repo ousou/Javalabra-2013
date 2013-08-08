@@ -14,6 +14,7 @@ import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
 import poker.FiveCardPokerHandComparator;
+import poker.PokerGameType;
 
 /**
  * Simulates the result when pitting poker hands against each other.
@@ -30,8 +31,8 @@ public class PokerHandSimulator {
     private final List<AbstractStartingHand> startingHands;
     private FiveCardBoard board;
     private List<Card> removedCards;
-    private boolean useBoard;
     private int numberOfSimulations;
+    private PokerGameType gameType;
 
     /**
      * Creates a new hand simulator with the given starting hands and board
@@ -46,7 +47,6 @@ public class PokerHandSimulator {
      */
     public PokerHandSimulator(List<AbstractStartingHand> startingHands, List<Card> boardCards, int numberOfSimulations) {
         this(startingHands, numberOfSimulations);
-        this.useBoard = true;
         for (int i = 0; i < boardCards.size(); i++) {
             board.addCard(boardCards.get(i));
             removedCards.add(boardCards.get(i));
@@ -57,11 +57,10 @@ public class PokerHandSimulator {
     /**
      * Creates a new hand simulator without any board cards.
      *
-     * If useBoard is true, a board is present in the game. If false, there is
-     * no board, i.e. the game is not a community card game.
-     *
+     * The board will be used in the simulation if the given starting hands
+     * have a game type with uses community cards.
+     * 
      * @param startingHands List of starting hands
-     * @param useBoard If true, game is a community card game.
      * @param numberOfSimulations Number of simulations.
      * @throws IllegalArgumentException if numberOfSimulations isn't positive
      * @throws IllegalArgumentException if there are less than two
@@ -69,21 +68,7 @@ public class PokerHandSimulator {
      * @throws IllegalArgumentException if hands or the board have overlapping
      * cards, or if some of the starting hands aren't full.
      */
-    public PokerHandSimulator(List<AbstractStartingHand> startingHands, boolean useBoard, int numberOfSimulations) {
-        this(startingHands, numberOfSimulations);
-        this.useBoard = useBoard;
-        verifyHandsAndBoard();
-    }
-
-    /**
-     * Private constructor.
-     *
-     * Used to avoid copy-pasting.
-     *
-     * @param startingHands
-     * @param numberOfSimulations
-     */
-    private PokerHandSimulator(List<AbstractStartingHand> startingHands, int numberOfSimulations) {
+    public PokerHandSimulator(List<AbstractStartingHand> startingHands, int numberOfSimulations) {
         if (numberOfSimulations < 1) {
             throw new IllegalArgumentException("Number of simulations must be positive!");
         }
@@ -95,8 +80,9 @@ public class PokerHandSimulator {
         this.startingHands = new ArrayList<AbstractStartingHand>(startingHands);
         this.removedCards = new ArrayList<Card>();
         addCardsFromStartingHandsToRemovedCards();
+        verifyHandsAndBoard();
     }
-    
+
     /**
      * Verifies that the starting hands and the board do not have overlapping cards.
      * 
@@ -106,9 +92,13 @@ public class PokerHandSimulator {
         Set<Card> allCards = new HashSet<Card>();
         int totalNumberOfCards = 0;
 
+        gameType = startingHands.get(0).getGameType();
         for (AbstractStartingHand hand : startingHands) {
             if (!hand.isFull()) {
                 throw new IllegalArgumentException("One of the hands isn't full!");
+            }
+            if (gameType != hand.getGameType()) {
+                throw new IllegalArgumentException("Starting hands do not have the same game type");
             }
             List<Card> cards = hand.getCards();
             allCards.addAll(cards);
@@ -137,7 +127,7 @@ public class PokerHandSimulator {
         Set<Integer> indicesOfWinningHands = new HashSet<Integer>();        
         ICardDeck deck = new CardDeckStandard(removedCards);
 
-        if (!useBoard) {
+        if (!gameType.isCommunityCardGame()) {
             throw new UnsupportedOperationException("Non-community card games not supported yet.");
         }
         while (!board.isFull()) {

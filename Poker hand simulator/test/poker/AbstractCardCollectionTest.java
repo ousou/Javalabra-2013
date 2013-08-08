@@ -26,6 +26,16 @@ public class AbstractCardCollectionTest {
     public static void tearDownClass() {
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateAbstractCardCollectionWithNonPositiveMaxAmount() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(0);        
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateAbstractCardCollectionWithNonPositiveMaxAmount2() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(-1);        
+    }
+            
     @Test
     public void testAddCard() {
         AbstractCardCollection collection = new AbstractCardCollectionImpl(2);
@@ -83,7 +93,7 @@ public class AbstractCardCollectionTest {
         
         String toString = collection.toString();
         
-        if (!toString.equals(expected1) || toString.equals(expected2)) {
+        if (!toString.equals(expected1) && !toString.equals(expected2)) {
             fail("toString method doesn't work correctly");
         }
     }

@@ -17,7 +17,7 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
      * Creates a new Texas hold'em-hand without any cards.
      */
     public TexasHoldemStartingHand() {
-        super(2, 0, 2);
+        super(2, 0, 2, PokerGameType.TEXAS);
     }
     
     /**
@@ -29,7 +29,7 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
      * if they are the same card.
      */
     public TexasHoldemStartingHand(Card card1, Card card2) {
-        super(2, 0, 2);
+        this();
         addCard(card1);
         addCard(card2);
     }

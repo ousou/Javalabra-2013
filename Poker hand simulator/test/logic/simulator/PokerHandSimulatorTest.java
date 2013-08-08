@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import poker.AbstractStartingHand;
+import poker.OmahaHoldemStartingHand;
 import poker.TexasHoldemStartingHand;
 
 /**
@@ -31,7 +32,7 @@ public class PokerHandSimulatorTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testPokerHandSimulatorNonPositiveAmountOfSimulations() {
+    public void testNonPositiveAmountOfSimulations() {
         AbstractStartingHand winner = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
         AbstractStartingHand loser = new TexasHoldemStartingHand(new Card(Suit.SPADE, Rank.DEUCE), new Card(Suit.HEART, Rank.SEVEN));
         
@@ -39,21 +40,37 @@ public class PokerHandSimulatorTest {
         startingHands.add(winner);
         startingHands.add(loser);
         
-        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, true, 0);
+        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, 0);
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testPokerHandSimulatorOnlyOneStartingHand() {
+    public void testOnlyOneStartingHand() {
         AbstractStartingHand winner = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
         
         List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>(); 
         startingHands.add(winner);
         
-        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, true, 1);
+        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, 1);
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testPokerHandSimulatorStartingHandsHaveOverlappingCards() {
+    public void testStartingHandsHaveDifferentPokerGameTypes() {
+        AbstractStartingHand texas = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
+        AbstractStartingHand omaha = new OmahaHoldemStartingHand();
+        omaha.addCard(new Card(Suit.DIAMOND, Rank.THREE));
+        omaha.addCard(new Card(Suit.SPADE, Rank.THREE));
+        omaha.addCard(new Card(Suit.CLUB, Rank.SEVEN));
+        omaha.addCard(new Card(Suit.DIAMOND, Rank.NINE));        
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>(); 
+        startingHands.add(texas);
+        startingHands.add(omaha);
+        
+        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, 1);
+    }    
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartingHandsHaveOverlappingCards() {
         AbstractStartingHand hand1 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
         AbstractStartingHand hand2 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.ACE));        
         
@@ -61,11 +78,11 @@ public class PokerHandSimulatorTest {
         startingHands.add(hand1);
         startingHands.add(hand2);        
         
-        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, true, 1);
+        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, 1);
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testPokerHandSimulatorStartingHandAndBoardHaveOverlappingCards() {
+    public void testStartingHandAndBoardHaveOverlappingCards() {
         AbstractStartingHand hand1 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
         AbstractStartingHand hand2 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.KING));        
         

@@ -16,7 +16,16 @@ public abstract class AbstractCardCollection {
     private Set<Card> cards;
     private final int maximumAmountOfCardsInCollection;    
 
+    /**
+     * Creates a new AbstractCardCollection
+     * 
+     * @param maximumAmountOfCardsInCollection 
+     * @throws IllegalArgumentException if maximumAmountOfCardsInCollection isn't positive.
+     */
     public AbstractCardCollection(int maximumAmountOfCardsInCollection) {
+        if (maximumAmountOfCardsInCollection <= 0) {
+            throw new IllegalArgumentException("Maximum amount of cards in collection must be positive");
+        }
         this.cards = new HashSet<Card>();
         this.maximumAmountOfCardsInCollection = maximumAmountOfCardsInCollection;
     }
