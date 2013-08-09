@@ -1,6 +1,9 @@
 package logic.simulator;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import poker.AbstractStartingHand;
@@ -10,9 +13,8 @@ import poker.PokerGameType;
 /**
  * Collects all the information of a performed simulation.
  *
- * This class takes a set of hands instead of a list to make
- * it more effective.
- * 
+ * This class takes a set of hands instead of a list to make it more effective.
+ *
  * @author Sebastian Björkqvist
  *
  * @todo Implement inserting and outputting the results
@@ -144,17 +146,17 @@ public class SimulationResult {
         }
         this.performedSimulations = 0;
     }
-    
+
     /**
      * Adds a result of one simulation.
-     * 
-     * @param winners 
-     * @throws IllegalArgumentException if the winning hands aren't in the
-     * set of starting hands. 
+     *
+     * @param winners
+     * @throws IllegalArgumentException if the winning hands aren't in the set
+     * of starting hands.
      * @throws IllegalArgumentException if winners is null or empty.
-     * @throws IllegalArgumentException if enough simulations have been
-     * performed, i.e. the number of performed simulations is already
-     * at the maximum number given in the constructor.
+     * @throws IllegalStateException if enough simulations have been
+     * performed, i.e. the number of performed simulations is already at the
+     * maximum number given in the constructor.
      */
     public void addResultForOneSimulation(Set<AbstractStartingHand> winners) {
         if (winners == null || winners.isEmpty()) {
@@ -166,14 +168,128 @@ public class SimulationResult {
                     + "in the set of starting hands!");
         }
         if (performedSimulations >= totalNumberOfSimulationsToPerform) {
-            throw new IllegalArgumentException("Enough simulations have already"
+            throw new IllegalStateException("Enough simulations have already"
                     + "been performed.");
         }
-        
+
         int numberOfWinningHands = winners.size();
         for (AbstractStartingHand hand : winners) {
-            resultForHand.get(hand)[numberOfWinningHands - 1]++;                    
-        } 
+            resultForHand.get(hand)[numberOfWinningHands - 1]++;
+        }
         performedSimulations++;
-   }
+    }
+
+    /**
+     * Returns a copy of the set of starting hands.
+     * 
+     * @return Set of starting hands.
+     */
+    public Set<AbstractStartingHand> getStartingHands() {
+        return new HashSet<AbstractStartingHand>(startingHands);
+    }    
+    
+    /**
+     * Retrieves the win percentage for a hand.
+     * 
+     * @param hand Starting hand
+     * @param numberOfSignificantDigits Accuracy of the returned double
+     * @return Winning probability in percent.
+     * @throws IllegalArgumentException if the hand is null or isn't
+     * contained in the set of starting hands of the simulation result.
+     * @throws IllegalStateException if enough simulations haven't been 
+     * performed yet.
+     * @throws IllegalArgumentException if numberOfSignificantDigits isn't
+     * positive.
+     */
+    public double getWinPercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
+        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits);
+        BigDecimal winningPercentage = new BigDecimal(resultForHand.get(hand)[0]);
+        winningPercentage = winningPercentage.divide(new BigDecimal(performedSimulations), 
+                new MathContext(numberOfSignificantDigits));
+        return winningPercentage.doubleValue();
+    }
+    
+    /**
+     * Retrieves the tie percentage for a hand.
+     * 
+     * All types of ties are included here. Different types of ties
+     * are used to calculate the expected value.
+     * 
+     * @param hand Starting hand
+     * @param numberOfSignificantDigits Accuracy of the returned double
+     * @return Tying probability in percent.
+     * @throws IllegalArgumentException if the hand is null or isn't
+     * contained in the set of starting hands of the simulation result.
+     * @throws IllegalStateException if enough simulations haven't been 
+     * performed yet.
+     * @throws IllegalArgumentException if numberOfSignificantDigits isn't
+     * positive.
+     */
+    public double getTiePercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
+        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits);
+        int numberOfTies = 0;
+        int[] resultForThisHand = resultForHand.get(hand);
+        for (int i = 1; i < resultForThisHand.length; i++) {
+            numberOfTies += resultForThisHand[i];
+        }
+        BigDecimal tiePercentage = new BigDecimal(numberOfTies);
+        tiePercentage = tiePercentage.divide(new BigDecimal(performedSimulations), 
+                new MathContext(numberOfSignificantDigits));
+        return tiePercentage.doubleValue();
+    }
+    
+    /**
+     * Retrieves the loss percentage for a hand.
+     * 
+     * @param hand Starting hand
+     * @param numberOfSignificantDigits Accuracy of the returned double
+     * @return Losing probability in percent.
+     * @throws IllegalArgumentException if the hand is null or isn't
+     * contained in the set of starting hands of the simulation result.
+     * @throws IllegalStateException if enough simulations haven't been 
+     * performed yet.
+     * @throws IllegalArgumentException if numberOfSignificantDigits isn't
+     * positive.  
+     */
+    public double getLossPercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
+        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits); 
+        
+        /* The number of losses is the amount performed simulations
+         * that didn't result in a win or tie.
+         */
+        int numberOfLosses = performedSimulations;
+        int[] resultForThisHand = resultForHand.get(hand);
+        for (int i = 0; i < resultForThisHand.length; i++) {
+            numberOfLosses -= resultForThisHand[i];
+        }        
+        BigDecimal lossPercentage = new BigDecimal(numberOfLosses);
+        lossPercentage = lossPercentage.divide(new BigDecimal(performedSimulations), 
+                new MathContext(numberOfSignificantDigits));
+        return lossPercentage.doubleValue();
+    }
+
+    /**
+     * Checks that the arguments are correct when getting win, tie or loss percentage.
+     * 
+     * @see getWinPercentageForHand
+     * @see getTiePercentageForHand
+     * @see getLossPercentageForHand
+     * 
+     * @param hand starting hand
+     * @param numberOfSignificantDigits accuracy of result
+     */
+    private void checkArgumentsForGetWinTieOrLossPercentage(AbstractStartingHand hand, int numberOfSignificantDigits) {
+        if (hand == null) {
+            throw new IllegalArgumentException("Hand can't be null");
+        }
+        if (!startingHands.contains(hand)) {
+            throw new IllegalArgumentException("The hand isn't contained in the set of starting hands");
+        }
+        if (numberOfSignificantDigits <= 0) {
+            throw new IllegalArgumentException("Number of significant digits must be positive");
+        }
+        if (performedSimulations < totalNumberOfSimulationsToPerform) {
+            throw new IllegalStateException("Simulation isn't done yet");
+        }        
+    }
 }
