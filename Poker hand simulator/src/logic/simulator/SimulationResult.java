@@ -202,7 +202,7 @@ public class SimulationResult {
      * positive.
      */
     public double getWinPercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
-        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits);
+        checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits);
         BigDecimal winningPercentage = new BigDecimal(resultForHand.get(hand)[0]);
         winningPercentage = winningPercentage.divide(new BigDecimal(performedSimulations), 
                 new MathContext(numberOfSignificantDigits));
@@ -226,7 +226,7 @@ public class SimulationResult {
      * positive.
      */
     public double getTiePercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
-        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits);
+        checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits);
         int numberOfTies = 0;
         int[] resultForThisHand = resultForHand.get(hand);
         for (int i = 1; i < resultForThisHand.length; i++) {
@@ -252,7 +252,7 @@ public class SimulationResult {
      * positive.  
      */
     public double getLossPercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
-        checkArgumentsForGetWinTieOrLossPercentage(hand, numberOfSignificantDigits); 
+        checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits); 
         
         /* The number of losses is the amount performed simulations
          * that didn't result in a win or tie.
@@ -267,9 +267,35 @@ public class SimulationResult {
                 new MathContext(numberOfSignificantDigits));
         return lossPercentage.doubleValue();
     }
+    
+    /**
+     * Retrieves the expected value for a hand.
+     * 
+     * The expected value is given as a number between 0 and 1, not
+     * as a percentage.
+     * 
+     * @param hand Starting hand
+     * @param numberOfSignificantDigits Accuracy of the returned double
+     * @return The expected value
+     */
+    public double getExpectedValueForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
+        checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits); 
+        BigDecimal expectedValue = new BigDecimal(0);
+        int[] resultForThisHand = resultForHand.get(hand);
+        
+        for (int i = 0; i < resultForThisHand.length; i++) {
+            double numerator = resultForThisHand[i];
+            BigDecimal toAdd = new BigDecimal(numerator);
+            toAdd = toAdd.divide(new BigDecimal(i+1));
+            expectedValue.add(toAdd);
+        }    
+        
+        return expectedValue.round(new MathContext(numberOfSignificantDigits)).doubleValue();
+    }
 
     /**
-     * Checks that the arguments are correct when getting win, tie or loss percentage.
+     * Checks that the arguments are correct when getting win, tie or loss percentage
+     * or expected value for a hand.
      * 
      * @see getWinPercentageForHand
      * @see getTiePercentageForHand
@@ -278,7 +304,7 @@ public class SimulationResult {
      * @param hand starting hand
      * @param numberOfSignificantDigits accuracy of result
      */
-    private void checkArgumentsForGetWinTieOrLossPercentage(AbstractStartingHand hand, int numberOfSignificantDigits) {
+    private void checkArgumentsForResultRetrieval(AbstractStartingHand hand, int numberOfSignificantDigits) {
         if (hand == null) {
             throw new IllegalArgumentException("Hand can't be null");
         }

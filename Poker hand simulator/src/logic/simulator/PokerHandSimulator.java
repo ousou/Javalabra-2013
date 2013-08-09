@@ -21,6 +21,7 @@ import poker.PokerGameType;
  *
  * The class supports only community card games at the moment.
  * 
+ * @todo Start using SimulationResult-class when simulating
  * @todo Add support for non-community card games.
  *
  * @author Sebastian Björkqvist

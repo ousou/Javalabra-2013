@@ -3,14 +3,11 @@ package logic.simulator;
 import card.Card;
 import card.Rank;
 import card.Suit;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.PokerGameType;
@@ -19,6 +16,8 @@ import poker.TexasHoldemStartingHand;
 /**
  *
  * @author Sebastian Björkqvist
+ * 
+ * @todo Write proper test for result getting methods.
  */
 public class SimulationResultTest {
 
