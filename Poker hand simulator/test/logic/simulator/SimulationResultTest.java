@@ -4,7 +4,9 @@ import card.Card;
 import card.Rank;
 import card.Suit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,7 +41,7 @@ public class SimulationResultTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorNullGameType() {
-        List<AbstractStartingHand> hands = new ArrayList<AbstractStartingHand>();
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
         FiveCardBoard board = new FiveCardBoard();        
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));        
@@ -48,7 +50,7 @@ public class SimulationResultTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorNullBoard() {
-        List<AbstractStartingHand> hands = new ArrayList<AbstractStartingHand>();
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));        
         SimulationResult result = new SimulationResult(hands, null, 1000, PokerGameType.TEXAS);
@@ -56,7 +58,7 @@ public class SimulationResultTest {
     
     @Test(expected = IllegalArgumentException.class) 
     public void testConstructorNonPositiveNumberOfSimulations() {
-        List<AbstractStartingHand> hands = new ArrayList<AbstractStartingHand>();
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));        
         SimulationResult result = new SimulationResult(hands, 0, PokerGameType.TEXAS);        
@@ -64,9 +66,54 @@ public class SimulationResultTest {
     
     @Test(expected = IllegalArgumentException.class) 
     public void testConstructorNonPositiveNumberOfSimulations2() {
-        List<AbstractStartingHand> hands = new ArrayList<AbstractStartingHand>();
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
         hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));        
-        SimulationResult result = new SimulationResult(hands, 0, PokerGameType.TEXAS);        
+        SimulationResult result = new SimulationResult(hands, -1, PokerGameType.TEXAS);        
     }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void testAddResultForOneSimulationNullHandSet() {
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));    
+        SimulationResult result = new SimulationResult(hands, 1000, PokerGameType.TEXAS);         
+        
+        result.addResultForOneSimulation(null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void testAddResultForOneSimulationEmptyHandSet() {
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));    
+        SimulationResult result = new SimulationResult(hands, 1000, PokerGameType.TEXAS);         
+        
+        result.addResultForOneSimulation(new HashSet<AbstractStartingHand>());
+    }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void testAddResultForOneSimulationIncorrectHandSet() {
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));    
+        SimulationResult result = new SimulationResult(hands, 1000, PokerGameType.TEXAS);         
+        
+        Set<AbstractStartingHand> winner = new HashSet<AbstractStartingHand>();        
+        
+        winner.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.FIVE), new Card(Suit.SPADE, Rank.THREE)));            
+        result.addResultForOneSimulation(winner);
+    }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void testAddResultForOneSimulationEnoughSimulations() {    
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE)));
+        hands.add(new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE)));    
+        SimulationResult result = new SimulationResult(hands, 1, PokerGameType.TEXAS);   
+        
+        result.addResultForOneSimulation(hands);
+        result.addResultForOneSimulation(hands);        
+    }
+
 }

@@ -97,6 +97,54 @@ public class AbstractCardCollectionTest {
             fail("toString method doesn't work correctly");
         }
     }
+    
+    @Test
+    public void testEquals() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(2);  
+        
+        assertTrue(collection.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        AbstractCardCollection collection2 = new AbstractCardCollectionImpl(2);  
+        
+        assertTrue(collection2.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection2.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        assertTrue(collection.equals(collection2));
+        assertTrue(collection2.equals(collection));
+    }
+    
+    @Test
+    public void testEquals2() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(2);  
+        
+        assertTrue(collection.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection.addCard(new Card(Suit.HEART, Rank.ACE)));  
+        
+        AbstractCardCollection collection2 = new AbstractCardCollectionImpl(2);  
+        
+        assertTrue(collection2.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection2.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        assertFalse(collection.equals(collection2));
+        assertFalse(collection2.equals(collection));
+    }
+    
+    @Test
+    public void testEquals3() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(4);  
+        
+        assertTrue(collection.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        AbstractCardCollection collection2 = new AbstractCardCollectionImpl(2);  
+        
+        assertTrue(collection2.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection2.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        assertFalse(collection.equals(collection2));
+        assertFalse(collection2.equals(collection));
+    }
 
     public class AbstractCardCollectionImpl extends AbstractCardCollection {
 

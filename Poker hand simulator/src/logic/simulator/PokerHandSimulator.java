@@ -120,10 +120,10 @@ public class PokerHandSimulator {
      *
      * If there's a tie, the list contains the indices for the winning hands.
      *
-     * @return the indices of the winning hand(s) in the startingHands-list.
+     * @return set containing the winning hand(s).
      */
-    protected Set<Integer> simulateHand() {
-        Set<Integer> indicesOfWinningHands = new HashSet<Integer>();        
+    protected Set<AbstractStartingHand> simulateHand() {
+        Set<AbstractStartingHand> winningHands = new HashSet<AbstractStartingHand>();        
         ICardDeck deck = new CardDeckStandard(removedCards);
 
         if (!gameType.isCommunityCardGame()) {
@@ -137,27 +137,27 @@ public class PokerHandSimulator {
             board.addCard(nextCard);
         }
 
-        Map<FiveCardPokerHand, List<Integer>> bestFiveCardHandForThisIndex = new HashMap<FiveCardPokerHand, List<Integer>>();
+        Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForThisStartingHand = new HashMap<FiveCardPokerHand, List<AbstractStartingHand>>();
         FiveCardPokerHandComparator handComparator = new FiveCardPokerHandComparator();
         List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
         
-        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisIndex);
+        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisStartingHand);
         
         // Determining the winning hand by sorting the list of best hands.
         Collections.sort(allBestHands, handComparator);
 
         // Adding the index or indices of the best hand to the set.
-        indicesOfWinningHands.addAll(bestFiveCardHandForThisIndex.get(allBestHands.get(0)));
+        winningHands.addAll(bestFiveCardHandForThisStartingHand.get(allBestHands.get(0)));
         
-        // Checking if other hands tie with this hand, and if so, we add them to the indexset also
+        // Checking if other hands tie with this hand, and if so, we add them to the set also
         int nextIndex = 1;
         while (nextIndex < allBestHands.size() && 
                 handComparator.compare(allBestHands.get(0), allBestHands.get(nextIndex)) == 0) {
-            indicesOfWinningHands.addAll(bestFiveCardHandForThisIndex.get(allBestHands.get(nextIndex)));
+            winningHands.addAll(bestFiveCardHandForThisStartingHand.get(allBestHands.get(nextIndex)));
             nextIndex++;
         }        
         
-        return indicesOfWinningHands;
+        return winningHands;
     }
 
     /**
@@ -176,14 +176,14 @@ public class PokerHandSimulator {
     }
 
     /**
-     * Creates all the possible hands for the startingHands in this simulation.
+     * Determines the best possible hand for the startingHands in this simulation.
      * 
      * @param handComparator FiveCardPokerHandComparator
      * @param allBestHands All best hands are added to this list
-     * @param bestFiveCardHandForThisIndex Maps hands to indices (in the 
-     * startingHands list) for which the hand is the best hand.
+     * @param bestFiveCardHandForStartingHand Maps five card hands
+     * to starting hands for which the five card hand hand is the best hand.
      */
-    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<Integer>> bestFiveCardHandForThisIndex) {
+    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand) {
         /* Creating all possible hands for each starting hand, and determining the best possible
          * hand each starting hand can form.
          */
@@ -195,10 +195,10 @@ public class PokerHandSimulator {
             if (!allHands.isEmpty()) {
                 FiveCardPokerHand bestHand = allHands.get(0);
                 allBestHands.add(bestHand);
-                if (!bestFiveCardHandForThisIndex.containsKey(bestHand)) {
-                    bestFiveCardHandForThisIndex.put(bestHand, new ArrayList<Integer>());
+                if (!bestFiveCardHandForStartingHand.containsKey(bestHand)) {
+                    bestFiveCardHandForStartingHand.put(bestHand, new ArrayList<AbstractStartingHand>());
                 }
-                bestFiveCardHandForThisIndex.get(bestHand).add(i);
+                bestFiveCardHandForStartingHand.get(bestHand).add(startingHands.get(i));
             }
         }
     }

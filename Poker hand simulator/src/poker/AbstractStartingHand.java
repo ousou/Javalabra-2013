@@ -20,6 +20,7 @@ public abstract class AbstractStartingHand extends AbstractCardCollection {
      * @param gameType the gameType of the hand.
      * @throws IllegalArgumentException if minimumAmountOfCardsUsed is negative or
      * maximumAmountOfCardsUsed is non-positive.
+     * @throws IllegalArgumentException if gameType is null.
      */
     public AbstractStartingHand(int maximumAmountOfCardsInHand, int minimumAmountOfCardsUsed, int maximumAmountOfCardsUsed, PokerGameType gameType) {
         super(maximumAmountOfCardsInHand);
@@ -28,6 +29,9 @@ public abstract class AbstractStartingHand extends AbstractCardCollection {
         }
         if (maximumAmountOfCardsUsed <= 0) {
             throw new IllegalArgumentException("Maximum amount of cards used must be positive");
+        }
+        if (gameType == null) {
+            throw new IllegalArgumentException("Gametype can't be null");
         }
         this.minimumAmountOfCardsUsed = minimumAmountOfCardsUsed;
         this.maximumAmountOfCardsUsed = maximumAmountOfCardsUsed;

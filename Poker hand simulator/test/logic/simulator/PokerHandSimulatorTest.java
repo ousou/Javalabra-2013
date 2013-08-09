@@ -114,9 +114,9 @@ public class PokerHandSimulatorTest {
         boardCards.add(new Card(Suit.DIAMOND, Rank.JACK));
         
         PokerHandSimulator simulator = new PokerHandSimulator(startingHands, boardCards, 1);
-        Set<Integer> winners = simulator.simulateHand();
+        Set<AbstractStartingHand> winners = simulator.simulateHand();
         assertEquals(1, winners.size());
-        assertTrue(winners.contains(0));
+        assertTrue(winners.contains(winner));
     }
 
 }
