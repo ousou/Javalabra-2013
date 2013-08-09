@@ -23,6 +23,19 @@ public class Card implements Comparable<Card> {
         return rank;
     }
     
+    /**
+     * Returns the string representation of the card.
+     * 
+     * The rank is represented by one capital letter,
+     * the suit by one small letter.
+     * 
+     * I.e. Queen of hearts is Qh
+     * Ten of clubs is Tc
+     * Three of diamonds is 3d
+     * Ace of spades is As
+     * 
+     * @return String of length two.
+     */
     @Override
     public String toString() {
         return rank.getShortName() + suit.getShortName();

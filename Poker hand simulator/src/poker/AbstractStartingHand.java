@@ -1,10 +1,9 @@
 package poker;
 
 /**
- *
- * @author Sebastian Björkqvist
+ * Class representing a starting hand in a poker game.
  * 
- * @todo Modify this to accept a PokerGameType.
+ * @author Sebastian Björkqvist
  */
 public abstract class AbstractStartingHand extends AbstractCardCollection {
     

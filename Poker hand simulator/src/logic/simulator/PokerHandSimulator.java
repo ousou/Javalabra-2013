@@ -20,11 +20,10 @@ import poker.PokerGameType;
  * Simulates the result when pitting poker hands against each other.
  *
  * The class supports only community card games at the moment.
+ * 
+ * @todo Add support for non-community card games.
  *
  * @author Sebastian Björkqvist
- * 
- * @todo Modify constructor to have PokerGameType as an argument,
- * and check that all the hands are of this type.
  */
 public class PokerHandSimulator {
 
@@ -142,22 +141,7 @@ public class PokerHandSimulator {
         FiveCardPokerHandComparator handComparator = new FiveCardPokerHandComparator();
         List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
         
-        /* Creating all possible hands for each starting hand, and determining the best possible
-         * hand each starting hand can form.
-         */
-        for (int i = 0; i < startingHands.size(); i++) {
-            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), board);
-            List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
-            Collections.sort(allHands, handComparator);
-            if (!allHands.isEmpty()) {
-                FiveCardPokerHand bestHand = allHands.get(0);
-                allBestHands.add(bestHand);
-                if (!bestFiveCardHandForThisIndex.containsKey(bestHand)) {
-                    bestFiveCardHandForThisIndex.put(bestHand, new ArrayList<Integer>());
-                }
-                bestFiveCardHandForThisIndex.get(bestHand).add(i);
-            }
-        }
+        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisIndex);
         
         // Determining the winning hand by sorting the list of best hands.
         Collections.sort(allBestHands, handComparator);
@@ -188,6 +172,34 @@ public class PokerHandSimulator {
     private void addCardsFromStartingHandsToRemovedCards() {
         for (AbstractStartingHand hand : startingHands) {
             removedCards.addAll(hand.getCards());
+        }
+    }
+
+    /**
+     * Creates all the possible hands for the startingHands in this simulation.
+     * 
+     * @param handComparator FiveCardPokerHandComparator
+     * @param allBestHands All best hands are added to this list
+     * @param bestFiveCardHandForThisIndex Maps hands to indices (in the 
+     * startingHands list) for which the hand is the best hand.
+     */
+    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<Integer>> bestFiveCardHandForThisIndex) {
+        /* Creating all possible hands for each starting hand, and determining the best possible
+         * hand each starting hand can form.
+         */
+        
+        for (int i = 0; i < startingHands.size(); i++) {
+            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), board);
+            List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
+            Collections.sort(allHands, handComparator);
+            if (!allHands.isEmpty()) {
+                FiveCardPokerHand bestHand = allHands.get(0);
+                allBestHands.add(bestHand);
+                if (!bestFiveCardHandForThisIndex.containsKey(bestHand)) {
+                    bestFiveCardHandForThisIndex.put(bestHand, new ArrayList<Integer>());
+                }
+                bestFiveCardHandForThisIndex.get(bestHand).add(i);
+            }
         }
     }
 }
