@@ -460,6 +460,73 @@ public class SimulationResultTest {
     }
     
     @Test
+    public void testResultsForManySimulationsThreeHands() {
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>();
+        FiveCardBoard board = new FiveCardBoard();               
+        int digits = 4;
+        
+        TexasHoldemStartingHand hand1 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
+        hands.add(hand1);
+        TexasHoldemStartingHand hand2 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE));
+        hands.add(hand2);           
+        TexasHoldemStartingHand hand3 = new TexasHoldemStartingHand(new Card(Suit.HEART, Rank.NINE), new Card(Suit.HEART, Rank.THREE));
+        hands.add(hand3);             
+        SimulationResult result = new SimulationResult(hands, board, 200, PokerGameType.TEXAS);          
+        Set<AbstractStartingHand> winningHand = new HashSet<AbstractStartingHand>();
+        // Hand 1 wins 100 times        
+        winningHand.add(hand1);
+        for (int i = 0; i < 100; i++) {
+            result.addResultForOneSimulation(winningHand);
+        }        
+        // The hands 1 and 2 tie 10 times
+        winningHand.add(hand2);        
+        for (int i = 0; i < 10; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }
+        // Hand 2 wins 50 times
+        winningHand.remove(hand1);
+        for (int i = 0; i < 50; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }  
+        // Hands 2 and 3 tie 5 times
+        winningHand.add(hand3);
+        for (int i = 0; i < 5; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }        
+        // Hand 3 wins 25 times
+        winningHand.remove(hand2);
+        for (int i = 0; i < 25; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }
+        // Hands 1 and 3 tie 5 times
+        winningHand.add(hand1);
+        for (int i = 0; i < 5; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }        
+        // Hands 1, 2 and 3 tie 5 times
+        winningHand.add(hand2);
+        for (int i = 0; i < 5; i++) {
+            result.addResultForOneSimulation(winningHand);        
+        }         
+        
+        
+        assertEquals(50, result.getWinPercentageForHand(hand1, digits), 0);
+        assertEquals(40, result.getLossPercentageForHand(hand1, digits), 0);
+        assertEquals(10, result.getTiePercentageForHand(hand1, digits), 0);        
+        assertEquals(0.5458, result.getExpectedValueForHand(hand1, digits), 0);
+        
+        assertEquals(25, result.getWinPercentageForHand(hand2, digits), 0);
+        assertEquals(65, result.getLossPercentageForHand(hand2, digits), 0);
+        assertEquals(10, result.getTiePercentageForHand(hand2, digits), 0);        
+        assertEquals(0.2958, result.getExpectedValueForHand(hand2, digits), 0);
+        
+        assertEquals(12.5, result.getWinPercentageForHand(hand3, digits), 0);
+        assertEquals(80, result.getLossPercentageForHand(hand3, digits), 0);
+        assertEquals(7.5, result.getTiePercentageForHand(hand3, digits), 0);        
+        assertEquals(0.1583, result.getExpectedValueForHand(hand3, digits), 0);        
+    }
+    
+    @Test
     public void testRandomSimulationResult() {
         Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>(); 
         List<AbstractStartingHand> handList = new ArrayList<AbstractStartingHand>();        

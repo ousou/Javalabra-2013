@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public abstract class AbstractCardCollection {
 
-    private Set<Card> cards;
+    private final Set<Card> cards;
     private final int maximumAmountOfCardsInCollection;    
 
     /**

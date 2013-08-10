@@ -6,7 +6,10 @@ package poker;
  * @author Sebastian Björkqvist
  */
 public class FiveCardBoard extends AbstractCardCollection {
- 
+
+    /**
+     * Creates a new FiveCardBoard.
+     */
     public FiveCardBoard() {
         super(5);
     }       
