@@ -112,6 +112,27 @@ public class PokerHandSimulator {
             throw new IllegalArgumentException("The hands and the board have overlapping cards!");
         }
     }
+    
+    /**
+     * Performs the desired simulation.
+     * 
+     * @return SimulationResult-object containing the results of the simulation.
+     */
+    public SimulationResult performSimulation() {
+        SimulationResult simulationResult;
+        Set<AbstractStartingHand> handSet = new HashSet<AbstractStartingHand>(startingHands);
+        if (gameType.isCommunityCardGame()) {
+            simulationResult = new SimulationResult(handSet, board, numberOfSimulations, gameType);
+        } else {
+            simulationResult = new SimulationResult(handSet, numberOfSimulations, gameType);
+        }
+        for (int i = 0; i < numberOfSimulations; i++) {
+            Set<AbstractStartingHand> result = simulateHand();
+            simulationResult.addResultForOneSimulation(result);
+        }
+
+        return simulationResult;
+    }
 
     /**
      * Simulates a hand.
@@ -130,19 +151,22 @@ public class PokerHandSimulator {
         if (!gameType.isCommunityCardGame()) {
             throw new UnsupportedOperationException("Non-community card games not supported yet.");
         }
-        while (!board.isFull()) {
+        
+        FiveCardBoard simulatedBoard = copyOfBoard();
+        
+        while (!simulatedBoard.isFull()) {
             Card nextCard = deck.getCard();
             if (nextCard == null) {
                 throw new RuntimeException("The deck ran out of cards!");
             }
-            board.addCard(nextCard);
+            simulatedBoard.addCard(nextCard);
         }
 
         Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForThisStartingHand = new HashMap<FiveCardPokerHand, List<AbstractStartingHand>>();
         FiveCardPokerHandComparator handComparator = new FiveCardPokerHandComparator();
         List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
         
-        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisStartingHand);
+        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisStartingHand, simulatedBoard);
         
         // Determining the winning hand by sorting the list of best hands.
         Collections.sort(allBestHands, handComparator);
@@ -184,13 +208,16 @@ public class PokerHandSimulator {
      * @param bestFiveCardHandForStartingHand Maps five card hands
      * to starting hands for which the five card hand hand is the best hand.
      */
-    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand) {
+    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, 
+            List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, 
+            List<AbstractStartingHand>> bestFiveCardHandForStartingHand,
+            FiveCardBoard simulatedBoard) {
         /* Creating all possible hands for each starting hand, and determining the best possible
          * hand each starting hand can form.
          */
         
         for (int i = 0; i < startingHands.size(); i++) {
-            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), board);
+            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
             List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
             Collections.sort(allHands, handComparator);
             if (!allHands.isEmpty()) {
@@ -202,5 +229,19 @@ public class PokerHandSimulator {
                 bestFiveCardHandForStartingHand.get(bestHand).add(startingHands.get(i));
             }
         }
+    }
+
+    /**
+     * Copies the boardcards given in the constructor
+     * 
+     * @return Copied board.
+     */
+    private FiveCardBoard copyOfBoard() {
+        List<Card> copyOfBoardCards = board.getCards();
+        FiveCardBoard simulatedBoard = new FiveCardBoard();
+        for (Card card: copyOfBoardCards) {
+            simulatedBoard.addCard(card);
+        }
+        return simulatedBoard;
     }
 }

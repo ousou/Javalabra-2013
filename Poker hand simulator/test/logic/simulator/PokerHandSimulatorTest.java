@@ -118,5 +118,38 @@ public class PokerHandSimulatorTest {
         assertEquals(1, winners.size());
         assertTrue(winners.contains(winner));
     }
+    
+    @Test
+    public void testPerformSimulation() {
+        AbstractStartingHand winner = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
+        AbstractStartingHand loser = new TexasHoldemStartingHand(new Card(Suit.SPADE, Rank.DEUCE), new Card(Suit.HEART, Rank.SEVEN));
+        
+        int digits = 3;
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>();
+        startingHands.add(winner);
+        startingHands.add(loser);
+        
+        // Making sure the hand winner always wins
+        List<Card> boardCards = new ArrayList<Card>();
+        boardCards.add(new Card(Suit.HEART, Rank.ACE));
+        boardCards.add(new Card(Suit.DIAMOND, Rank.ACE));
+        boardCards.add(new Card(Suit.DIAMOND, Rank.JACK));
+        
+        PokerHandSimulator simulator = new PokerHandSimulator(startingHands, boardCards, 10000);
+        SimulationResult result = simulator.performSimulation();
+        
+        // Checking that the hand winner always won
+        assertEquals(1, result.getExpectedValueForHand(winner, digits), 0);
+        assertEquals(0, result.getExpectedValueForHand(loser, digits), 0);        
+        
+        assertEquals(100, result.getWinPercentageForHand(winner, digits), 0);
+        assertEquals(0, result.getTiePercentageForHand(winner, digits), 0);
+        assertEquals(0, result.getLossPercentageForHand(winner, digits), 0);
+        
+        assertEquals(0, result.getWinPercentageForHand(loser, digits), 0);
+        assertEquals(0, result.getTiePercentageForHand(loser, digits), 0);
+        assertEquals(100, result.getLossPercentageForHand(loser, digits), 0);        
+    }
 
 }

@@ -1,5 +1,6 @@
 package card;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ public final class CardDeckStandard implements ICardDeck {
      *
      * @param removedCards List of removed cards.
      * @throws IllegalArgumentException if removedCards is null
-     */    
+     */
     public CardDeckStandard(List<Card> removedCards) {
         this(removedCards, true);
     }
