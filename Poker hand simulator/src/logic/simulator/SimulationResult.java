@@ -159,15 +159,15 @@ public class SimulationResult {
     public void addResultForOneSimulation(Set<AbstractStartingHand> winners) {
         if (winners == null || winners.isEmpty()) {
             throw new IllegalArgumentException("Set of winning hands can't be null"
-                    + "or empty!");
+                    + " or empty!");
         }
         if (!startingHands.containsAll(winners)) {
             throw new IllegalArgumentException("Winning hands aren't contained"
-                    + "in the set of starting hands!");
+                    + " in the set of starting hands!");
         }
         if (performedSimulations >= totalNumberOfSimulationsToPerform) {
             throw new IllegalStateException("Enough simulations have already"
-                    + "been performed.");
+                    + " been performed.");
         }
 
         int numberOfWinningHands = winners.size();

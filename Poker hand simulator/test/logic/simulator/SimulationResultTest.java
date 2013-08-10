@@ -3,7 +3,10 @@ package logic.simulator;
 import card.Card;
 import card.Rank;
 import card.Suit;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -454,5 +457,68 @@ public class SimulationResultTest {
         assertEquals(60.61, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(3.030, result.getTiePercentageForHand(hand2, digits), 0);        
         assertEquals(0.3788, result.getExpectedValueForHand(hand2, digits), 0);
-    }    
-}
+    }
+    
+    @Test
+    public void testRandomSimulationResult() {
+        Set<AbstractStartingHand> hands = new HashSet<AbstractStartingHand>(); 
+        List<AbstractStartingHand> handList = new ArrayList<AbstractStartingHand>();        
+        FiveCardBoard board = new FiveCardBoard(); 
+        int digits = 9;
+        int simulations = 10000;
+        double epsilon = Math.pow(10, -8);
+        
+        TexasHoldemStartingHand hand1 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), new Card(Suit.SPADE, Rank.ACE));
+        hands.add(hand1);
+        handList.add(hand1);
+        TexasHoldemStartingHand hand2 = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.DEUCE), new Card(Suit.SPADE, Rank.THREE));
+        hands.add(hand2);  
+        handList.add(hand2);        
+        TexasHoldemStartingHand hand3 = new TexasHoldemStartingHand(new Card(Suit.SPADE, Rank.FIVE), new Card(Suit.DIAMOND, Rank.FIVE));
+        hands.add(hand3); 
+        handList.add(hand3);        
+        TexasHoldemStartingHand hand4 = new TexasHoldemStartingHand(new Card(Suit.DIAMOND, Rank.NINE), new Card(Suit.DIAMOND, Rank.THREE));
+        hands.add(hand4); 
+        handList.add(hand4);        
+        TexasHoldemStartingHand hand5 = new TexasHoldemStartingHand(new Card(Suit.HEART, Rank.FIVE), new Card(Suit.HEART, Rank.SEVEN));
+        hands.add(hand5); 
+        handList.add(hand5);        
+        
+
+        
+        SimulationResult result = new SimulationResult(hands, board, simulations, PokerGameType.TEXAS);        
+        
+        Random random = new Random();
+        
+        double[] probabilityForHand = {0.35,0.3,0.2,0.1,0.05};
+        
+        Set<AbstractStartingHand> winners = new HashSet<AbstractStartingHand>();
+        
+        for (int i = 0; i < simulations; i++) {
+            winners.clear();
+            for (int j = 0; j < 5; j++) {
+                double number = random.nextDouble();
+                if (number < probabilityForHand[j]) {
+                    winners.add(handList.get(j));
+                }
+            }
+            if (winners.isEmpty()) {
+                winners.add(handList.get(0));
+            }
+            result.addResultForOneSimulation(winners);
+        }
+        
+        // Verifying results
+        double sumOfExpectedValues = 0;
+        for (int i = 0; i < 5; i++) {
+            double sumOfPercentages = 0;
+            sumOfPercentages += result.getWinPercentageForHand(handList.get(i), digits);
+            sumOfPercentages += result.getTiePercentageForHand(handList.get(i), digits);
+            sumOfPercentages += result.getLossPercentageForHand(handList.get(i), digits);            
+            assertEquals(100, sumOfPercentages, epsilon);
+            sumOfExpectedValues += result.getExpectedValueForHand(handList.get(i), digits);
+        }
+        
+        assertEquals(1, sumOfExpectedValues, epsilon);
+    }
+} 
