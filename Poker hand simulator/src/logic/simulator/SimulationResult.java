@@ -16,8 +16,6 @@ import poker.PokerGameType;
  * This class takes a set of hands instead of a list to make it more effective.
  *
  * @author Sebastian Björkqvist
- *
- * @todo Implement inserting and outputting the results
  */
 public class SimulationResult {
 
@@ -204,9 +202,9 @@ public class SimulationResult {
     public double getWinPercentageForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
         checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits);
         BigDecimal winningPercentage = new BigDecimal(resultForHand.get(hand)[0]);
-        winningPercentage = winningPercentage.divide(new BigDecimal(performedSimulations), 
-                new MathContext(numberOfSignificantDigits));
-        return winningPercentage.doubleValue();
+        winningPercentage = winningPercentage.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
+        winningPercentage = winningPercentage.multiply(new BigDecimal(100));
+        return winningPercentage.round(new MathContext(numberOfSignificantDigits)).doubleValue();
     }
     
     /**
@@ -233,9 +231,9 @@ public class SimulationResult {
             numberOfTies += resultForThisHand[i];
         }
         BigDecimal tiePercentage = new BigDecimal(numberOfTies);
-        tiePercentage = tiePercentage.divide(new BigDecimal(performedSimulations), 
-                new MathContext(numberOfSignificantDigits));
-        return tiePercentage.doubleValue();
+        tiePercentage = tiePercentage.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
+        tiePercentage = tiePercentage.multiply(new BigDecimal(100));
+        return tiePercentage.round(new MathContext(numberOfSignificantDigits)).doubleValue();
     }
     
     /**
@@ -263,9 +261,9 @@ public class SimulationResult {
             numberOfLosses -= resultForThisHand[i];
         }        
         BigDecimal lossPercentage = new BigDecimal(numberOfLosses);
-        lossPercentage = lossPercentage.divide(new BigDecimal(performedSimulations), 
-                new MathContext(numberOfSignificantDigits));
-        return lossPercentage.doubleValue();
+        lossPercentage = lossPercentage.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
+        lossPercentage = lossPercentage.multiply(new BigDecimal(100));
+        return lossPercentage.round(new MathContext(numberOfSignificantDigits)).doubleValue();        
     }
     
     /**
@@ -282,13 +280,16 @@ public class SimulationResult {
         checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits); 
         BigDecimal expectedValue = new BigDecimal(0);
         int[] resultForThisHand = resultForHand.get(hand);
+        BigDecimal toAdd;
         
         for (int i = 0; i < resultForThisHand.length; i++) {
             double numerator = resultForThisHand[i];
-            BigDecimal toAdd = new BigDecimal(numerator);
-            toAdd = toAdd.divide(new BigDecimal(i+1));
-            expectedValue.add(toAdd);
-        }    
+            toAdd = new BigDecimal(numerator);
+            toAdd = toAdd.divide(new BigDecimal(i+1), new MathContext(numberOfSignificantDigits + 3));
+            expectedValue = expectedValue.add(toAdd);
+        }
+        
+        expectedValue = expectedValue.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
         
         return expectedValue.round(new MathContext(numberOfSignificantDigits)).doubleValue();
     }
