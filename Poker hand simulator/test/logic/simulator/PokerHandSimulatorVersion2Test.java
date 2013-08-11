@@ -5,22 +5,24 @@ import card.Rank;
 import card.Suit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import poker.AbstractStartingHand;
-import poker.startinghands.OmahaHoldemStartingHand;
+import poker.FiveCardBoard;
+import poker.FiveCardPokerHand;
 import poker.startinghands.TexasHoldemStartingHand;
 
 /**
  *
  * @author Sebastian Björkqvist
  */
-public class PokerHandSimulatorOriginalTest {
+public class PokerHandSimulatorVersion2Test {
 
-    public PokerHandSimulatorOriginalTest() {
+    public PokerHandSimulatorVersion2Test() {
     }
 
     @BeforeClass
@@ -30,6 +32,8 @@ public class PokerHandSimulatorOriginalTest {
     @AfterClass
     public static void tearDownClass() {
     }
+    
+    
     
     @Test
     public void testSimulateHand() {
@@ -46,7 +50,7 @@ public class PokerHandSimulatorOriginalTest {
         boardCards.add(new Card(Suit.DIAMOND, Rank.ACE));
         boardCards.add(new Card(Suit.DIAMOND, Rank.JACK));
         
-        AbstractPokerHandSimulator simulator = new PokerHandSimulatorOriginal(startingHands, boardCards, 1);
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, boardCards, 1);
         Set<AbstractStartingHand> winners = simulator.simulateHand();
         assertEquals(1, winners.size());
         assertTrue(winners.contains(winner));
@@ -69,7 +73,7 @@ public class PokerHandSimulatorOriginalTest {
         boardCards.add(new Card(Suit.DIAMOND, Rank.ACE));
         boardCards.add(new Card(Suit.DIAMOND, Rank.JACK));
         
-        AbstractPokerHandSimulator simulator = new PokerHandSimulatorOriginal(startingHands, boardCards, 10000);
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, boardCards, 10000);
         SimulationResult result = simulator.performSimulation();
         
         // Checking that the hand winner always won
@@ -102,7 +106,7 @@ public class PokerHandSimulatorOriginalTest {
         boardCards.add(new Card(Suit.DIAMOND, Rank.NINE));
         boardCards.add(new Card(Suit.HEART, Rank.EIGHT));
         
-        AbstractPokerHandSimulator simulator = new PokerHandSimulatorOriginal(startingHands, boardCards, 10000);
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, boardCards, 10000);
         SimulationResult result = simulator.performSimulation();
         
         // Checking that the results are sensible
@@ -140,7 +144,7 @@ public class PokerHandSimulatorOriginalTest {
         startingHands.add(hand2);
        
         
-        AbstractPokerHandSimulator simulator = new PokerHandSimulatorOriginal(startingHands, 10000);
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, 10000);
         SimulationResult result = simulator.performSimulation();
         
         // Checking that the results are sensible
@@ -165,5 +169,6 @@ public class PokerHandSimulatorOriginalTest {
         assertTrue(result.getLossPercentageForHand(hand2, digits) > 40);
         assertTrue(result.getLossPercentageForHand(hand2, digits) < 60);           
     }
+
 
 }

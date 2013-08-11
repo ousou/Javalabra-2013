@@ -1,8 +1,11 @@
 package logic.simulator;
 
 import card.Card;
+import card.CardDeckStandard;
+import card.ICardDeck;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +19,9 @@ import poker.enums.PokerGameType;
 /**
  * Simulates the result when pitting poker hands against each other.
  * 
- * Implementations of this class must implement the simulateHand-method.
- * There the implementations can specify how a simulation is to be performed.
+ * Implementations of this class must implement the createBestHands-method.
+ * There the implementation can specify how the best hands for a
+ * starting hand are to be found.
  * 
  * @author Sebastian Björkqvist
  */
@@ -28,6 +32,7 @@ public abstract class AbstractPokerHandSimulator {
     protected List<Card> removedCards;
     protected int numberOfSimulations;
     protected PokerGameType gameType;
+    protected FiveCardPokerHandComparator fiveCardPokerHandComparator;
 
     /**
      * Creates a new hand simulator with the given starting hands and board
@@ -74,6 +79,7 @@ public abstract class AbstractPokerHandSimulator {
         this.numberOfSimulations = numberOfSimulations;
         this.startingHands = new ArrayList<AbstractStartingHand>(startingHands);
         this.removedCards = new ArrayList<Card>();
+        this.fiveCardPokerHandComparator = new FiveCardPokerHandComparator();
         addCardsFromStartingHandsToRemovedCards();
         verifyHandsAndBoard();
     }
@@ -156,7 +162,36 @@ public abstract class AbstractPokerHandSimulator {
      *
      * @return set containing the winning hand(s).
      */    
-    protected abstract Set<AbstractStartingHand> simulateHand();
+    protected Set<AbstractStartingHand> simulateHand() {
+        Set<AbstractStartingHand> winningHands = new HashSet<AbstractStartingHand>();        
+        ICardDeck deck = new CardDeckStandard(removedCards);
+
+        if (!gameType.isCommunityCardGame()) {
+            throw new UnsupportedOperationException("Non-community card games not supported yet.");
+        }
+        FiveCardBoard simulatedBoard = simulateBoard(deck);
+
+        Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForThisStartingHand = new HashMap<FiveCardPokerHand, List<AbstractStartingHand>>();
+        List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
+        
+        createBestHands(allBestHands, bestFiveCardHandForThisStartingHand, simulatedBoard);
+        
+        // Determining the winning hand by sorting the list of best hands.
+        Collections.sort(allBestHands, fiveCardPokerHandComparator);
+
+        // Adding the index or indices of the best hand to the set.
+        winningHands.addAll(bestFiveCardHandForThisStartingHand.get(allBestHands.get(0)));
+        
+        // Checking if other hands tie with this hand, and if so, we add them to the set also
+        int nextIndex = 1;
+        while (nextIndex < allBestHands.size() && 
+                fiveCardPokerHandComparator.compare(allBestHands.get(0), allBestHands.get(nextIndex)) == 0) {
+            winningHands.addAll(bestFiveCardHandForThisStartingHand.get(allBestHands.get(nextIndex)));
+            nextIndex++;
+        }        
+        
+        return winningHands;
+    }
 
     /**
      * Copies the boardcards given in the constructor
@@ -175,27 +210,29 @@ public abstract class AbstractPokerHandSimulator {
     /**
      * Determines the best possible hand for the startingHands in this simulation.
      *
-     * @param handComparator FiveCardPokerHandComparator
      * @param allBestHands All best hands are added to this list
      * @param bestFiveCardHandForStartingHand Maps five card hands
      * to starting hands for which the five card hand hand is the best hand.
+     * @param simulatedBoard A full simulated board
      */
-    protected void createBestHands(FiveCardPokerHandComparator handComparator, List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand, FiveCardBoard simulatedBoard) {
-        /* Creating all possible hands for each starting hand, and determining the best possible
-         * hand each starting hand can form.
-         */
-        for (int i = 0; i < startingHands.size(); i++) {
-            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
-            List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
-            Collections.sort(allHands, handComparator);
-            if (!allHands.isEmpty()) {
-                FiveCardPokerHand bestHand = allHands.get(0);
-                allBestHands.add(bestHand);
-                if (!bestFiveCardHandForStartingHand.containsKey(bestHand)) {
-                    bestFiveCardHandForStartingHand.put(bestHand, new ArrayList<AbstractStartingHand>());
-                }
-                bestFiveCardHandForStartingHand.get(bestHand).add(startingHands.get(i));
+    protected abstract void createBestHands(List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand, FiveCardBoard simulatedBoard);
+
+    /**
+     * Simulates the board.
+     * 
+     * @param deck Carddeck
+     * @return Simulated full board.
+     * @throws RuntimeException If the deck runs out of cards.
+     */
+    protected FiveCardBoard simulateBoard(ICardDeck deck) throws RuntimeException {
+        FiveCardBoard simulatedBoard = copyOfBoard();
+        while (!simulatedBoard.isFull()) {
+            Card nextCard = deck.getCard();
+            if (nextCard == null) {
+                throw new RuntimeException("The deck ran out of cards!");
             }
+            simulatedBoard.addCard(nextCard);
         }
+        return simulatedBoard;
     }
 }
