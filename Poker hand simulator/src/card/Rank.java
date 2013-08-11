@@ -2,7 +2,9 @@ package card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the rank of a card.
@@ -33,12 +35,36 @@ public enum Rank {
     
     private String shortName;
     private int value;        
+    private static Map<String, Rank> stringToRankMap;
 
     private Rank(String shortName, int value) {
         this.shortName = shortName;
         this.value = value;
     }
-
+    
+    private static Map<String, Rank> createStringToRankMap() {
+        stringToRankMap = new HashMap<String, Rank>();
+        for (int i = 0; i < values().length; i++) {
+            stringToRankMap.put(values()[i].shortName, values()[i]);
+        }
+        
+        return stringToRankMap;
+    }   
+    /**
+     * Returns String to Rank-map.
+     * 
+     * The returned map maps the one-character string representation
+     * of a rank to the corresponding Rank-object.
+     * 
+     * @return stringToRankMap
+     */
+    public static Map<String, Rank> getStringToRankMap() {
+        if (stringToRankMap == null) {
+            stringToRankMap = createStringToRankMap();
+        }
+        return stringToRankMap;
+    }
+    
     /**
      * Gets list of all ranks.
      * 

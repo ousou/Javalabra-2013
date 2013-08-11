@@ -2,7 +2,9 @@ package card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the suit of a card.
@@ -19,11 +21,35 @@ public enum Suit {
     DIAMOND("d"),
     CLUB("c");
     private String shortName;
+    private static Map<String, Suit> stringToSuitMap;    
 
     private Suit(String shortName) {
         this.shortName = shortName;
     }
 
+    private static Map<String, Suit> createStringToSuitMap() {
+        stringToSuitMap = new HashMap<String, Suit>();
+        for (int i = 0; i < values().length; i++) {
+            stringToSuitMap.put(values()[i].shortName, values()[i]);
+        }
+        
+        return stringToSuitMap;
+    }   
+    /**
+     * Returns String to Suit-map.
+     * 
+     * The returned map maps the one-character string representation
+     * of a rank to the corresponding Suit-object.
+     * 
+     * @return stringToSuitMap
+     */
+    public static Map<String, Suit> getStringToSuitMap() {
+        if (stringToSuitMap == null) {
+            stringToSuitMap = createStringToSuitMap();
+        }
+        return stringToSuitMap;
+    }    
+    
     /**
      * Gets a list of all suits.
      *

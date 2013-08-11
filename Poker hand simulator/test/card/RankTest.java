@@ -1,6 +1,7 @@
 package card;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,9 +14,11 @@ import static org.junit.Assert.*;
 public class RankTest {
 
     private List<Rank> allRanks;
+    private Map<String, Rank> stringToRankMap;
     
     public RankTest() {
         allRanks = Rank.getAllRanks();
+        stringToRankMap = Rank.getStringToRankMap();
     }
 
     @BeforeClass
@@ -32,6 +35,7 @@ public class RankTest {
         assertEquals(1, r.getValue());
         assertEquals("A", r.getShortName());
         assertTrue(allRanks.contains(r));
+        assertEquals(r, stringToRankMap.get("A"));
     }
 
     @Test
@@ -39,7 +43,8 @@ public class RankTest {
         Rank r = Rank.DEUCE;
         assertEquals(2, r.getValue());
         assertEquals("2", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));    
+        assertEquals(r, stringToRankMap.get("2"));        
     }
 
     @Test
@@ -47,7 +52,8 @@ public class RankTest {
         Rank r = Rank.THREE;
         assertEquals(3, r.getValue());
         assertEquals("3", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));
+        assertEquals(r, stringToRankMap.get("3"));        
     }
 
     @Test
@@ -55,7 +61,8 @@ public class RankTest {
         Rank r = Rank.FOUR;
         assertEquals(4, r.getValue());
         assertEquals("4", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));    
+        assertEquals(r, stringToRankMap.get("4"));        
     }
 
     @Test
@@ -63,7 +70,8 @@ public class RankTest {
         Rank r = Rank.FIVE;
         assertEquals(5, r.getValue());
         assertEquals("5", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));      
+        assertEquals(r, stringToRankMap.get("5"));        
     }
 
     @Test
@@ -71,7 +79,8 @@ public class RankTest {
         Rank r = Rank.SIX;
         assertEquals(6, r.getValue());
         assertEquals("6", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));
+        assertEquals(r, stringToRankMap.get("6"));        
     }
 
     @Test
@@ -79,7 +88,8 @@ public class RankTest {
         Rank r = Rank.SEVEN;
         assertEquals(7, r.getValue());
         assertEquals("7", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r)); 
+        assertEquals(r, stringToRankMap.get("7"));        
     }
 
     @Test
@@ -87,7 +97,8 @@ public class RankTest {
         Rank r = Rank.EIGHT;
         assertEquals(8, r.getValue());
         assertEquals("8", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));
+        assertEquals(r, stringToRankMap.get("8"));        
     }
 
     @Test
@@ -96,6 +107,7 @@ public class RankTest {
         assertEquals(9, r.getValue());
         assertEquals("9", r.getShortName());
         assertTrue(allRanks.contains(r));        
+        assertEquals(r, stringToRankMap.get("9"));        
     }
 
     @Test
@@ -103,7 +115,8 @@ public class RankTest {
         Rank r = Rank.TEN;
         assertEquals(10, r.getValue());
         assertEquals("T", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r)); 
+        assertEquals(r, stringToRankMap.get("T"));        
     }
 
     @Test
@@ -111,7 +124,8 @@ public class RankTest {
         Rank r = Rank.JACK;
         assertEquals(11, r.getValue());
         assertEquals("J", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));   
+        assertEquals(r, stringToRankMap.get("J"));        
     }
 
     @Test
@@ -119,7 +133,8 @@ public class RankTest {
         Rank r = Rank.QUEEN;
         assertEquals(12, r.getValue());
         assertEquals("Q", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));     
+        assertEquals(r, stringToRankMap.get("Q"));        
     }
 
     @Test
@@ -127,7 +142,8 @@ public class RankTest {
         Rank r = Rank.KING;
         assertEquals(13, r.getValue());
         assertEquals("K", r.getShortName());
-        assertTrue(allRanks.contains(r));        
+        assertTrue(allRanks.contains(r));     
+        assertEquals(r, stringToRankMap.get("K"));        
     }
 
 }
