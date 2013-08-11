@@ -1,5 +1,6 @@
-package poker;
+package poker.comparators;
 
+import poker.enums.PokerHandType;
 import card.Card;
 import card.CardAce14Comparator;
 import card.Rank;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import poker.FiveCardPokerHand;
 
 /**
  *

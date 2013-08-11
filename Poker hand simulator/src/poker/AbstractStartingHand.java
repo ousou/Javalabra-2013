@@ -1,5 +1,7 @@
 package poker;
 
+import poker.enums.PokerGameType;
+
 /**
  * Class representing a starting hand in a poker game.
  * 

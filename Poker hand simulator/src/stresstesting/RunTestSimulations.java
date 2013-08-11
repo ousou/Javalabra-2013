@@ -1,14 +1,14 @@
-package main;
+package stresstesting;
 
 import card.Card;
 import card.Rank;
 import card.Suit;
 import java.util.ArrayList;
 import java.util.List;
-import logic.simulator.PokerHandSimulator;
+import logic.simulator.PokerHandSimulatorOriginal;
 import logic.simulator.SimulationResult;
 import poker.AbstractStartingHand;
-import poker.TexasHoldemStartingHand;
+import poker.startinghands.TexasHoldemStartingHand;
 
 /**
  *
@@ -30,7 +30,7 @@ public class RunTestSimulations {
         hands.add(fives);
         
         
-        PokerHandSimulator simulator = new PokerHandSimulator(hands, times);
+        PokerHandSimulatorOriginal simulator = new PokerHandSimulatorOriginal(hands, times);
         SimulationResult result = simulator.performSimulation();
         
         System.out.println("As Ac expected value: " + result.getExpectedValueForHand(aces, 3));

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
-import poker.PokerGameType;
+import poker.enums.PokerGameType;
 
 /**
  * Collects all the information of a performed simulation.

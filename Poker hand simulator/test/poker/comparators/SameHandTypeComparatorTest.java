@@ -1,11 +1,14 @@
-package poker;
+package poker.comparators;
 
+import poker.comparators.SameHandTypeComparator;
+import poker.enums.PokerHandType;
 import card.Card;
 import card.Rank;
 import card.Suit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import poker.FiveCardPokerHand;
 import static org.junit.Assert.*;
 
 /**

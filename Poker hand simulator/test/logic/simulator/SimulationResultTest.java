@@ -13,8 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
-import poker.PokerGameType;
-import poker.TexasHoldemStartingHand;
+import poker.enums.PokerGameType;
+import poker.startinghands.TexasHoldemStartingHand;
 import static org.junit.Assert.*;
 
 /**

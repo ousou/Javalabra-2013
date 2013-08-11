@@ -1,4 +1,4 @@
-package poker;
+package poker.enums;
 
 /**
  * Enum representing a type of poker hand.

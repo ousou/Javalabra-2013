@@ -1,5 +1,6 @@
-package poker;
+package poker.comparators;
 
+import poker.enums.PokerHandType;
 import card.Card;
 import card.Rank;
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import poker.FiveCardPokerHand;
 
 /**
  * Sorts hands by their hand type.

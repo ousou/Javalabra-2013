@@ -1,5 +1,6 @@
-package poker;
+package poker.comparators;
 
+import poker.enums.PokerHandType;
 import card.Card;
 import card.CardAce14Comparator;
 import card.Rank;
@@ -10,15 +11,16 @@ import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import static poker.PokerHandType.FLUSH;
-import static poker.PokerHandType.FOUR_OF_A_KIND;
-import static poker.PokerHandType.FULL_HOUSE;
-import static poker.PokerHandType.HIGH_CARD;
-import static poker.PokerHandType.PAIR;
-import static poker.PokerHandType.STRAIGHT;
-import static poker.PokerHandType.STRAIGHT_FLUSH;
-import static poker.PokerHandType.THREE_OF_A_KIND;
-import static poker.PokerHandType.TWO_PAIR;
+import poker.FiveCardPokerHand;
+import static poker.enums.PokerHandType.FLUSH;
+import static poker.enums.PokerHandType.FOUR_OF_A_KIND;
+import static poker.enums.PokerHandType.FULL_HOUSE;
+import static poker.enums.PokerHandType.HIGH_CARD;
+import static poker.enums.PokerHandType.PAIR;
+import static poker.enums.PokerHandType.STRAIGHT;
+import static poker.enums.PokerHandType.STRAIGHT_FLUSH;
+import static poker.enums.PokerHandType.THREE_OF_A_KIND;
+import static poker.enums.PokerHandType.TWO_PAIR;
 
 /**
  *

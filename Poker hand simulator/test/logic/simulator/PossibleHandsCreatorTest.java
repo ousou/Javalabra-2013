@@ -12,8 +12,8 @@ import static org.junit.Assert.*;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
-import poker.OmahaHoldemStartingHand;
-import poker.TexasHoldemStartingHand;
+import poker.startinghands.OmahaHoldemStartingHand;
+import poker.startinghands.TexasHoldemStartingHand;
 
 /**
  *

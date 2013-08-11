@@ -1,5 +1,7 @@
-package poker;
+package poker.comparators;
 
+import poker.comparators.PokerHandTypeComparator;
+import poker.enums.PokerHandType;
 import card.Card;
 import card.Rank;
 import card.Suit;
@@ -9,6 +11,7 @@ import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import poker.FiveCardPokerHand;
 import static org.junit.Assert.*;
 
 /**

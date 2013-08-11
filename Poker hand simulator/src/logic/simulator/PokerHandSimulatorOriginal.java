@@ -13,21 +13,24 @@ import java.util.Set;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
-import poker.FiveCardPokerHandComparator;
-import poker.PokerGameType;
+import poker.comparators.FiveCardPokerHandComparator;
+import poker.enums.PokerGameType;
 
 /**
  * Simulates the result when pitting poker hands against each other.
  *
  * The class supports only community card games at the moment.
  * 
+ * This class does extra work by sorting all the possible hands created
+ * during the simulation, when it would be enough to find the best five card hand
+ * for each starting hand. Other implementations of IPokerHandSimulator do less
+ * work and are faster.
+ * 
  * @todo Add support for non-community card games.
- * @todo Create a new hand comparator that only compares hand types.
- * Then we'll need to sort only the hands of the best type totally.
  *
  * @author Sebastian Björkqvist
  */
-public class PokerHandSimulator implements IPokerHandSimulator {
+public class PokerHandSimulatorOriginal implements IPokerHandSimulator {
 
     private final List<AbstractStartingHand> startingHands;
     private FiveCardBoard board;
@@ -46,7 +49,7 @@ public class PokerHandSimulator implements IPokerHandSimulator {
      * @throws IllegalArgumentException if there are less than two
      * startingHands.
      */
-    public PokerHandSimulator(List<AbstractStartingHand> startingHands, List<Card> boardCards, int numberOfSimulations) {
+    public PokerHandSimulatorOriginal(List<AbstractStartingHand> startingHands, List<Card> boardCards, int numberOfSimulations) {
         this(startingHands, numberOfSimulations);
         for (int i = 0; i < boardCards.size(); i++) {
             board.addCard(boardCards.get(i));
@@ -69,7 +72,7 @@ public class PokerHandSimulator implements IPokerHandSimulator {
      * @throws IllegalArgumentException if hands or the board have overlapping
      * cards, or if some of the starting hands aren't full.
      */
-    public PokerHandSimulator(List<AbstractStartingHand> startingHands, int numberOfSimulations) {
+    public PokerHandSimulatorOriginal(List<AbstractStartingHand> startingHands, int numberOfSimulations) {
         if (numberOfSimulations < 1) {
             throw new IllegalArgumentException("Number of simulations must be positive!");
         }

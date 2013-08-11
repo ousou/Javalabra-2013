@@ -1,7 +1,9 @@
-package poker;
+package poker.startinghands;
 
+import poker.enums.PokerGameType;
 import card.Card;
 import java.util.List;
+import poker.AbstractStartingHand;
 
 /**
  * Represents a starting hand in Omaha hold'em.
