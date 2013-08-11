@@ -4,7 +4,7 @@ import card.Card;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import poker.AbstractStartingHand;
+import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
 
@@ -63,15 +63,7 @@ public class PokerHandSimulatorVersion2 extends AbstractPokerHandSimulator {
             if (allHands.isEmpty()) {
                 throw new RuntimeException("No hands created for starting hand " + startingHands.get(i));
             }
-            // Finding the best hand from the list allHands:            
-            FiveCardPokerHand bestHand = allHands.get(0);
-            FiveCardPokerHand nextHand;
-            for (int j = 1; j < allHands.size(); j++) {
-                nextHand = allHands.get(j);
-                if (fiveCardPokerHandComparator.compare(nextHand, bestHand) < 0) {
-                    bestHand = nextHand;
-                }
-            }
+            FiveCardPokerHand bestHand = findBestHandFromList(allHands);
             allBestHands.add(bestHand);
             if (!bestFiveCardHandForStartingHand.containsKey(bestHand)) {
                 bestFiveCardHandForStartingHand.put(bestHand, new ArrayList<AbstractStartingHand>());
@@ -79,4 +71,16 @@ public class PokerHandSimulatorVersion2 extends AbstractPokerHandSimulator {
             bestFiveCardHandForStartingHand.get(bestHand).add(startingHands.get(i));
         }
     }    
+
+    private FiveCardPokerHand findBestHandFromList(List<FiveCardPokerHand> allHands) {
+        FiveCardPokerHand bestHand = allHands.get(0);
+        FiveCardPokerHand nextHand;
+        for (int j = 1; j < allHands.size(); j++) {
+            nextHand = allHands.get(j);
+            if (fiveCardPokerHandComparator.compare(nextHand, bestHand) < 0) {
+                bestHand = nextHand;
+            }
+        }
+        return bestHand;
+    }
 }

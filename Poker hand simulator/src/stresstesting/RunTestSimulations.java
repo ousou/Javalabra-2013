@@ -9,7 +9,7 @@ import logic.simulator.AbstractPokerHandSimulator;
 import logic.simulator.PokerHandSimulatorOriginal;
 import logic.simulator.PokerHandSimulatorVersion2;
 import logic.simulator.SimulationResult;
-import poker.AbstractStartingHand;
+import poker.startinghands.AbstractStartingHand;
 import poker.startinghands.OmahaHoldemStartingHand;
 import poker.startinghands.TexasHoldemStartingHand;
 

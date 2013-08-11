@@ -1,19 +1,13 @@
 package logic.simulator;
 
 import card.Card;
-import card.CardDeckStandard;
-import card.ICardDeck;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import poker.AbstractStartingHand;
+import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
-import poker.comparators.FiveCardPokerHandComparator;
 
 /**
  * Original implementation of AbstractPokerHandSimulator.

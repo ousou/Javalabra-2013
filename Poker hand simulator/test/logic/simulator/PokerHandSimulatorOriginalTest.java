@@ -10,7 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import poker.AbstractStartingHand;
+import poker.startinghands.AbstractStartingHand;
 import poker.startinghands.OmahaHoldemStartingHand;
 import poker.startinghands.TexasHoldemStartingHand;
 

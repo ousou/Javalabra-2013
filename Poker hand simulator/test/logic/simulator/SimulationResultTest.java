@@ -11,7 +11,7 @@ import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import poker.AbstractStartingHand;
+import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.TexasHoldemStartingHand;

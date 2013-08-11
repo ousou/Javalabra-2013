@@ -1,5 +1,6 @@
-package poker;
+package poker.startinghands;
 
+import poker.AbstractCardCollection;
 import poker.enums.PokerGameType;
 
 /**
