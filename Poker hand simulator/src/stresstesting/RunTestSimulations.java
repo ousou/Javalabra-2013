@@ -5,6 +5,7 @@ import card.Rank;
 import card.Suit;
 import java.util.ArrayList;
 import java.util.List;
+import logic.simulator.AbstractPokerHandSimulator;
 import logic.simulator.PokerHandSimulatorOriginal;
 import logic.simulator.SimulationResult;
 import poker.AbstractStartingHand;
@@ -18,7 +19,7 @@ public class RunTestSimulations {
 
     public static void main(String[] args) {
                 
-        int times = 2;
+        int times = 10;
         System.out.println("Simulating As Ac vs. 5h 5c " + times + " times:");
         
         AbstractStartingHand aces = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), 
@@ -30,7 +31,7 @@ public class RunTestSimulations {
         hands.add(fives);
         
         
-        PokerHandSimulatorOriginal simulator = new PokerHandSimulatorOriginal(hands, times);
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorOriginal(hands, times);
         SimulationResult result = simulator.performSimulation();
         
         System.out.println("As Ac expected value: " + result.getExpectedValueForHand(aces, 3));
