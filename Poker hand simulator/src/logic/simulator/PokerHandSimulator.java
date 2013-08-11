@@ -21,12 +21,13 @@ import poker.PokerGameType;
  *
  * The class supports only community card games at the moment.
  * 
- * @todo Start using SimulationResult-class when simulating
  * @todo Add support for non-community card games.
+ * @todo Create a new hand comparator that only compares hand types.
+ * Then we'll need to sort only the hands of the best type totally.
  *
  * @author Sebastian Björkqvist
  */
-public class PokerHandSimulator {
+public class PokerHandSimulator implements IPokerHandSimulator {
 
     private final List<AbstractStartingHand> startingHands;
     private FiveCardBoard board;
@@ -112,12 +113,8 @@ public class PokerHandSimulator {
             throw new IllegalArgumentException("The hands and the board have overlapping cards!");
         }
     }
-    
-    /**
-     * Performs the desired simulation.
-     * 
-     * @return SimulationResult-object containing the results of the simulation.
-     */
+
+    @Override
     public SimulationResult performSimulation() {
         SimulationResult simulationResult;
         Set<AbstractStartingHand> handSet = new HashSet<AbstractStartingHand>(startingHands);
@@ -166,7 +163,7 @@ public class PokerHandSimulator {
         FiveCardPokerHandComparator handComparator = new FiveCardPokerHandComparator();
         List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
         
-        createAllPossibleHands(handComparator, allBestHands, bestFiveCardHandForThisStartingHand, simulatedBoard);
+        createBestHands(handComparator, allBestHands, bestFiveCardHandForThisStartingHand, simulatedBoard);
         
         // Determining the winning hand by sorting the list of best hands.
         Collections.sort(allBestHands, handComparator);
@@ -208,7 +205,7 @@ public class PokerHandSimulator {
      * @param bestFiveCardHandForStartingHand Maps five card hands
      * to starting hands for which the five card hand hand is the best hand.
      */
-    private void createAllPossibleHands(FiveCardPokerHandComparator handComparator, 
+    private void createBestHands(FiveCardPokerHandComparator handComparator, 
             List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, 
             List<AbstractStartingHand>> bestFiveCardHandForStartingHand,
             FiveCardBoard simulatedBoard) {

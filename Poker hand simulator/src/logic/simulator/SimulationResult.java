@@ -1,5 +1,6 @@
 package logic.simulator;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import poker.PokerGameType;
  *
  * @author Sebastian Björkqvist
  */
-public class SimulationResult {
+public class SimulationResult implements Serializable {
 
     private Set<AbstractStartingHand> startingHands;
     private FiveCardBoard board;

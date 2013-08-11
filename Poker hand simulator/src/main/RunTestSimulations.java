@@ -18,7 +18,7 @@ public class RunTestSimulations {
 
     public static void main(String[] args) {
                 
-        int times = 10000;
+        int times = 2;
         System.out.println("Simulating As Ac vs. 5h 5c " + times + " times:");
         
         AbstractStartingHand aces = new TexasHoldemStartingHand(new Card(Suit.CLUB, Rank.ACE), 
