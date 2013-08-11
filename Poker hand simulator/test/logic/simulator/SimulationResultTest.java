@@ -273,12 +273,12 @@ public class SimulationResultTest {
         assertEquals(100.0, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(0, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(0, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(1, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(1, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(100.0, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(0, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0, result.getEquityForHand(hand2, digits), 0);
     }
     
     @Test
@@ -300,12 +300,12 @@ public class SimulationResultTest {
         assertEquals(0, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(0, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(100.0, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.5000, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.5000, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(0, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(100.0, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.5000, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.5000, result.getEquityForHand(hand2, digits), 0);
     }
     
     @Test
@@ -328,12 +328,12 @@ public class SimulationResultTest {
         assertEquals(50.00, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(0, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(50.00, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.7500, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.7500, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(50.00, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(50.00, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.2500, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.2500, result.getEquityForHand(hand2, digits), 0);
     }    
     
     @Test
@@ -364,17 +364,17 @@ public class SimulationResultTest {
         assertEquals(33.33, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(33.33, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(33.33, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.5000, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.5000, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(33.33, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(66.67, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.3333, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.3333, result.getEquityForHand(hand2, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand3, digits), 0);
         assertEquals(66.67, result.getLossPercentageForHand(hand3, digits), 0);
         assertEquals(33.33, result.getTiePercentageForHand(hand3, digits), 0);        
-        assertEquals(0.1667, result.getExpectedValueForHand(hand3, digits), 0);        
+        assertEquals(0.1667, result.getEquityForHand(hand3, digits), 0);        
     }    
     
     @Test
@@ -408,17 +408,17 @@ public class SimulationResultTest {
         assertEquals(25.00, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(25.00, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(50.00, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.4583, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.4583, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(25.00, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(75.00, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.3333, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.3333, result.getEquityForHand(hand2, digits), 0);
         
         assertEquals(0, result.getWinPercentageForHand(hand3, digits), 0);
         assertEquals(50.00, result.getLossPercentageForHand(hand3, digits), 0);
         assertEquals(50.00, result.getTiePercentageForHand(hand3, digits), 0);        
-        assertEquals(0.2083, result.getExpectedValueForHand(hand3, digits), 0);        
+        assertEquals(0.2083, result.getEquityForHand(hand3, digits), 0);        
     }
     
     @Test
@@ -451,12 +451,12 @@ public class SimulationResultTest {
         assertEquals(60.61, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(36.36, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(3.030, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.6212, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.6212, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(36.36, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(60.61, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(3.030, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.3788, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.3788, result.getEquityForHand(hand2, digits), 0);
     }
     
     @Test
@@ -513,17 +513,17 @@ public class SimulationResultTest {
         assertEquals(50, result.getWinPercentageForHand(hand1, digits), 0);
         assertEquals(40, result.getLossPercentageForHand(hand1, digits), 0);
         assertEquals(10, result.getTiePercentageForHand(hand1, digits), 0);        
-        assertEquals(0.5458, result.getExpectedValueForHand(hand1, digits), 0);
+        assertEquals(0.5458, result.getEquityForHand(hand1, digits), 0);
         
         assertEquals(25, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(65, result.getLossPercentageForHand(hand2, digits), 0);
         assertEquals(10, result.getTiePercentageForHand(hand2, digits), 0);        
-        assertEquals(0.2958, result.getExpectedValueForHand(hand2, digits), 0);
+        assertEquals(0.2958, result.getEquityForHand(hand2, digits), 0);
         
         assertEquals(12.5, result.getWinPercentageForHand(hand3, digits), 0);
         assertEquals(80, result.getLossPercentageForHand(hand3, digits), 0);
         assertEquals(7.5, result.getTiePercentageForHand(hand3, digits), 0);        
-        assertEquals(0.1583, result.getExpectedValueForHand(hand3, digits), 0);        
+        assertEquals(0.1583, result.getEquityForHand(hand3, digits), 0);        
     }
     
     @Test
@@ -576,16 +576,16 @@ public class SimulationResultTest {
         }
         
         // Verifying results
-        double sumOfExpectedValues = 0;
+        double sumOfEquities = 0;
         for (int i = 0; i < 5; i++) {
             double sumOfPercentages = 0;
             sumOfPercentages += result.getWinPercentageForHand(handList.get(i), digits);
             sumOfPercentages += result.getTiePercentageForHand(handList.get(i), digits);
             sumOfPercentages += result.getLossPercentageForHand(handList.get(i), digits);            
             assertEquals(100, sumOfPercentages, epsilon);
-            sumOfExpectedValues += result.getExpectedValueForHand(handList.get(i), digits);
+            sumOfEquities += result.getEquityForHand(handList.get(i), digits);
         }
         
-        assertEquals(1, sumOfExpectedValues, epsilon);
+        assertEquals(1, sumOfEquities, epsilon);
     }
 } 

@@ -149,7 +149,10 @@ public class SimulationResult implements Serializable {
     /**
      * Adds a result of one simulation.
      *
-     * @param winners
+     * This method is synchronized to enable parallel simulations using
+     * threads.
+     * 
+     * @param winners Set containing the winning starting hands.
      * @throws IllegalArgumentException if the winning hands aren't in the set
      * of starting hands.
      * @throws IllegalArgumentException if winners is null or empty.
@@ -157,7 +160,7 @@ public class SimulationResult implements Serializable {
      * performed, i.e. the number of performed simulations is already at the
      * maximum number given in the constructor.
      */
-    public void addResultForOneSimulation(Set<AbstractStartingHand> winners) {
+    public synchronized void addResultForOneSimulation(Set<AbstractStartingHand> winners) {
         if (winners == null || winners.isEmpty()) {
             throw new IllegalArgumentException("Set of winning hands can't be null"
                     + " or empty!");
@@ -268,18 +271,18 @@ public class SimulationResult implements Serializable {
     }
     
     /**
-     * Retrieves the expected value for a hand.
+     * Retrieves the equity for a hand.
      * 
-     * The expected value is given as a number between 0 and 1, not
+     * The equity is given as a number between 0 and 1, not
      * as a percentage.
      * 
      * @param hand Starting hand
      * @param numberOfSignificantDigits Accuracy of the returned double
      * @return The expected value
      */
-    public double getExpectedValueForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
+    public double getEquityForHand(AbstractStartingHand hand, int numberOfSignificantDigits) {
         checkArgumentsForResultRetrieval(hand, numberOfSignificantDigits); 
-        BigDecimal expectedValue = new BigDecimal(0);
+        BigDecimal equity = new BigDecimal(0);
         int[] resultForThisHand = resultForHand.get(hand);
         BigDecimal toAdd;
         
@@ -287,12 +290,12 @@ public class SimulationResult implements Serializable {
             double numerator = resultForThisHand[i];
             toAdd = new BigDecimal(numerator);
             toAdd = toAdd.divide(new BigDecimal(i+1), new MathContext(numberOfSignificantDigits + 3));
-            expectedValue = expectedValue.add(toAdd);
+            equity = equity.add(toAdd);
         }
         
-        expectedValue = expectedValue.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
+        equity = equity.divide(new BigDecimal(performedSimulations), new MathContext(numberOfSignificantDigits + 3));
         
-        return expectedValue.round(new MathContext(numberOfSignificantDigits)).doubleValue();
+        return equity.round(new MathContext(numberOfSignificantDigits)).doubleValue();
     }
 
     /**
@@ -317,7 +320,8 @@ public class SimulationResult implements Serializable {
             throw new IllegalArgumentException("Number of significant digits must be positive");
         }
         if (performedSimulations < totalNumberOfSimulationsToPerform) {
-            throw new IllegalStateException("Simulation isn't done yet");
+            throw new IllegalStateException("Only " + performedSimulations + " of " 
+                    + totalNumberOfSimulationsToPerform + " simulations have been performed.");
         }        
     }
 }

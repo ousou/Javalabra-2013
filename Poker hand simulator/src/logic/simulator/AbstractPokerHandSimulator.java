@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import poker.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
@@ -27,6 +30,7 @@ import poker.enums.PokerGameType;
  */
 public abstract class AbstractPokerHandSimulator {
 
+    protected final Semaphore waitForThreadToStart = new Semaphore(0);    
     protected final List<AbstractStartingHand> startingHands;
     protected FiveCardBoard board;
     protected List<Card> removedCards;
@@ -130,9 +134,11 @@ public abstract class AbstractPokerHandSimulator {
     }
     /**
      * Performs the desired simulation.
-     * 
+     *      
      * The class will simulate the result the amount of times
      * requested in the constructor.
+     * 
+     * This method does not use threads.
      * 
      * @return SimulationResult-object containing the results of the simulation.
      */    
@@ -144,12 +150,72 @@ public abstract class AbstractPokerHandSimulator {
         } else {
             simulationResult = new SimulationResult(handSet, numberOfSimulations, gameType);
         }
+        
         for (int i = 0; i < numberOfSimulations; i++) {
             Set<AbstractStartingHand> result = simulateHand();
             simulationResult.addResultForOneSimulation(result);
         }
-
+        
         return simulationResult;
+    }
+
+    /**
+     * Performs the desired simulation.
+     *      
+     * The class will simulate the result the amount of times
+     * requested in the constructor.
+     * 
+     * This method uses parallel threads to perform
+     * the simulations.
+     * 
+     * @param numberOfThreads Number of threads to use.
+     * @return SimulationResult-object containing the results of the simulation.
+     * @throws IllegalArgumentException if the number of threads is non-positive
+     * and larger than 16.
+     * @throws InterruptedException if the threads are interrupted.
+     */
+    public SimulationResult performSimulation(int numberOfThreads) throws InterruptedException {
+        if (numberOfThreads <= 0) {
+            throw new IllegalArgumentException("Number of threads must be positive.");
+        }
+        if (numberOfThreads > 16) {
+            throw new IllegalArgumentException("A maximum of 16 threads are allowed.");
+        }
+        if (numberOfThreads == 1) {
+            return performSimulation();
+        }
+        
+        SimulationResult simulationResult;
+        Set<AbstractStartingHand> handSet = new HashSet<AbstractStartingHand>(startingHands);
+        
+        if (gameType.isCommunityCardGame()) {
+            simulationResult = new SimulationResult(handSet, board, numberOfSimulations, gameType);
+        } else {
+            simulationResult = new SimulationResult(handSet, numberOfSimulations, gameType);
+        }
+        int simulationsPerThread = numberOfSimulations / numberOfThreads;
+        int remainder = numberOfSimulations - (numberOfThreads*simulationsPerThread);
+        
+        List<HandSimulationThread> threadList = new ArrayList<HandSimulationThread>();
+        
+        HandSimulationThread threadToAdd = new HandSimulationThread(this, simulationResult, simulationsPerThread + remainder);        
+        threadList.add(threadToAdd);
+        
+        for (int i = 1; i < numberOfThreads; i++) {
+            threadToAdd = new HandSimulationThread(this, simulationResult, simulationsPerThread);        
+            threadList.add(threadToAdd);
+        }
+        
+        for (HandSimulationThread thread : threadList) {
+            thread.start();
+        }
+        
+        for (HandSimulationThread thread : threadList) {
+            thread.join();
+        }        
+        
+        return simulationResult;        
+        
     }
     
     /**
@@ -234,5 +300,29 @@ public abstract class AbstractPokerHandSimulator {
             simulatedBoard.addCard(nextCard);
         }
         return simulatedBoard;
+    }
+    
+    /**
+     * Class enabling parallel simulations.
+     */
+    private static class HandSimulationThread extends Thread {
+
+        private AbstractPokerHandSimulator simulator;
+        private SimulationResult simulationResult;
+        private int timesToRun;
+        
+        public HandSimulationThread(AbstractPokerHandSimulator simulator, SimulationResult simulationResult, int timesToRun) {
+            this.simulator = simulator;
+            this.simulationResult = simulationResult;
+            this.timesToRun = timesToRun;                   
+        }        
+        
+        @Override
+        public void run() {
+            for (int i = 0; i < timesToRun; i++) {
+                Set<AbstractStartingHand> result = simulator.simulateHand();            
+                simulationResult.addResultForOneSimulation(result);   
+            }
+        }
     }
 }
