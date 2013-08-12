@@ -230,7 +230,8 @@ public abstract class AbstractPokerHandSimulator {
         FiveCardBoard simulatedBoard;
         
         if (!gameType.isCommunityCardGame()) {
-            simulatedBoard = null;
+            throw new UnsupportedOperationException("Non-community card games are not supported yet.");
+//            simulatedBoard = null;
         } else {
             simulatedBoard = simulateBoard(deck);
         }
