@@ -57,7 +57,12 @@ public class PokerHandSimulatorVersion2 extends AbstractPokerHandSimulator {
          * hand each starting hand can form.
          */
         for (int i = 0; i < startingHands.size(); i++) {
-            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
+            PossibleHandsCreator handCreator;
+            if (simulatedBoard == null || !simulatedBoard.isFull()) {
+                handCreator = new PossibleHandsCreator(startingHands.get(i));
+            } else {
+                handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
+            }            
             List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
             
             if (allHands.isEmpty()) {

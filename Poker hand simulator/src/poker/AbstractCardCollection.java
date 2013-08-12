@@ -2,6 +2,7 @@ package poker;
 
 import card.Card;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,24 @@ public abstract class AbstractCardCollection {
         }
         cards.add(card);
         return true;
+    }
+    
+    /**
+     * Adds a collection of cards to the hand.
+     * 
+     * @param cards Collection of cards.
+     * @return true if all cards were added.
+     * @throws IllegalArgumentException if cards is null.
+     */
+    public boolean addCards(Collection<Card> cards) {
+        if (cards == null) {
+            throw new IllegalArgumentException("Collection can't be null");
+        }
+        boolean added = true;
+        for (Card card : cards) {
+            added = addCard(card);
+        }
+        return added;
     }
 
     /**

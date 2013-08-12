@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
-import logic.parsing.ParseTextInputToCards;
 import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
@@ -25,11 +23,12 @@ import poker.enums.PokerGameType;
  * There the implementation can specify how the best hands for a
  * starting hand are to be found.
  * 
+ * @todo Add support for non-community card games.
+ * 
  * @author Sebastian Björkqvist
  */
 public abstract class AbstractPokerHandSimulator {
 
-    protected final Semaphore waitForThreadToStart = new Semaphore(0);    
     protected final List<AbstractStartingHand> startingHands;
     protected FiveCardBoard board;
     protected List<Card> removedCards;
@@ -69,7 +68,7 @@ public abstract class AbstractPokerHandSimulator {
      * @throws IllegalArgumentException if there are less than two
      * startingHands.
      * @throws IllegalArgumentException if hands or the board have overlapping
-     * cards, or if some of the starting hands aren't full.
+     * cards.
      */
     public AbstractPokerHandSimulator(List<AbstractStartingHand> startingHands, int numberOfSimulations) {
         if (numberOfSimulations < 1) {
@@ -98,9 +97,6 @@ public abstract class AbstractPokerHandSimulator {
 
         gameType = startingHands.get(0).getGameType();
         for (AbstractStartingHand hand : startingHands) {
-            if (!hand.isFull()) {
-                throw new IllegalArgumentException("One of the hands isn't full!");
-            }
             if (gameType != hand.getGameType()) {
                 throw new IllegalArgumentException("Starting hands do not have the same game type");
             }
@@ -230,11 +226,14 @@ public abstract class AbstractPokerHandSimulator {
     protected Set<AbstractStartingHand> simulateHand() {
         Set<AbstractStartingHand> winningHands = new HashSet<AbstractStartingHand>();        
         ICardDeck deck = new CardDeckStandard(removedCards);
-
+        
+        FiveCardBoard simulatedBoard;
+        
         if (!gameType.isCommunityCardGame()) {
-            throw new UnsupportedOperationException("Non-community card games not supported yet.");
+            simulatedBoard = null;
+        } else {
+            simulatedBoard = simulateBoard(deck);
         }
-        FiveCardBoard simulatedBoard = simulateBoard(deck);
 
         Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForThisStartingHand = new HashMap<FiveCardPokerHand, List<AbstractStartingHand>>();
         List<FiveCardPokerHand> allBestHands = new ArrayList<FiveCardPokerHand>();
@@ -299,6 +298,16 @@ public abstract class AbstractPokerHandSimulator {
             simulatedBoard.addCard(nextCard);
         }
         return simulatedBoard;
+    }
+    
+    /**
+     * Creates copies of starting hands and fills them.
+     * @return 
+     */
+    protected List<AbstractStartingHand> fillStartingHands(ICardDeck deck) {
+        List<AbstractStartingHand> filledStartingHands = new ArrayList<AbstractStartingHand>();
+        
+        return filledStartingHands;
     }
     
     /**

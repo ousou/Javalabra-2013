@@ -3,6 +3,7 @@ package poker;
 import card.Card;
 import card.Rank;
 import card.Suit;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,6 +49,32 @@ public class AbstractCardCollectionTest {
         
         assertFalse(collection.addCard(new Card(Suit.CLUB, Rank.THREE)));
     }
+    
+    @Test
+    public void testAddCards() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(2);
+
+        assertFalse(collection.isFull());        
+        List<Card> toAdd = new ArrayList<Card>();
+        toAdd.add(new Card(Suit.CLUB, Rank.ACE));
+        toAdd.add(new Card(Suit.SPADE, Rank.ACE));
+        assertTrue(collection.addCards(toAdd));
+        assertTrue(collection.isFull());          
+        
+        List<Card> cards = collection.getCards();
+        assertEquals(2, cards.size());
+        for (Card card : toAdd) {
+            assertTrue(cards.contains(card));
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddCardsNullCollection() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(2);
+
+        assertFalse(collection.addCards(null));
+    }
+    
     
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullCard() {

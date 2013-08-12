@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
+import poker.startinghands.SevenCardStudStartingHand;
 import poker.startinghands.TexasHoldemStartingHand;
 
 /**
@@ -282,6 +283,42 @@ public class PokerHandSimulatorVersion2Test {
         assertTrue(result.getTiePercentageForHand(hand2, digits) < 5);
         assertTrue(result.getLossPercentageForHand(hand2, digits) > 40);
         assertTrue(result.getLossPercentageForHand(hand2, digits) < 60);           
+    }
+    
+    @Test
+    public void testPerformSimulationSevenCardStud() throws InterruptedException {
+        // Hand 1 should always win
+        AbstractStartingHand hand1 = new SevenCardStudStartingHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        hand1.addCard(new Card(Suit.SPADE, Rank.ACE));
+        hand1.addCard(new Card(Suit.DIAMOND, Rank.ACE));
+        hand1.addCard(new Card(Suit.HEART, Rank.ACE));    
+        
+        AbstractStartingHand hand2 = new SevenCardStudStartingHand();      
+        hand2.addCard(new Card(Suit.CLUB, Rank.DEUCE));
+        hand2.addCard(new Card(Suit.SPADE, Rank.FIVE));
+        hand2.addCard(new Card(Suit.DIAMOND, Rank.NINE));
+        hand2.addCard(new Card(Suit.HEART, Rank.TEN));    
+        
+        int digits = 3;
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>();
+        startingHands.add(hand1);
+        startingHands.add(hand2);  
+        
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, 10000);
+        SimulationResult result = simulator.performSimulation(2);  
+        
+        assertEquals(1, result.getEquityForHand(hand1, 3), 0);
+        assertEquals(0, result.getEquityForHand(hand2, 3), 0);        
+        
+        assertEquals(100, result.getWinPercentageForHand(hand1, digits), 0);
+        assertEquals(0, result.getTiePercentageForHand(hand1, digits), 0);
+        assertEquals(0, result.getLossPercentageForHand(hand1, digits), 0);
+        
+        assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
+        assertEquals(0, result.getTiePercentageForHand(hand2, digits), 0);
+        assertEquals(100, result.getLossPercentageForHand(hand2, digits), 0);          
     }
 
 

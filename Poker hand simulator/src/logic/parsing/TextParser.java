@@ -11,10 +11,9 @@ import java.util.Map;
 /**
  * Parses text input of cards to a list of card-objects.
  * 
- * @todo Implement text parsing.
  * @author Sebastian Björkqvist
  */
-public class ParseTextInputToCards {
+public class TextParser {
 
     /**
      * Parses string to cards.
@@ -38,8 +37,11 @@ public class ParseTextInputToCards {
      * @return List of cards
      * @throws ParseException if the string can't be parsed.
      */
-    public List<Card> parseTextToCards(String input) throws ParseException {
+    public static List<Card> parseTextToCards(String input) throws ParseException {
         List<Card> cards = new ArrayList<Card>();
+        if (input == null || input.isEmpty()) {
+            return cards;
+        }        
         Map<String, Rank> stringToRankMap = Rank.getStringToRankMap();
         Map<String, Suit> stringToSuitMap = Suit.getStringToSuitMap();
         
@@ -60,7 +62,11 @@ public class ParseTextInputToCards {
             }
             Card card = new Card(suit, rank);
             
-            cards.add(card);
+            if (!cards.contains(card)) {
+                cards.add(card);
+            } else {
+                throw new ParseException("The same card can't be added twice to the list", i);
+            }
         }
         
         return cards;

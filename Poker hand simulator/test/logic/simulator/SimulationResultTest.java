@@ -20,8 +20,6 @@ import static org.junit.Assert.*;
 /**
  *
  * @author Sebastian Björkqvist
- * 
- * @todo Write proper test for result getting methods.
  */
 public class SimulationResultTest {
 

@@ -19,8 +19,6 @@ import poker.FiveCardPokerHand;
  * for each starting hand. Other implementations of IPokerHandSimulator do less
  * work and are faster.
  * 
- * @todo Add support for non-community card games.
- *
  * @author Sebastian Björkqvist
  */
 public class PokerHandSimulatorOriginal extends AbstractPokerHandSimulator {
@@ -64,7 +62,12 @@ public class PokerHandSimulatorOriginal extends AbstractPokerHandSimulator {
          * hand each starting hand can form.
          */
         for (int i = 0; i < startingHands.size(); i++) {
-            PossibleHandsCreator handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
+            PossibleHandsCreator handCreator;
+            if (simulatedBoard == null || !simulatedBoard.isFull()) {
+                handCreator = new PossibleHandsCreator(startingHands.get(i));
+            } else {
+                handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
+            }
             List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
             Collections.sort(allHands, fiveCardPokerHandComparator);
             if (allHands.isEmpty()) {
