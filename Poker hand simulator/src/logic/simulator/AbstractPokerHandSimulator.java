@@ -23,8 +23,6 @@ import poker.enums.PokerGameType;
  * There the implementation can specify how the best hands for a starting hand
  * are to be found.
  *
- * @todo Add support for non-community card games.
- *
  * @author Sebastian Björkqvist
  */
 public abstract class AbstractPokerHandSimulator {
@@ -232,7 +230,6 @@ public abstract class AbstractPokerHandSimulator {
         List<AbstractStartingHand> filledStartingHands = fillStartingHands(deck);
 
         if (!gameType.isCommunityCardGame()) {
-//            throw new UnsupportedOperationException("Non-community card games are not supported yet.");
             simulatedBoard = null;
         } else {
             simulatedBoard = simulateBoard(deck);
