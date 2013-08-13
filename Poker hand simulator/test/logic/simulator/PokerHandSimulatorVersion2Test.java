@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
+import poker.startinghands.FiveCardDrawStartingHand;
 import poker.startinghands.SevenCardStudStartingHand;
 import poker.startinghands.TexasHoldemStartingHand;
 
@@ -319,6 +320,133 @@ public class PokerHandSimulatorVersion2Test {
         assertEquals(0, result.getWinPercentageForHand(hand2, digits), 0);
         assertEquals(0, result.getTiePercentageForHand(hand2, digits), 0);
         assertEquals(100, result.getLossPercentageForHand(hand2, digits), 0);          
+    }
+    
+    @Test
+    public void testPerformSimulationSevenCardStud2() throws InterruptedException {
+        // Hand 1 should always win
+        AbstractStartingHand hand1 = new SevenCardStudStartingHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.THREE));
+        hand1.addCard(new Card(Suit.SPADE, Rank.THREE));
+        hand1.addCard(new Card(Suit.DIAMOND, Rank.SIX));
+        
+        AbstractStartingHand hand2 = new SevenCardStudStartingHand();      
+        hand2.addCard(new Card(Suit.CLUB, Rank.ACE));
+        hand2.addCard(new Card(Suit.SPADE, Rank.KING));
+        hand2.addCard(new Card(Suit.SPADE, Rank.QUEEN));
+        
+        int digits = 3;
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>();
+        startingHands.add(hand1);
+        startingHands.add(hand2);  
+        
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, 10000);
+        SimulationResult result = simulator.performSimulation(2);  
+        
+        // Checking that the results are sensible
+        System.out.println("Hand 1 (3-3-6) EV: " + result.getEquityForHand(hand1, digits));
+        System.out.println("Hand 2 (A-K-Q) EV: " + result.getEquityForHand(hand2, digits));        
+        
+        assertTrue(result.getEquityForHand(hand1, digits) > 0.3);
+        assertTrue(result.getEquityForHand(hand1, digits) < 0.7);   
+        
+        assertTrue(result.getEquityForHand(hand2, digits) > 0.3);
+        assertTrue(result.getEquityForHand(hand2, digits) < 0.7);
+        
+        assertTrue(result.getWinPercentageForHand(hand1, digits) > 30);
+        assertTrue(result.getWinPercentageForHand(hand1, digits) < 70);        
+        assertTrue(result.getTiePercentageForHand(hand1, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) > 30);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) < 70);     
+        
+        assertTrue(result.getWinPercentageForHand(hand2, digits) > 30);
+        assertTrue(result.getWinPercentageForHand(hand2, digits) < 70);        
+        assertTrue(result.getTiePercentageForHand(hand2, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) > 30);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) < 70);           
+    }
+    
+    @Test
+    public void testPerformSimulationFiveCardDraw() throws InterruptedException {
+        // Hand 1 should always win
+        AbstractStartingHand hand1 = new FiveCardDrawStartingHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.THREE));
+        hand1.addCard(new Card(Suit.SPADE, Rank.THREE));
+        
+        AbstractStartingHand hand2 = new FiveCardDrawStartingHand();      
+        hand2.addCard(new Card(Suit.CLUB, Rank.ACE));
+        hand2.addCard(new Card(Suit.SPADE, Rank.KING));
+        
+        int digits = 3;
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>();
+        startingHands.add(hand1);
+        startingHands.add(hand2);  
+        
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, 10000);
+        SimulationResult result = simulator.performSimulation(2);  
+        
+        // Checking that the results are sensible
+        System.out.println("Hand 1 (3-3) EV: " + result.getEquityForHand(hand1, digits));
+        System.out.println("Hand 2 (A-K) EV: " + result.getEquityForHand(hand2, digits));        
+        
+        assertTrue(result.getEquityForHand(hand1, digits) > 0.5);
+        assertTrue(result.getEquityForHand(hand1, digits) < 0.8);   
+        
+        assertTrue(result.getEquityForHand(hand2, digits) > 0.2);
+        assertTrue(result.getEquityForHand(hand2, digits) < 0.4);
+        
+        assertTrue(result.getWinPercentageForHand(hand1, digits) > 50);
+        assertTrue(result.getWinPercentageForHand(hand1, digits) < 80);        
+        assertTrue(result.getTiePercentageForHand(hand1, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) > 20);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) < 50);     
+        
+        assertTrue(result.getWinPercentageForHand(hand2, digits) > 20);
+        assertTrue(result.getWinPercentageForHand(hand2, digits) < 40);        
+        assertTrue(result.getTiePercentageForHand(hand2, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) > 60);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) < 80);           
+    }
+    
+    @Test
+    public void testPerformSimulationWithDifferentAmountOfCardsInHands() throws InterruptedException {
+        // These starting hands have about equal expected value pre-flop
+        AbstractStartingHand hand1 = new TexasHoldemStartingHand();
+        hand1.addCard(new Card(Suit.CLUB, Rank.ACE));
+        AbstractStartingHand hand2 = new TexasHoldemStartingHand(new Card(Suit.HEART, Rank.DEUCE), new Card(Suit.SPADE, Rank.DEUCE));        
+        int digits = 3;
+        
+        List<AbstractStartingHand> startingHands = new ArrayList<AbstractStartingHand>();
+        startingHands.add(hand1);
+        startingHands.add(hand2);
+       
+        
+        AbstractPokerHandSimulator simulator = new PokerHandSimulatorVersion2(startingHands, 10000);
+        SimulationResult result = simulator.performSimulation(2);
+        
+        // Checking that the results are sensible
+        System.out.println("Hand 1 (Ace-any) EV: " + result.getEquityForHand(hand1, digits));
+        System.out.println("Hand 2 (Pair of deuces) EV: " + result.getEquityForHand(hand2, digits));
+        
+        assertTrue(result.getEquityForHand(hand1, digits) > 0.4);
+        assertTrue(result.getEquityForHand(hand1, digits) < 0.6);   
+        
+        assertTrue(result.getEquityForHand(hand2, digits) > 0.4);
+        assertTrue(result.getEquityForHand(hand2, digits) < 0.6);
+        
+        assertTrue(result.getWinPercentageForHand(hand1, digits) > 40);
+        assertTrue(result.getWinPercentageForHand(hand1, digits) < 60);        
+        assertTrue(result.getTiePercentageForHand(hand1, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) > 40);
+        assertTrue(result.getLossPercentageForHand(hand1, digits) < 60);     
+        
+        assertTrue(result.getWinPercentageForHand(hand2, digits) > 40);
+        assertTrue(result.getWinPercentageForHand(hand2, digits) < 60);        
+        assertTrue(result.getTiePercentageForHand(hand2, digits) < 5);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) > 40);
+        assertTrue(result.getLossPercentageForHand(hand2, digits) < 60);           
     }
 
 

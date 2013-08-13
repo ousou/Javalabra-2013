@@ -116,7 +116,8 @@ public class AbstractPokerHandSimulatorTest {
         }        
 
         @Override
-        public void createBestHands(List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand, FiveCardBoard simulatedBoard) {
+        public void createBestHands(List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand,
+                FiveCardBoard simulatedBoard, List<AbstractStartingHand> simulatedHands) {
         }
     }
 

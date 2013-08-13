@@ -12,7 +12,6 @@ import java.util.List;
 public enum PokerGameType {
     TEXAS("Texas hold'em", true),
     OMAHA("Omaha hold'em", true),
-    FIVE_STUD("Five card stud", false),
     SEVEN_STUD("Seven card stud", false),
     FIVE_DRAW("Five card draw", false);
     

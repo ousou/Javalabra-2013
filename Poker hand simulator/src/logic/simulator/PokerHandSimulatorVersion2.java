@@ -52,16 +52,17 @@ public class PokerHandSimulatorVersion2 extends AbstractPokerHandSimulator {
     }    
 
     @Override
-    protected void createBestHands(List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand, FiveCardBoard simulatedBoard) {
+    protected void createBestHands(List<FiveCardPokerHand> allBestHands, Map<FiveCardPokerHand, List<AbstractStartingHand>> bestFiveCardHandForStartingHand,
+            FiveCardBoard simulatedBoard, List<AbstractStartingHand> filledStartingHands) {
         /* Creating all possible hands for each starting hand, and determining the best possible
          * hand each starting hand can form.
          */
-        for (int i = 0; i < startingHands.size(); i++) {
+        for (int i = 0; i < filledStartingHands.size(); i++) {
             PossibleHandsCreator handCreator;
             if (simulatedBoard == null || !simulatedBoard.isFull()) {
-                handCreator = new PossibleHandsCreator(startingHands.get(i));
+                handCreator = new PossibleHandsCreator(filledStartingHands.get(i));
             } else {
-                handCreator = new PossibleHandsCreator(startingHands.get(i), simulatedBoard);
+                handCreator = new PossibleHandsCreator(filledStartingHands.get(i), simulatedBoard);
             }            
             List<FiveCardPokerHand> allHands = handCreator.createAllPossibleHands();
             

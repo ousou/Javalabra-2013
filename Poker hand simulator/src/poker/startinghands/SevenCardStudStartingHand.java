@@ -40,7 +40,8 @@ public class SevenCardStudStartingHand extends AbstractStartingHand {
 
     @Override
     public AbstractStartingHand copyOfHand() {
-        AbstractStartingHand copy = new SevenCardStudStartingHand(getCards());
+        AbstractStartingHand copy = new SevenCardStudStartingHand();
+        copy.addCards(getCards());        
         return copy;
     }
     

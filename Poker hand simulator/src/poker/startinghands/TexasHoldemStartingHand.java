@@ -55,7 +55,8 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
 
     @Override
     public AbstractStartingHand copyOfHand() {
-        AbstractStartingHand copy = new TexasHoldemStartingHand(getCards());
+        AbstractStartingHand copy = new TexasHoldemStartingHand();
+        copy.addCards(getCards());
         return copy;
     }
 }
