@@ -35,9 +35,13 @@ public class SevenCardStudStartingHand extends AbstractStartingHand {
         if (cardsToAdd.size() > 7) {
             throw new IllegalArgumentException("The list has more than seven cards");
         }
-        for (int i = 0; i < cardsToAdd.size(); i++) {
-            addCard(cardsToAdd.get(i));
-        }
+        addCards(cardsToAdd);
+    }
+
+    @Override
+    public AbstractStartingHand copyOfHand() {
+        AbstractStartingHand copy = new SevenCardStudStartingHand(getCards());
+        return copy;
     }
     
 }

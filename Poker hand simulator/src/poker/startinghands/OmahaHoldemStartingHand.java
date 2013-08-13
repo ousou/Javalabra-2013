@@ -38,4 +38,12 @@ public class OmahaHoldemStartingHand extends AbstractStartingHand {
             addCard(cardsToAdd.get(i));
         }
     }
+
+    @Override
+    public AbstractStartingHand copyOfHand() {
+        AbstractStartingHand copy = new OmahaHoldemStartingHand(getCards());
+        return copy;
+    }
+    
+    
 }

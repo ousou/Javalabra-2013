@@ -1,12 +1,13 @@
 package card;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * 
  * @author Sebastian Björkqvist
  */
-public class CardAce14Comparator implements Comparator<Card> {
+public class CardAce14Comparator implements Comparator<Card>, Serializable {
 
     /**
      * Compares cards by their rank, with ace having rank 14.

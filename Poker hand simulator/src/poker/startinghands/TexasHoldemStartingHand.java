@@ -52,4 +52,10 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
         addCard(cardsToAdd.get(0));
         addCard(cardsToAdd.get(1));
     }    
+
+    @Override
+    public AbstractStartingHand copyOfHand() {
+        AbstractStartingHand copy = new TexasHoldemStartingHand(getCards());
+        return copy;
+    }
 }

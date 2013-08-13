@@ -70,4 +70,10 @@ public abstract class AbstractStartingHand extends AbstractCardCollection {
         return gameType;
     }    
     
+    /**
+     * Returns a copy of this starting hand.
+     * 
+     * @return AbstractStartingHand
+     */
+    public abstract AbstractStartingHand copyOfHand();            
 }

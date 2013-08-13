@@ -1,6 +1,7 @@
 package poker;
 
 import card.Card;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,7 +13,7 @@ import java.util.Set;
  * 
  * @author Sebastian Björkqvist
  */
-public abstract class AbstractCardCollection {
+public abstract class AbstractCardCollection implements Serializable {
 
     private final Set<Card> cards;
     private final int maximumAmountOfCardsInCollection;    
