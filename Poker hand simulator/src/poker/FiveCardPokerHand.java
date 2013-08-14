@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class FiveCardPokerHand extends AbstractCardCollection {
 
-
     /**
      * Creates a new empty five card hand.
      */

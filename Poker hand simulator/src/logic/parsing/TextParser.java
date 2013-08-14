@@ -34,7 +34,7 @@ public class TextParser {
      * "Ad, Ts, Kh, Qc, 5d" also works.
      * 
      * @param input String with cards
-     * @return List of cards
+     * @return List of cards, empty list if there is nothing to be parsed.
      * @throws ParseException if the string can't be parsed.
      */
     public static List<Card> parseTextToCards(String input) throws ParseException {
