@@ -29,12 +29,6 @@ public class SevenCardStudStartingHand extends AbstractStartingHand {
     
     public SevenCardStudStartingHand(List<Card> cardsToAdd) {
         this();
-        if (cardsToAdd == null) {
-            throw new IllegalArgumentException("List of cards can't be null!");
-        }
-        if (cardsToAdd.size() > 7) {
-            throw new IllegalArgumentException("The list has more than seven cards");
-        }
         addCards(cardsToAdd);
     }
 

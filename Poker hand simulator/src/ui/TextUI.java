@@ -7,9 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import logic.parsing.TextParser;
+import logic.simulator.AbstractPokerHandSimulator;
+import logic.simulator.PokerHandSimulatorVersion2;
+import logic.simulator.SimulationResult;
 import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
@@ -26,9 +27,12 @@ import poker.startinghands.TexasHoldemStartingHand;
 public class TextUI implements UI {
 
     private Scanner scanner;
+    private Set<Card> deadCards;
+    private final static int resultAccuracy = 3;
 
     public TextUI() {
         this.scanner = new Scanner(System.in);
+        deadCards = new HashSet<Card>();
     }
 
     @Override
@@ -53,14 +57,14 @@ public class TextUI implements UI {
     private void goToMainMenu() {
         boolean printMainMenu = true;
         while (true) {
-
+            deadCards.clear();
             System.out.println("");
             if (printMainMenu) {
                 printMainMenu();
             }
             System.out.println("");
             System.out.print("> ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             input = input.trim();
 
             if (input.equals("1")) {
@@ -83,14 +87,36 @@ public class TextUI implements UI {
         PokerGameType gameType = getGameSelection();
         int numberOfHands = getNumberOfHands(gameType);
         List<AbstractStartingHand> startingHands = getStartingHands(numberOfHands, gameType);
+        FiveCardBoard board = null;
         if (gameType.isCommunityCardGame()) {
-            FiveCardBoard board = getBoard();
+            board = getBoard();
+            deadCards.addAll(board.getCards());
         }
-        System.out.println("You selected " + gameType.getFullName() + " with " + numberOfHands + " hands");
-        for (AbstractStartingHand hand : startingHands) {
-            System.out.println("Hand: " + hand);
+        int numberOfSimulations = getNumberOfSimulations();
+        
+
+//        printSelections(gameType, numberOfHands, startingHands, board, numberOfSimulations);
+
+        AbstractPokerHandSimulator simulator;
+        if (gameType.isCommunityCardGame()) {
+            simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), numberOfSimulations);
+        } else {
+            simulator = new PokerHandSimulatorVersion2(startingHands, numberOfSimulations);
         }
-        System.out.println("Not implemented yet");
+        SimulationResult result;
+        
+        System.out.println("Simulating, please wait...");
+        long start = System.currentTimeMillis();
+
+        try {
+            result = simulator.performSimulation(2);
+        } catch (InterruptedException ex) {
+            System.out.println("One of the simulation threads were interrupted. Please try again.");
+            return;
+        }
+        long end = System.currentTimeMillis(); 
+        double timeElapsed = (1.0*end-start)/1000;     
+        printResults(result, startingHands, board, gameType, timeElapsed);                
     }
 
     private void printHelp() {
@@ -120,7 +146,7 @@ public class TextUI implements UI {
             printGameSelectionMenu();
             System.out.println("");
             System.out.print("> ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             if (input.equals("1")) {
                 return PokerGameType.TEXAS;
             } else if (input.equals("2")) {
@@ -150,7 +176,7 @@ public class TextUI implements UI {
             System.out.println("");
             System.out.print("Number of hands in simulation (2-" + maxNumberOfHands + "): ");
 
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             int selection;
             try {
                 selection = Integer.parseInt(input);
@@ -184,7 +210,9 @@ public class TextUI implements UI {
         List<AbstractStartingHand> hands = new ArrayList<AbstractStartingHand>();
         
         for (int i = 0; i < numberOfHands; i++) {
-            hands.add(getHandInput(gameType, i+1));
+            AbstractStartingHand hand = getHandInput(gameType, i+1);
+            hands.add(hand);
+            deadCards.addAll(hand.getCards());
         }
         
         return hands;
@@ -194,7 +222,7 @@ public class TextUI implements UI {
         while (true) {
             System.out.println("");
             System.out.print("Enter cards in hand " + i + "  (example: As, Kd): ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             List<Card> parsedCards;
             try {
                 parsedCards = TextParser.parseTextToCards(input);
@@ -207,7 +235,7 @@ public class TextUI implements UI {
                 continue;
             }
             if (checkDuplicateCards(parsedCards)) {
-                System.out.println("The same card can't be in the input twice");
+                System.out.println("One of the entered cards belongs to another hand");
                 continue;
             }
             switch (gameType) {
@@ -246,10 +274,12 @@ public class TextUI implements UI {
     }
 
     private boolean checkDuplicateCards(List<Card> parsedCards) {
-        Set<Card> uniqueCards = new HashSet<Card>(parsedCards);
-        List<Card> copyOfParsedCards = new ArrayList<Card>(parsedCards);
-        copyOfParsedCards.removeAll(uniqueCards);
-        return !copyOfParsedCards.isEmpty();
+        for (Card card: parsedCards) {
+            if (deadCards.contains(card)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private FiveCardBoard getBoard() {
@@ -257,7 +287,7 @@ public class TextUI implements UI {
         while (true) {
             System.out.println("");
             System.out.print("Enter cards on board: (example: Ts, Th, 3c): ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             List<Card> parsedCards;
             try {
                 parsedCards = TextParser.parseTextToCards(input);
@@ -265,14 +295,10 @@ public class TextUI implements UI {
                 System.out.println("Unable to parse input");
                 continue;
             }
-            if (parsedCards.isEmpty()) {
-                System.out.println("No cards detected in input");
-                continue;
-            }
             if (checkDuplicateCards(parsedCards)) {
-                System.out.println("The same card can't be in the input twice");
+                System.out.println("One of the entered cards belongs to a hand");
                 continue;
-            }
+            }            
             if (parsedCards.size() > board.getMaximumAmountOfCardsInCollection()) {
                 System.out.println("The board can take a maximum of five cards");
                 continue;
@@ -280,5 +306,54 @@ public class TextUI implements UI {
             board.addCards(parsedCards);
             return board;
         }
+    }
+
+    private int getNumberOfSimulations() {
+        while (true) {
+            System.out.println("");
+            System.out.println("Number of simulations (select default 10000 by pressing enter): ");
+            String input = scanner.nextLine().trim();
+            
+            if (input.isEmpty()) {
+                return 10000;
+            }            
+            try {
+                return Integer.parseInt(input);                
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input");
+            }                
+        }
+    }
+
+    private void printSelections(PokerGameType gameType, int numberOfHands, List<AbstractStartingHand> startingHands, FiveCardBoard board, int numberOfSimulations) {
+        System.out.println("You selected " + gameType.getFullName() + " with " + numberOfHands + " hands");
+        for (AbstractStartingHand hand : startingHands) {
+            System.out.println("Hand: " + hand);
+        }
+        System.out.println("Board: " + board);
+        System.out.println("Number of simulations: " + numberOfSimulations);
+    }
+
+    private void printResults(SimulationResult result, List<AbstractStartingHand> startingHands, 
+            FiveCardBoard board, PokerGameType gameType, double timeElapsed) {
+        System.out.println("");
+        System.out.println("Results: ");
+        System.out.println("Game: " + gameType.getFullName());
+        if (board != null) {
+            System.out.println("Board: " + board);
+        }
+        for (int i = 0; i < startingHands.size(); i++) {
+            AbstractStartingHand hand = startingHands.get(i);
+            System.out.println("Hand " + (i+1) + hand + " win/loss/tie % " + 
+                    result.getWinPercentageForHand(hand, resultAccuracy) + "/" +
+                    result.getLossPercentageForHand(hand, resultAccuracy) + "/" +
+                    result.getTiePercentageForHand(hand, resultAccuracy) + "/" +                    
+                    " equity: " + result.getEquityForHand(hand, resultAccuracy));
+        }        
+        System.out.println("");
+        System.out.println("Time elapsed: " + timeElapsed + " seconds");
+        System.out.println("");
+        System.out.println("Press any key to return to main menu");
+        scanner.nextLine();
     }
 }

@@ -32,12 +32,6 @@ public class FiveCardDrawStartingHand extends AbstractStartingHand {
      */
     public FiveCardDrawStartingHand(List<Card> cardsToAdd) {
         this();
-        if (cardsToAdd == null) {
-            throw new IllegalArgumentException("List of cards can't be null");
-        }
-        if (cardsToAdd.size() > 5) {
-            throw new IllegalArgumentException("List contains more than five cards!");            
-        }
         addCards(cardsToAdd);
     }
    

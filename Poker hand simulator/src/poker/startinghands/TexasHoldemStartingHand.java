@@ -42,15 +42,10 @@ public class TexasHoldemStartingHand extends AbstractStartingHand {
      * @param card2 Second card
      * @throws IllegalArgumentException if one of the cards are null, or
      * if they are the same card.
-     * @throws IllegalArgumentException if the list size isn't 2.
      */
     public TexasHoldemStartingHand(List<Card> cardsToAdd) {
         this();
-        if (cardsToAdd == null || cardsToAdd.size() != 2) {
-            throw new IllegalArgumentException("List of cards must be of size 2");
-        }
-        addCard(cardsToAdd.get(0));
-        addCard(cardsToAdd.get(1));
+        addCards(cardsToAdd);
     }    
 
     @Override
