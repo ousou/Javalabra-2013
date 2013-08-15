@@ -12,26 +12,23 @@ import poker.FiveCardPokerHand;
 
 /**
  * Sorts hands by their hand type.
- * 
+ *
  * @author Sebastian Björkqvist
  */
 public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, Serializable {
 
-    /* These are used when comparing hands of same type,
-     * so that the hand type doens't have to be determined
-     * more than once.
-     */
-    private PokerHandType hand1Type;
-    private PokerHandType hand2Type;    
     
     /**
      * Sorts five card poker in descending hands by their hand type.
-     * 
-     * The hand(s) with the best hand type will be first on the list
-     * when using this sorter.
-     * 
+     *
+     * The hand(s) with the best hand type will be first on the list when using
+     * this sorter.
+     *
      * Hands of the same type are considered equal.
      * 
+     * The method uses the predetermined hand types of the given hands if available.
+     * When the method has run, the hands will contain their hand type.
+     *
      * @param o1
      * @param o2
      * @return Returns a negative, positive or zero integer if o1 is of a
@@ -41,17 +38,21 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
      */
     @Override
     public int compare(FiveCardPokerHand o1, FiveCardPokerHand o2) {
-        hand1Type = determineHandType(o1);
-        hand2Type = determineHandType(o2);
-        
-        return hand2Type.getValue() - hand1Type.getValue();
-    }    
-    
+        if (o1.getHandType() == null) {
+            o1.setHandType(determineHandType(o1));
+        }
+        if (o2.getHandType() == null) {
+            o2.setHandType(determineHandType(o2));
+        }
+
+        return o2.getHandType().getValue() - o1.getHandType().getValue();
+    }
+
     /**
      * Determines the hand type of a five card poker hand.
-     * 
+     *
      * All hand types have a value representing their strength. A higher value
-     * means a better hand, so using this method we can immediately determine 
+     * means a better hand, so using this method we can immediately determine
      * which of two hands is better if they aren't of the same type.
      *
      * @param hand FiveCardPokerHand
@@ -105,11 +106,10 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
         // If none of the above are true, the hand is a high card hand.
         return PokerHandType.HIGH_CARD;
     }
-    
 
     /**
      * Checks if a hand is a flush.
-     * 
+     *
      * @param cards
      * @return true if all cards are of the same suit, false otherwise.
      */
@@ -127,7 +127,7 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
      * Checks if a hand is a straight.
      *
      * The method assumes that the cards are sorted.
-     * 
+     *
      * @param cards
      * @return True if the hand is a straight, false otherwise.
      */
@@ -148,9 +148,9 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
 
     /**
      * Checks if the value of the card increases by one starting from an index.
-     * 
+     *
      * The method assumes that the cards are sorted.
-     * 
+     *
      * @param cards List of cards
      * @param startingIndex starting index
      * @return true if the value always increases by one, false otherwise.
@@ -174,14 +174,12 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
      * the hand.
      *
      * The method assumes that the cards are sorted.
-     * 
-     * Examples: 
-     * For the hand 9-9-9-K-A the method returns the list {3,1,1} 
-     * For the hand 5-5-4-T-Q the method returns the list {2,1,1,1} 
-     * For the hand 4-4-K-K-K the method returns {3,2} 
-     * For the hand K-T-K-K-K the method returns {4,1} 
-     * For the hand 5-5-7-7-T the method returns {2,2,1} 
-     * For the hand 5-4-8-7-9 the method returns {1,1,1,1,1}
+     *
+     * Examples: For the hand 9-9-9-K-A the method returns the list {3,1,1} For
+     * the hand 5-5-4-T-Q the method returns the list {2,1,1,1} For the hand
+     * 4-4-K-K-K the method returns {3,2} For the hand K-T-K-K-K the method
+     * returns {4,1} For the hand 5-5-7-7-T the method returns {2,2,1} For the
+     * hand 5-4-8-7-9 the method returns {1,1,1,1,1}
      *
      * @param cards The cards of a hand
      * @return An list of integers, with the highest amount of cards with the
@@ -208,13 +206,5 @@ public class PokerHandTypeComparator implements Comparator<FiveCardPokerHand>, S
         Collections.reverse(cardsOfSameRankList);
 
         return cardsOfSameRankList;
-    }    
-
-    public PokerHandType getHand1Type() {
-        return hand1Type;
-    }
-
-    public PokerHandType getHand2Type() {
-        return hand2Type;
     }
 }

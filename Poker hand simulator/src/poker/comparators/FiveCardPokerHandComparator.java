@@ -63,7 +63,7 @@ public final class FiveCardPokerHandComparator implements Comparator<FiveCardPok
             return handTypeComparison;
         }
         // If we are here, we know that the hands must be of the same type.
-        PokerHandType handType = handTypeComparator.getHand1Type(); 
+        PokerHandType handType = o1.getHandType(); 
         
         SameHandTypeComparator sameHandTypeComparator = new SameHandTypeComparator(handType);
         

@@ -2,6 +2,7 @@ package poker;
 
 import card.Card;
 import java.util.List;
+import poker.enums.PokerHandType;
 
 /**
  * Represents a standard five card poker hand with cards from a 52 card deck.
@@ -10,6 +11,7 @@ import java.util.List;
  */
 public class FiveCardPokerHand extends AbstractCardCollection {
 
+    private PokerHandType handType;
     /**
      * Creates a new empty five card hand.
      */
@@ -34,4 +36,11 @@ public class FiveCardPokerHand extends AbstractCardCollection {
         }
     }
 
+    public PokerHandType getHandType() {
+        return handType;
+    }
+
+    public void setHandType(PokerHandType handType) {
+        this.handType = handType;
+    }
 }
