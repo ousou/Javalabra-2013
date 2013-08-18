@@ -24,12 +24,11 @@ import javax.swing.border.Border;
 import ui.guitools.CardDrawer;
 
 /**
- * Method that draws all cards and writes the string
- * representation of the cards.
- * 
- * Used for testing that the card pictures are named
- * correctly.
- * 
+ * Method that draws all cards and writes the string representation of the
+ * cards.
+ *
+ * Used for testing that the card pictures are named correctly.
+ *
  * @author Sebastian Björkqvist
  */
 public class DrawAllCards implements Runnable {
@@ -42,22 +41,22 @@ public class DrawAllCards implements Runnable {
 
     public DrawAllCards() {
         this.deck = new CardDeckStandard(false);
-    }    
-    
+    }
+
     @Override
     public void run() {
-        frame = new JFrame("Drawing all cards");
-        frame.setPreferredSize(new Dimension(800, 400));
-        
+        frame = new JFrame("All cards");
+        frame.setPreferredSize(new Dimension(800, 600));
+
         JLayeredPane contentPanel = new JLayeredPane();
 
         Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
         contentPanel.setBorder(padding);
 
-        frame.setContentPane(contentPanel);  
+        frame.setContentPane(contentPanel);
         frame.setLayeredPane(contentPanel);
-        
+
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         try {
             createComponents(frame.getLayeredPane());
@@ -65,33 +64,37 @@ public class DrawAllCards implements Runnable {
             Logger.getLogger(DrawAllCards.class.getName()).log(Level.SEVERE, null, ex);
         }
         frame.pack();
-        frame.setVisible(true);      
-        
+        frame.setVisible(true);
+
     }
 
     private void createComponents(Container container) throws IOException {
-        this.cardDrawer = new CardDrawer(container, pictureDirectory, pictureType);        
-        
+        this.cardDrawer = new CardDrawer(container, pictureDirectory, pictureType);
+
         int index = 0;
         while (!deck.isEmpty()) {
             Card c = deck.getCard();
-            int xPlace = (index % 13)*50;
-            int yPlace = (index / 13)*75 + 25;
-            cardDrawer.draw(c, xPlace, yPlace, index);
-            
-            Insets insets = container.getInsets();
-            JLabel text = new JLabel(c.toString());
-            container.add(text, index);
-            Dimension size = text.getPreferredSize();
-            text.setBounds(((index % 13)) * 50 + 5 + insets.left, 85 + 75 * (index / 13) + insets.top,
-                    size.width, size.height);   
-            index++;            
+            int xPlace = (index % 8) * 90;
+            int yPlace = (index / 8) * 75 + 25;
+            cardDrawer.draw(c, xPlace, yPlace, index, false);
+            cardDrawer.draw(c, xPlace + 45, yPlace, index, true);
+
+            addCardText(c, xPlace, yPlace, index, container);
+            index++;
         }
     }
-    
+
+    private void addCardText(Card c, int xPlace, int yPlace, int index, Container container) {
+        Insets insets = container.getInsets();
+        JLabel text = new JLabel(c.toString());
+        container.add(text, index);
+        Dimension size = text.getPreferredSize();
+        text.setBounds(xPlace + 5 + insets.left, yPlace + 60 + insets.top,
+                size.width, size.height);
+    }
+
     public static void main(String[] args) {
         DrawAllCards draw = new DrawAllCards();
         SwingUtilities.invokeLater(draw);
     }
-
 }

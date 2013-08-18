@@ -34,12 +34,20 @@ public class CardDrawer {
      * @param y Place of image on the y-axis
      * @param index Where to put the image in the container. Used to determine
      * which image will be visible if two images are on top of each other
+     * @param grey if true, draws the grey version of the card
+     * 
      * @return The JLabel-object in which the image is placed.
      * 
      * @throws IOException If the card picture isn't found.
      */
-    public JLabel draw(Card card, int x, int y, int index) throws IOException {
-        BufferedImage picture = ImageIO.read(new File(pictureDirectory + card.toString() + pictureType));
+    public JLabel draw(Card card, int x, int y, int index, boolean grey) throws IOException {
+        String fileName;
+        if (grey) {
+            fileName = pictureDirectory + card.toString() + "_grey" + pictureType;
+        } else {
+            fileName = pictureDirectory + card.toString() + pictureType;
+        }
+        BufferedImage picture = ImageIO.read(new File(fileName));
         JLabel pictureLabel = new JLabel(new ImageIcon(picture));
         
         container.add(pictureLabel, index);
