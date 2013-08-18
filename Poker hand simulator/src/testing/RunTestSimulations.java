@@ -1,4 +1,4 @@
-package stresstesting;
+package testing;
 
 import card.Card;
 import card.Rank;
