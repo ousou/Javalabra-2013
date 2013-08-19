@@ -1,5 +1,6 @@
 package main;
 
+import ui.GUIInvoker;
 import ui.TextUI;
 import ui.UI;
 
@@ -10,7 +11,7 @@ import ui.UI;
 public class Main {
 
     public static void main(String[] args) {
-        UI ui = new TextUI();
+        UI ui = new GUIInvoker();
         
         ui.start();
     }
