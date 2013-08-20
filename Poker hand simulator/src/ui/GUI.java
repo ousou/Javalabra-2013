@@ -1,19 +1,17 @@
 package ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.WindowConstants;
-import javax.swing.border.Border;
+import poker.enums.PokerGameType;
 import ui.guitools.CardDrawer;
 import ui.actionlisteners.ProgramShutdown;
-import ui.actionlisteners.StartNewSimulation;
+import ui.actionlisteners.SimulationStarter;
+import ui.actionlisteners.StartNewSimulationDialog;
 
 /**
  * Graphical user interface for Poker hand simulator.
@@ -23,7 +21,7 @@ import ui.actionlisteners.StartNewSimulation;
 public class GUI implements Runnable {
 
     private JFrame frame;
-    private final String pictureDirectory = "pictures/";
+    private final String pictureDirectory = "pictures_small/";
     private final String pictureType = ".png";    
     private CardDrawer cardDrawer;
     
@@ -72,7 +70,7 @@ public class GUI implements Runnable {
 
         JMenuItem startSimulationButton = new JMenuItem("New simulation",
                 KeyEvent.VK_S);
-        startSimulationButton.addActionListener(new StartNewSimulation(this));
+        startSimulationButton.addActionListener(new StartNewSimulationDialog(this));
         mainMenu.add(startSimulationButton);
         mainMenu.addSeparator();   
         
@@ -82,4 +80,15 @@ public class GUI implements Runnable {
         mainMenu.add(exitProgramButton);        
     }
 
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public String getPictureDirectory() {
+        return pictureDirectory;
+    }
+
+    public String getPictureType() {
+        return pictureType;
+    }
 }

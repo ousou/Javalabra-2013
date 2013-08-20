@@ -13,7 +13,7 @@ public enum PokerGameType {
     TEXAS("Texas hold'em", true),
     OMAHA("Omaha hold'em", true),
     SEVEN_STUD("Seven card stud", false),
-    FIVE_DRAW("Five card draw", false);
+    FIVE_DRAW("Five card draw / stud", false);
     
     private String fullName;
     private boolean communityCardGame;
@@ -51,4 +51,14 @@ public enum PokerGameType {
     public static List<PokerGameType> getAllGameTypes() {
         return new ArrayList<PokerGameType>(Arrays.asList(values()));
     }
+    
+    /**
+     * Retrieves and array of all poker game types.
+     * 
+     * @return Array containing all types;
+     */
+    public static PokerGameType[] getAllGameTypesArray() {
+        return values();
+    }
+            
 }
