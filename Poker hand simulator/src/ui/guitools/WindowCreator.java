@@ -26,6 +26,7 @@ public class WindowCreator {
         dialog.setTitle(title);
         dialog.setSize(new Dimension(width, height));
         dialog.setLocationRelativeTo(owner);
+        dialog.setResizable(false);
         dialog.setVisible(true);
 
         return dialog;

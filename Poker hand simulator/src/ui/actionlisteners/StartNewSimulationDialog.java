@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import poker.enums.PokerGameType;
 import ui.GUI;
@@ -120,6 +121,7 @@ public class StartNewSimulationDialog implements ActionListener {
                 return;
             }
             SimulationStarter starter = new SimulationStarter(gui, gameType, selectedNumberOfHands, selectedNumberOfSimulations);
+            SwingUtilities.invokeLater(starter);
             mainDialog.dispose();
         }
 

@@ -25,7 +25,7 @@ import ui.guitools.WindowCreator;
  * 
  * @author Sebastian Björkqvist
  */
-public class SimulationStarter {
+public class SimulationStarter implements Runnable {
 
     private GUI gui;
     private Container container;
@@ -43,14 +43,21 @@ public class SimulationStarter {
         this.numberOfStartingHands = numberOfStartingHands;
         this.numberOfSimulations = numberOfSimulations;
         drawnCards = new ArrayList<Component>();
-        openWindow();
     }
+
+    @Override
+    public void run() {
+        openWindow();
+    }    
 
     private void openWindow() {
         WindowCreator creator = new WindowCreator(gui.getFrame());
         dialog = creator.createNewJDialog("Simulation starter", 700, 800);
+      
         container = dialog.getLayeredPane();
-        container.setLayout(null);
+//        container.setLayout(null);
+        
+
         try {
             drawAllCards();
         } catch (IOException ex) {
@@ -83,8 +90,7 @@ public class SimulationStarter {
         container.add(abort);        
         
         createGraphicsForStartingHands();
-        dialog.pack();
-        dialog.setVisible(true);
+
     }
 
     private void drawAllCards() throws IOException {
