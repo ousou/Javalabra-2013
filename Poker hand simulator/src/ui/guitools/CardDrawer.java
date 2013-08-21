@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -48,7 +49,9 @@ public class CardDrawer {
         } else {
             fileName = pictureDirectory + card.toString() + pictureType;
         }
-        BufferedImage picture = ImageIO.read(new File(fileName));
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream(fileName);        
+        BufferedImage picture = ImageIO.read(input);
         JLabel pictureLabel = new JLabel(new ImageIcon(picture));
 
         container.add(pictureLabel, index);

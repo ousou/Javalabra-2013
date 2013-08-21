@@ -29,7 +29,7 @@ import ui.guitools.CardDrawer;
 public class DrawAllCards implements Runnable {
 
     private JFrame frame;
-    private final String pictureDirectory = "pictures_small/";
+    private final String pictureDirectory = "";
     private final String pictureType = ".png";
     private ICardDeck deck;
     private CardDrawer cardDrawer;

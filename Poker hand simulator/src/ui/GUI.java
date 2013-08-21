@@ -21,7 +21,7 @@ import ui.actionlisteners.StartNewSimulationDialog;
 public class GUI implements Runnable {
 
     private JFrame frame;
-    private final String pictureDirectory = "pictures_small/";
+    private final String pictureDirectory = "";
     private final String pictureType = ".png";    
     private CardDrawer cardDrawer;
     
