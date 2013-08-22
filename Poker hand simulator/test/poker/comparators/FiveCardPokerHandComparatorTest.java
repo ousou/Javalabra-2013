@@ -155,7 +155,8 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(twoPair.addCard(new Card(Suit.HEART, Rank.SEVEN)));
         assertTrue(twoPair.addCard(new Card(Suit.DIAMOND, Rank.FIVE)));
         
-        assertTrue(comparator.compare(pair, twoPair) > 0);    
+        assertTrue("Two pair hand " + twoPair + " doesn't beat pair hand " + pair, 
+        comparator.compare(pair, twoPair) > 0);    
     }
     
     @Test
@@ -174,7 +175,8 @@ public class FiveCardPokerHandComparatorTest {
         assertTrue(flush.addCard(new Card(Suit.DIAMOND, Rank.SIX)));
         assertTrue(flush.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
         
-        assertTrue(comparator.compare(straight, flush) > 0);
+        assertTrue("Flush hand " + flush + " doesn't beat straight hand " + straight,
+                comparator.compare(straight, flush) > 0);
     }
     
     @Test

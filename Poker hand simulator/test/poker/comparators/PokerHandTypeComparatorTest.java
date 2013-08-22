@@ -45,7 +45,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(highCard.addCard(new Card(Suit.DIAMOND, Rank.TEN)));
         assertTrue(highCard.addCard(new Card(Suit.SPADE, Rank.NINE)));
 
-        assertEquals(PokerHandType.HIGH_CARD, comparator.determineHandType(highCard));
+        assertEquals("Hand " + highCard + " isn't recognized as a high card hand", 
+                PokerHandType.HIGH_CARD, comparator.determineHandType(highCard));
     }
 
     @Test
@@ -57,7 +58,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(pair1.addCard(new Card(Suit.DIAMOND, Rank.KING)));
         assertTrue(pair1.addCard(new Card(Suit.SPADE, Rank.NINE)));
 
-        assertEquals(PokerHandType.PAIR, comparator.determineHandType(pair1));
+        assertEquals("Hand " + pair1 + " isn't recognized as a pair hand", 
+                PokerHandType.PAIR, comparator.determineHandType(pair1));
     }
 
     @Test
@@ -69,7 +71,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(twoPair2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
         assertTrue(twoPair2.addCard(new Card(Suit.CLUB, Rank.SEVEN)));
         
-        assertEquals(PokerHandType.TWO_PAIR, comparator.determineHandType(twoPair2));
+        assertEquals("Hand " + twoPair2 + " isn't recognized as a two pair hand", 
+                PokerHandType.TWO_PAIR, comparator.determineHandType(twoPair2));
     }
     
     @Test
@@ -81,7 +84,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(threeOfAKind2.addCard(new Card(Suit.CLUB, Rank.EIGHT)));        
         assertTrue(threeOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));        
         
-        assertEquals(PokerHandType.THREE_OF_A_KIND, comparator.determineHandType(threeOfAKind2));        
+        assertEquals("Hand " + threeOfAKind2 + " isn't recognized as a three of a kind hand", 
+                PokerHandType.THREE_OF_A_KIND, comparator.determineHandType(threeOfAKind2));        
     }
     
     @Test
@@ -93,7 +97,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straight1.addCard(new Card(Suit.DIAMOND, Rank.DEUCE)));
         assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.THREE)));
         
-        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight1));
+        assertEquals("Hand " + straight1 + " isn't recognized as a straight hand", 
+                PokerHandType.STRAIGHT, comparator.determineHandType(straight1));
     }
     
     @Test
@@ -105,7 +110,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straight2.addCard(new Card(Suit.DIAMOND, Rank.NINE)));
         assertTrue(straight2.addCard(new Card(Suit.CLUB, Rank.EIGHT)));        
         
-        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight2));        
+        assertEquals("Hand " + straight2 + " isn't recognized as a straight hand", 
+                PokerHandType.STRAIGHT, comparator.determineHandType(straight2));        
     }
     
     @Test
@@ -117,7 +123,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straight1.addCard(new Card(Suit.DIAMOND, Rank.JACK)));
         assertTrue(straight1.addCard(new Card(Suit.SPADE, Rank.TEN)));    
         
-        assertEquals(PokerHandType.STRAIGHT, comparator.determineHandType(straight1));        
+        assertEquals("Hand " + straight1 + " isn't recognized as a straight hand", 
+                PokerHandType.STRAIGHT, comparator.determineHandType(straight1));        
     }
     
     @Test
@@ -129,7 +136,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(flush1.addCard(new Card(Suit.CLUB, Rank.QUEEN)));
         assertTrue(flush1.addCard(new Card(Suit.CLUB, Rank.KING)));
         
-        assertEquals(PokerHandType.FLUSH, comparator.determineHandType(flush1));
+        assertEquals("Hand " + flush1 + " isn't recognized as a flush hand", 
+                PokerHandType.FLUSH, comparator.determineHandType(flush1));
     }
     
     @Test
@@ -141,7 +149,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fullHouse1.addCard(new Card(Suit.CLUB, Rank.SIX)));
         assertTrue(fullHouse1.addCard(new Card(Suit.SPADE, Rank.SIX)));
         
-        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse1));
+        assertEquals("Hand " + fullHouse1 + " isn't recognized as a full house hand", 
+                PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse1));
     }
     
     @Test
@@ -153,7 +162,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.TEN)));
         assertTrue(fullHouse2.addCard(new Card(Suit.CLUB, Rank.TEN)));         
         
-        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));        
+        assertEquals("Hand " + fullHouse2 + " isn't recognized as a full house hand", 
+                PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));        
     }
     
     @Test
@@ -165,7 +175,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fullHouse2.addCard(new Card(Suit.HEART, Rank.TEN)));
         assertTrue(fullHouse2.addCard(new Card(Suit.DIAMOND, Rank.ACE)));  
         
-        assertEquals(PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));          
+        assertEquals("Hand " + fullHouse2 + " isn't recognized as a full house hand", 
+                PokerHandType.FULL_HOUSE, comparator.determineHandType(fullHouse2));          
     }
     
     @Test
@@ -177,7 +188,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fourOfAKind1.addCard(new Card(Suit.HEART, Rank.SEVEN)));
         assertTrue(fourOfAKind1.addCard(new Card(Suit.SPADE, Rank.DEUCE)));    
         
-        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind1));
+        assertEquals("Hand " + fourOfAKind1 + " isn't recognized as a four of a kind hand", 
+                PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind1));
     }
     
     @Test
@@ -189,7 +201,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fourOfAKind2.addCard(new Card(Suit.HEART, Rank.ACE)));
         assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));           
         
-        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
+        assertEquals("Hand " + fourOfAKind2 + " isn't recognized as a four of a kind hand", 
+                PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
     }
     
     @Test
@@ -201,7 +214,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(fourOfAKind2.addCard(new Card(Suit.CLUB, Rank.SIX)));
         assertTrue(fourOfAKind2.addCard(new Card(Suit.DIAMOND, Rank.SIX)));  
         
-        assertEquals(PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
+        assertEquals("Hand " + fourOfAKind2 + " isn't recognized as a four of a kind hand", 
+                PokerHandType.FOUR_OF_A_KIND, comparator.determineHandType(fourOfAKind2));        
     }
     
     @Test
@@ -213,7 +227,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straightFlush1.addCard(new Card(Suit.CLUB, Rank.JACK)));
         assertTrue(straightFlush1.addCard(new Card(Suit.CLUB, Rank.TEN)));
         
-        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush1));
+        assertEquals("Hand " + straightFlush1 + " isn't recognized as a straight flush hand", 
+                PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush1));
     }
     
     @Test
@@ -225,7 +240,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR)));
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.THREE)));                
         
-        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
+        assertEquals("Hand " + straightFlush2 + " isn't recognized as a straight flush hand", 
+                PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
     }
     
     @Test
@@ -237,7 +253,8 @@ public class PokerHandTypeComparatorTest {
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.FOUR)));
         assertTrue(straightFlush2.addCard(new Card(Suit.HEART, Rank.SIX)));                
         
-        assertEquals(PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
+        assertEquals("Hand " + straightFlush2 + " isn't recognized as a straight flush hand", 
+                PokerHandType.STRAIGHT_FLUSH, comparator.determineHandType(straightFlush2));        
     }
     
     @Test

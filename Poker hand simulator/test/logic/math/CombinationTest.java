@@ -110,7 +110,7 @@ public class CombinationTest {
         integers.add(2);
         List<List<Integer>> combinations = Combination.takeKFromList(integers, 0);
         assertNotNull(combinations);
-        assertTrue(combinations.isEmpty());
+        assertTrue("Combination set isn't empty", combinations.isEmpty());
     }
 
     @Test
@@ -126,8 +126,10 @@ public class CombinationTest {
         expectedCombination2.add(2);
 
         assertEquals(2, combinations.size());
-        assertTrue(combinations.contains(expectedCombination1));
-        assertTrue(combinations.contains(expectedCombination2));
+        assertTrue("Combination " + expectedCombination1 + "isn't in the result", 
+                combinations.contains(expectedCombination1));
+        assertTrue("Combination " + expectedCombination2 + "isn't in the result", 
+                combinations.contains(expectedCombination2));
     }
 
     @Test
@@ -141,7 +143,8 @@ public class CombinationTest {
         expectedResult1.add(2);
 
         assertEquals(1, combinations.size());        
-        assertTrue(combinations.contains(expectedResult1));
+        assertTrue("Combination " + expectedResult1 + "isn't in the result", 
+                combinations.contains(expectedResult1));
     }
 
     @Test
@@ -205,23 +208,34 @@ public class CombinationTest {
         expectedCombination10.add(5);
 
         assertEquals(10, combinations.size());        
-        assertTrue(combinations.contains(expectedCombination1));
-        assertTrue(combinations.contains(expectedCombination2));
-        assertTrue(combinations.contains(expectedCombination3));
-        assertTrue(combinations.contains(expectedCombination4));
-        assertTrue(combinations.contains(expectedCombination5));
-        assertTrue(combinations.contains(expectedCombination6));
-        assertTrue(combinations.contains(expectedCombination7));
-        assertTrue(combinations.contains(expectedCombination8));
-        assertTrue(combinations.contains(expectedCombination9));
-        assertTrue(combinations.contains(expectedCombination10));
+        assertTrue("Combination " + expectedCombination1 + "isn't in the result", 
+                combinations.contains(expectedCombination1));
+        assertTrue("Combination " + expectedCombination2 + "isn't in the result", 
+                combinations.contains(expectedCombination2));
+        assertTrue("Combination " + expectedCombination3 + "isn't in the result", 
+                combinations.contains(expectedCombination3));
+        assertTrue("Combination " + expectedCombination4 + "isn't in the result",
+                combinations.contains(expectedCombination4));
+        assertTrue("Combination " + expectedCombination5 + "isn't in the result", 
+                combinations.contains(expectedCombination5));
+        assertTrue("Combination " + expectedCombination6 + "isn't in the result",
+                combinations.contains(expectedCombination6));
+        assertTrue("Combination " + expectedCombination7 + "isn't in the result",
+                combinations.contains(expectedCombination7));
+        assertTrue("Combination " + expectedCombination8 + "isn't in the result",
+                combinations.contains(expectedCombination8));
+        assertTrue("Combination " + expectedCombination9 + "isn't in the result",
+                combinations.contains(expectedCombination9));
+        assertTrue("Combination " + expectedCombination10 + "isn't in the result",
+                combinations.contains(expectedCombination10));
     }
 
     @Test
     public void takeKFromListRandom() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             List<Integer> integers = new ArrayList<Integer>();
-            Random random = new Random();
+            long seed = System.currentTimeMillis();
+            Random random = new Random(seed);
 
             int listSize = random.nextInt(13) + 1;
             int k = random.nextInt(listSize) + 1;
@@ -232,7 +246,8 @@ public class CombinationTest {
             List<List<Integer>> result = Combination.takeKFromList(integers, k);
 
             // Checking that we have the right amount of combinations
-            assertEquals("Wrong amount of combinations with n = " + listSize + " and k = " + k, Combination.countNumberOfCombinations(listSize, k), result.size());
+            assertEquals("Wrong amount of combinations with n = " + listSize + " and k = " + k
+                    + " using seed " + seed, Combination.countNumberOfCombinations(listSize, k), result.size());
 
             /* Checking that all combinations are of the right size and that          
              * all combinations are different
