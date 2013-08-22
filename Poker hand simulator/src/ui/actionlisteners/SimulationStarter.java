@@ -6,15 +6,19 @@ import card.ICardDeck;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 import poker.enums.PokerGameType;
 import ui.GUI;
 import ui.guitools.CardDrawer;
@@ -22,7 +26,7 @@ import ui.guitools.WindowCreator;
 
 /**
  * Opens window where the user can input the simulation parameters.
- * 
+ *
  * @author Sebastian Björkqvist
  */
 public class SimulationStarter implements Runnable {
@@ -48,47 +52,26 @@ public class SimulationStarter implements Runnable {
     @Override
     public void run() {
         openWindow();
-    }    
+    }
 
     private void openWindow() {
         WindowCreator creator = new WindowCreator(gui.getFrame());
         dialog = creator.createNewJDialog("Simulation starter", 700, 800);
-      
+
         container = dialog.getLayeredPane();
 //        container.setLayout(null);
-        
 
         try {
             drawAllCards();
         } catch (IOException ex) {
             Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Couldn't find pictures!");
+            createPicturesNotFoundErrorWindow();
+            return;
         }
-        JLabel cardsLabel = new JLabel("Available cards");
-        Dimension size = cardsLabel.getPreferredSize();
-        Insets insets = container.getInsets();
-        cardsLabel.setBounds(30 + insets.left, 10 + insets.top,
-                size.width, size.height);
-        container.add(cardsLabel);
-        
-        JButton clearSelection = new JButton("Unselect all");
-        size = clearSelection.getPreferredSize();        
-        clearSelection.setBounds(265 + insets.left, 235 + insets.top, size.width, size.height);
-        
-        container.add(clearSelection);
-        
-        JButton startSimulation = new JButton("Start simulation");
-        size = startSimulation.getPreferredSize();           
-        startSimulation.setBounds(450 + insets.left, 720 + insets.top, size.width, size.height);
-        
-        container.add(startSimulation);
-        
-        JButton abort = new JButton("Abort");
-        size = abort.getPreferredSize();           
-        abort.setBounds(600 + insets.left, 720 + insets.top, size.width, size.height);
-        
-        container.add(abort);        
-        
+        drawAvailableCards();
+
+        drawMainButtons();
+
         createGraphicsForStartingHands();
 
     }
@@ -118,31 +101,89 @@ public class SimulationStarter implements Runnable {
                 break;
             case FIVE_DRAW:
                 xDistance = 160;
-                break;               
+                break;
         }
 
-        Insets insets = container.getInsets();        
+        Insets insets = container.getInsets();
         for (int i = 0; i < numberOfStartingHands; i++) {
             JLabel handLabel = new JLabel("Hand " + (i + 1));
-            Dimension size = handLabel.getPreferredSize();            
-            handLabel.setBounds(30 + xDistance*(i % handsOnRow) + insets.left, 
-                    320 + yDistance*(i/handsOnRow) + insets.top, size.width, size.height);            
+            Dimension size = handLabel.getPreferredSize();
+            handLabel.setBounds(30 + xDistance * (i % handsOnRow) + insets.left,
+                    320 + yDistance * (i / handsOnRow) + insets.top, size.width, size.height);
             container.add(handLabel);
-            
+
             JButton addCards = new JButton("Add");
             size = addCards.getPreferredSize();
-            addCards.setBounds(17 + xDistance*(i % handsOnRow) + insets.left
-                    , 420 + yDistance*(i/handsOnRow), size.width, size.height);
+            addCards.setBounds(17 + xDistance * (i % handsOnRow) + insets.left, 420 + yDistance * (i / handsOnRow), size.width, size.height);
             JButton clear = new JButton("Clear");
             size = clear.getPreferredSize();
-            clear.setBounds(77 + xDistance*(i % handsOnRow) + insets.left
-                    , 420 + yDistance*(i/handsOnRow), size.width, size.height);
-                    
+            clear.setBounds(77 + xDistance * (i % handsOnRow) + insets.left, 420 + yDistance * (i / handsOnRow), size.width, size.height);
+
             container.add(addCards);
             container.add(clear);
         }
+    }
+
+    private void drawAvailableCards() {
+        JLabel cardsLabel = new JLabel("Available cards");
+        Dimension size = cardsLabel.getPreferredSize();
+        Insets insets = container.getInsets();
+        cardsLabel.setBounds(30 + insets.left, 10 + insets.top,
+                size.width, size.height);
+        container.add(cardsLabel);
+    }
+
+    private void drawMainButtons() {
+        Insets insets = container.getInsets();
+        JButton clearSelection = new JButton("Unselect all");
+        Dimension size = clearSelection.getPreferredSize();
+        clearSelection.setBounds(265 + insets.left, 235 + insets.top, size.width, size.height);
+
+        container.add(clearSelection);
+
+        JButton startSimulation = new JButton("Start simulation");
+        size = startSimulation.getPreferredSize();
+        startSimulation.setBounds(450 + insets.left, 720 + insets.top, size.width, size.height);
+
+        container.add(startSimulation);
+
+        JButton abort = new JButton("Abort");
+        size = abort.getPreferredSize();
+        abort.setBounds(600 + insets.left, 720 + insets.top, size.width, size.height);
+
+        container.add(abort);
+    }
+
+    private void createPicturesNotFoundErrorWindow() {
+        WindowCreator creator = new WindowCreator(dialog);
+        JDialog errorWindow = creator.createNewJDialog("Error", 300, 200);
+
+        JPanel mainPanel = new JPanel();
+        Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+
+        mainPanel.setBorder(padding);
+        mainPanel.setLayout(new GridLayout(6, 1));
+        JLabel message1 = new JLabel("Card pictures could not be found.");
+        JLabel message2 = new JLabel("The program will shut down.");
+        JLabel message3 = new JLabel("If the problem persists, ");
+        JLabel message4 = new JLabel("please use the text user interface.");
+        mainPanel.add(message1);
+        mainPanel.add(message2);
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(message3);
+        mainPanel.add(message4);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3));
+        buttonPanel.add(new JLabel(""));
+
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(new ProgramShutdown(gui));
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(new JLabel(""));
+        mainPanel.add(buttonPanel);
         
-        
-        
+        errorWindow.setContentPane(mainPanel);
     }
 }

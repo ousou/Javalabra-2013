@@ -47,7 +47,8 @@ public class SameHandTypeComparatorTest {
         assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.THREE)));
         assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.NINE)));
 
-        assertTrue(comparator.compare(highCard, highCard2) < 0);
+        assertTrue("Hand " + highCard2 + " beats hand " + highCard, 
+                comparator.compare(highCard, highCard2) < 0);
     }
 
     @Test
@@ -66,7 +67,8 @@ public class SameHandTypeComparatorTest {
         assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.KING)));
         assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.NINE)));
 
-        assertTrue(comparator.compare(highCard, highCard2) < 0);
+        assertTrue("Hand " + highCard2 + " beats hand " + highCard,
+                comparator.compare(highCard, highCard2) < 0);
     }
 
     @Test
@@ -85,7 +87,8 @@ public class SameHandTypeComparatorTest {
         assertTrue(highCard2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
         assertTrue(highCard2.addCard(new Card(Suit.CLUB, Rank.KING)));
 
-        assertTrue(comparator.compare(highCard, highCard2) == 0);
+        assertTrue("Hands " + highCard2 + " and " + highCard + " don't tie",
+                comparator.compare(highCard, highCard2) == 0);
     }
 
     @Test
@@ -104,7 +107,7 @@ public class SameHandTypeComparatorTest {
         assertTrue(pair2.addCard(new Card(Suit.DIAMOND, Rank.SEVEN)));
         assertTrue(pair2.addCard(new Card(Suit.CLUB, Rank.KING)));
 
-        assertTrue(comparator.compare(pair1, pair2) < 0);
+        assertTrue("Hand " + pair2 + " beats hand " + pair1, comparator.compare(pair1, pair2) < 0);
     }
 
     @Test
