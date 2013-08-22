@@ -1,5 +1,6 @@
 package ui.actionlisteners;
 
+import ui.SimulationStarter;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +30,7 @@ public class StartNewSimulationDialog implements ActionListener {
     public StartNewSimulationDialog(GUI gui) {
         this.gui = gui;
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         WindowCreator creator = new WindowCreator(gui.getFrame());

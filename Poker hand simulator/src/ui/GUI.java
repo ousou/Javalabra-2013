@@ -7,10 +7,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.WindowConstants;
-import poker.enums.PokerGameType;
+import logic.simulator.SimulationResult;
 import ui.guitools.CardDrawer;
 import ui.actionlisteners.ProgramShutdown;
-import ui.actionlisteners.SimulationStarter;
 import ui.actionlisteners.StartNewSimulationDialog;
 
 /**
@@ -24,6 +23,7 @@ public class GUI implements Runnable {
     private final String pictureDirectory = "";
     private final String pictureType = ".png";    
     private CardDrawer cardDrawer;
+    private SimulationResult simulationResult;
     
     @Override
     public void run() {
@@ -91,4 +91,9 @@ public class GUI implements Runnable {
     public String getPictureType() {
         return pictureType;
     }
+
+    public void setSimulationResult(SimulationResult simulationResult) {
+        this.simulationResult = simulationResult;
+    }
+    
 }

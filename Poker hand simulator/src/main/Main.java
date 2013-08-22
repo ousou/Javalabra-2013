@@ -5,19 +5,26 @@ import ui.TextUI;
 import ui.UI;
 
 /**
- *
+ * Main class for Poker Hand Simulator.
+ * 
+ * Checks command line arguments, and starts the text user interface
+ * if needed.
+ * 
  * @author Sebastian Björkqvist
  */
 public class Main {
 
     public static void main(String[] args) {
         boolean useGraphical = true;
-        if (args.length > 0) {
-            String firstArg = args[0].trim();
-            if (firstArg.equals("-text")) {
+        
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i].trim();
+            if (arg.contains("text")) {
                 useGraphical = false;
+                break;
             }
         }
+        
         UI ui;
         if (useGraphical) {
             ui = new GUIInvoker();
