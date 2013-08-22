@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import poker.startinghands.AbstractStartingHand;
 import ui.SimulationStarter;
@@ -66,15 +64,19 @@ public class AddCardsToHand implements ActionListener {
                 JLabel cardLabel = cardDrawer.draw(c, xStart + 30 * howMany, yStart, 0, false);
                 cardLabels.add(cardLabel);
             } catch (IOException ex) {
-                PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow(simulationStarter.getDialog(), simulationStarter.getGui());
+                PicturesNotFoundErrorWindow errorWindow = 
+                        new PicturesNotFoundErrorWindow(simulationStarter.getDialog(), 
+                        simulationStarter.getGui());
                 errorWindow.create();
             }
             
+            // Removes the card drawn under Available cards.
             container.remove(drawnCards.get(c));
             howMany++;
         }
         List<Component> selectedCardLabels = simulationStarter.getSelectedCardLabels();
         
+        // Removes the grey cards under Available cards.
         for (Component c : selectedCardLabels) {
             container.remove(c);
         }

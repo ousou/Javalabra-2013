@@ -40,18 +40,23 @@ public class SimulationStarter implements Runnable {
 
     private GUI gui;
     private Container container;
-    private JDialog dialog;
+    private JDialog dialog;    
     private CardDrawer cardDrawer;
+    // Keeps track of where the cards are drawn in the Available cards-section
     private Map<Card, Component> drawnCards;
     private PokerGameType gameType;
     private int numberOfStartingHands;
     private int numberOfSimulations;
+    // Array containing all starting hands
     private AbstractStartingHand[] startingHands;   
+    // Array containing the labels of the cards added to starting hands
     private List<Component>[] cardLabelsInStartingHands;
     // Keeps track of where to draw a card when it's removed from a hand
     private Map<Card, Integer> indexForCard;
     private FiveCardBoard board;
+    // Contains cards currently selected in the Available cards-section
     private List<Card> selectedCards;
+    // Contains labels of cards currently selected in the Available cards-section
     private List<Component> selectedCardLabels;
 
     public SimulationStarter(GUI gui, PokerGameType gameType,
@@ -75,6 +80,9 @@ public class SimulationStarter implements Runnable {
         openWindow();
     }
 
+    /**
+     * Opens the main window.
+     */
     private void openWindow() {
         WindowCreator creator = new WindowCreator(gui.getFrame());
         dialog = creator.createNewJDialog("Simulation starter", 700, 800);
@@ -95,9 +103,12 @@ public class SimulationStarter implements Runnable {
         createMainButtons();
 
         createGraphicsForStartingHands();
-
     }
 
+/**
+ * Draws all cards to the available cards-section.
+ * @throws IOException 
+ */
     private void drawAllCards() throws IOException {
         ICardDeck deck = new CardDeckStandard(false);
         cardDrawer = new CardDrawer(container, gui.getPictureDirectory(), 
@@ -111,6 +122,9 @@ public class SimulationStarter implements Runnable {
         }
     }
 
+    /**
+     * Creates labels and buttons for starting hands.
+     */
     private void createGraphicsForStartingHands() {
         int xDistance = 150;
         int yDistance = 140;
@@ -160,6 +174,9 @@ public class SimulationStarter implements Runnable {
         container.add(cardsLabel);
     }
 
+    /**
+     * Creates buttons Unselect all, Start simulation and Abort.
+     */
     private void createMainButtons() {
         Insets insets = container.getInsets();
         JButton clearSelection = new JButton("Unselect all");
