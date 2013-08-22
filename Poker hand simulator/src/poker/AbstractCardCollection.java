@@ -108,6 +108,13 @@ public abstract class AbstractCardCollection implements Serializable {
     public List<Card> getCards() {
         return new ArrayList<Card>(cards);
     }
+    
+    /**
+     * Removes all cards from this collection.
+     */
+    public void removeAllCards() {
+        cards.clear();
+    }
 
     /**
      * HashCode for Abstract card collection.

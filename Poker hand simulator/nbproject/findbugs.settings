@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Sun Aug 11 11:37:58 EEST 2013
+#Thu Aug 22 19:50:48 EEST 2013
 detectorAbnormalFinallyBlockReturn=AbnormalFinallyBlockReturn|false
 detectorAbstractClassEmptyMethods=AbstractClassEmptyMethods|false
 detectorAbstractOverriddenMethod=AbstractOverriddenMethod|false
@@ -65,7 +65,7 @@ detectorFindBadEqualsImplementation=FindBadEqualsImplementation|false
 detectorFindBadForLoop=FindBadForLoop|true
 detectorFindBugsSummaryStats=FindBugsSummaryStats|true
 detectorFindCircularDependencies=FindCircularDependencies|false
-detectorFindDeadLocalStores=FindDeadLocalStores|true
+detectorFindDeadLocalStores=FindDeadLocalStores|false
 detectorFindDoubleCheck=FindDoubleCheck|true
 detectorFindEmptySynchronizedBlock=FindEmptySynchronizedBlock|true
 detectorFindFieldSelfAssignment=FindFieldSelfAssignment|true

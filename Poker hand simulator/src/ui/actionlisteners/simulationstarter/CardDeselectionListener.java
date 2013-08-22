@@ -16,7 +16,6 @@ import ui.SimulationStarter;
 public class CardDeselectionListener implements MouseListener {
 
     private Container container;
-    private List<Component> drawnCards;
     private List<Card> selectedCards;
     private Card card;
     private int xPlace;
@@ -29,7 +28,6 @@ public class CardDeselectionListener implements MouseListener {
     public CardDeselectionListener(SimulationStarter simulationStarter, Card card, int xPlace, int yPlace, JLabel greyCardLabel, JLabel cardLabel) {
         this.simulationStarter = simulationStarter;
         this.container = simulationStarter.getContainer();
-        this.drawnCards = simulationStarter.getDrawnCards();
         this.selectedCards = simulationStarter.getSelectedCards();
         this.card = card;
         this.xPlace = xPlace;
@@ -41,7 +39,6 @@ public class CardDeselectionListener implements MouseListener {
 
     public void removeGreyCard() {
         selectedCards.remove(card);
-        drawnCards.remove(greyCardLabel);
         selectedCardLabels.remove(greyCardLabel);
         container.remove(greyCardLabel);
 

@@ -6,29 +6,27 @@ import card.ICardDeck;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
 import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
+import poker.startinghands.StartingHandsCreator;
+import poker.startinghands.TexasHoldemStartingHand;
 import ui.actionlisteners.CloseWindow;
-import ui.actionlisteners.ProgramShutdown;
+import ui.actionlisteners.simulationstarter.AddCardsToHand;
 import ui.actionlisteners.simulationstarter.CardSelectionListener;
+import ui.actionlisteners.simulationstarter.ClearCardsFromHand;
+import ui.actionlisteners.simulationstarter.PicturesNotFoundErrorWindow;
 import ui.actionlisteners.simulationstarter.UnselectAllCardsListener;
 import ui.guitools.CardDrawer;
 import ui.guitools.WindowCreator;
@@ -44,11 +42,14 @@ public class SimulationStarter implements Runnable {
     private Container container;
     private JDialog dialog;
     private CardDrawer cardDrawer;
-    private List<Component> drawnCards;
+    private Map<Card, Component> drawnCards;
     private PokerGameType gameType;
     private int numberOfStartingHands;
     private int numberOfSimulations;
-    private List<AbstractStartingHand> startingHands;
+    private AbstractStartingHand[] startingHands;   
+    private List<Component>[] cardLabelsInStartingHands;
+    // Keeps track of where to draw a card when it's removed from a hand
+    private Map<Card, Integer> indexForCard;
     private FiveCardBoard board;
     private List<Card> selectedCards;
     private List<Component> selectedCardLabels;
@@ -59,10 +60,11 @@ public class SimulationStarter implements Runnable {
         this.gameType = gameType;
         this.numberOfStartingHands = numberOfStartingHands;
         this.numberOfSimulations = numberOfSimulations;
-        drawnCards = new ArrayList<Component>();
-        startingHands = new ArrayList<AbstractStartingHand>(numberOfStartingHands);
+        drawnCards = new HashMap<Card, Component>();
+        initStartingHandArrays();
         selectedCards = new ArrayList<Card>();
         selectedCardLabels = new ArrayList<Component>();
+        indexForCard = new HashMap<Card, Integer>();
         if (gameType.isCommunityCardGame()) {
             board = new FiveCardBoard();
         }
@@ -84,7 +86,8 @@ public class SimulationStarter implements Runnable {
             drawAllCards();
         } catch (IOException ex) {
             Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
-            createPicturesNotFoundErrorWindow();
+            PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow(dialog, gui);
+            errorWindow.create();
             return;
         }
         createAvailableCardsLabel();
@@ -97,16 +100,13 @@ public class SimulationStarter implements Runnable {
 
     private void drawAllCards() throws IOException {
         ICardDeck deck = new CardDeckStandard(false);
-        cardDrawer = new CardDrawer(container, gui.getPictureDirectory(), gui.getPictureType());
+        cardDrawer = new CardDrawer(container, gui.getPictureDirectory(), 
+                gui.getPictureType());
         int index = 0;
         while (!deck.isEmpty()) {
             Card c = deck.getCard();
-            int xPlace = (index % 12) * 30 + 30;
-            int yPlace = (index / 12) * 50 + 30;
-            JLabel cardLabel = cardDrawer.draw(c, xPlace, yPlace, 1, false);
-            drawnCards.add(cardLabel);
-            cardLabel.addMouseListener(new CardSelectionListener(this, c, 
-                    xPlace, yPlace, cardLabel));
+            indexForCard.put(c, index);
+            drawCard(c);
             index++;
         }
     }
@@ -137,9 +137,14 @@ public class SimulationStarter implements Runnable {
             size = addCards.getPreferredSize();
             addCards.setBounds(17 + xDistance * (i % handsOnRow) + insets.left, 
                     420 + yDistance * (i / handsOnRow), size.width, size.height);
+            addCards.addActionListener(new AddCardsToHand(this, i, 
+                    30 + xDistance * (i % handsOnRow), 350 + yDistance * (i / handsOnRow)));
+            
             JButton clear = new JButton("Clear");
             size = clear.getPreferredSize();
-            clear.setBounds(77 + xDistance * (i % handsOnRow) + insets.left, 420 + yDistance * (i / handsOnRow), size.width, size.height);
+            clear.setBounds(77 + xDistance * (i % handsOnRow) + insets.left, 
+                    420 + yDistance * (i / handsOnRow), size.width, size.height);
+            clear.addActionListener(new ClearCardsFromHand(this, i));
 
             container.add(addCards);
             container.add(clear);
@@ -178,38 +183,23 @@ public class SimulationStarter implements Runnable {
         container.add(abort);
     }
 
-    private void createPicturesNotFoundErrorWindow() {
-        WindowCreator creator = new WindowCreator(dialog);
-        JDialog errorWindow = creator.createNewJDialog("Error", 300, 200);
-
-        JPanel mainPanel = new JPanel();
-        Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-
-        mainPanel.setBorder(padding);
-        mainPanel.setLayout(new GridLayout(6, 1));
-        JLabel message1 = new JLabel("Card pictures could not be found.");
-        JLabel message2 = new JLabel("The program will shut down.");
-        JLabel message3 = new JLabel("If the problem persists, ");
-        JLabel message4 = new JLabel("please use the text user interface.");
-        mainPanel.add(message1);
-        mainPanel.add(message2);
-        mainPanel.add(new JLabel(""));
-        mainPanel.add(message3);
-        mainPanel.add(message4);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3));
-        buttonPanel.add(new JLabel(""));
-
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ProgramShutdown(gui));
-
-        buttonPanel.add(okButton);
-        buttonPanel.add(new JLabel(""));
-        mainPanel.add(buttonPanel);
-
-        errorWindow.setContentPane(mainPanel);
-    }
+    /**
+     * Draws a card to its original place among
+     * selected cards.
+     * 
+     * @param c Card
+     * @throws IOException 
+     */
+    
+    public void drawCard(Card c) throws IOException {
+        int index = indexForCard.get(c);
+        int xPlace = (index % 12) * 30 + 30;
+        int yPlace = (index / 12) * 50 + 30;
+        JLabel cardLabel = cardDrawer.draw(c, xPlace, yPlace, 1, false);
+        drawnCards.put(c, cardLabel);
+        cardLabel.addMouseListener(new CardSelectionListener(this, c, 
+                xPlace, yPlace, cardLabel));
+    }    
 
     public GUI getGui() {
         return gui;
@@ -227,7 +217,7 @@ public class SimulationStarter implements Runnable {
         return cardDrawer;
     }
 
-    public List<Component> getDrawnCards() {
+    public Map<Card, Component> getDrawnCards() {
         return drawnCards;
     }
 
@@ -238,151 +228,24 @@ public class SimulationStarter implements Runnable {
     public List<Component> getSelectedCardLabels() {
         return selectedCardLabels;
     }
+
+    public AbstractStartingHand[] getStartingHands() {
+        return startingHands;
+    }
+
+    public List<Component>[] getCardLabelsInStartingHands() {
+        return cardLabelsInStartingHands;
+    }
+
+    private void initStartingHandArrays() {
+        startingHands = new AbstractStartingHand[numberOfStartingHands];
+        for (int i = 0; i < startingHands.length; i++) {
+            startingHands[i] = StartingHandsCreator.createStartingHand(gameType);
+        }
+        cardLabelsInStartingHands = new List[numberOfStartingHands];
+        for (int i = 0; i < cardLabelsInStartingHands.length; i++) {
+            cardLabelsInStartingHands[i] = new ArrayList<Component>();
+        }
+    }
     
-//    /**
-//     * Handles card selecting when a card is clicked.
-//     */
-//    private class CardSelectionListener implements MouseListener {
-//
-//        private Container container;
-//        private List<Component> drawnCards;
-//        private List<Card> selectedCards;
-//        private Card card;
-//        private int xPlace;
-//        private int yPlace;
-//        private JLabel cardLabel;
-//        private List<Component> selectedCardLabels;        
-//
-//        public CardSelectionListener(Container container, List<Component> drawnCards, 
-//                List<Card> selectedCards, Card card, int xPlace, int yPlace, 
-//                JLabel cardLabel, List<Component> selectedCardLabels) {
-//            this.container = container;
-//            this.drawnCards = drawnCards;
-//            this.selectedCards = selectedCards;
-//            this.card = card;
-//            this.xPlace = xPlace;
-//            this.yPlace = yPlace;
-//            this.cardLabel = cardLabel;
-//            this.selectedCardLabels = selectedCardLabels;
-//        }
-//        
-//        public void addGreyCard() {
-//            selectedCards.add(card);
-//
-//            try {
-//                JLabel greyCardLabel = cardDrawer.draw(card, xPlace, yPlace, 1, true);
-//                drawnCards.add(greyCardLabel);
-//                selectedCardLabels.add(greyCardLabel);
-//                greyCardLabel.addMouseListener(
-//                        new CardDeselectionListener(container, drawnCards, selectedCards, 
-//                        card, xPlace, yPlace, greyCardLabel, cardLabel, selectedCardLabels));
-//            } catch (IOException ex) {
-//                Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
-//                createPicturesNotFoundErrorWindow();
-//            }            
-//        }
-//
-//        @Override
-//        public void mouseClicked(MouseEvent e) {
-//            addGreyCard();
-//        }
-//
-//        @Override
-//        public void mousePressed(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseReleased(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseEntered(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseExited(MouseEvent e) {
-//        }
-//    }
-//
-//    /**
-//     * Handles card deselecting when a card is clicked.
-//     */
-//    private class CardDeselectionListener implements MouseListener {
-//
-//        private Container container;
-//        private List<Component> drawnCards;
-//        private List<Card> selectedCards;
-//        private Card card;
-//        private int xPlace;
-//        private int yPlace;
-//        private JLabel greyCardLabel;
-//        private JLabel cardLabel;
-//        private List<Component> selectedCardLabels;                
-//
-//        public CardDeselectionListener(Container container, List<Component> drawnCards, List<Card> selectedCards, Card card, int xPlace, int yPlace, JLabel greyCardLabel, JLabel cardLabel, List<Component> selectedCardLabels) {
-//            this.container = container;
-//            this.drawnCards = drawnCards;
-//            this.selectedCards = selectedCards;
-//            this.card = card;
-//            this.xPlace = xPlace;
-//            this.yPlace = yPlace;
-//            this.greyCardLabel = greyCardLabel;
-//            this.cardLabel = cardLabel;
-//            this.selectedCardLabels = selectedCardLabels;
-//        }
-//        
-//        public void removeGreyCard() {
-//            selectedCards.remove(card);
-//            drawnCards.remove(greyCardLabel);
-//            selectedCardLabels.remove(greyCardLabel);
-//            container.remove(greyCardLabel);
-//            
-//            container.repaint();
-//        }
-//        
-//        @Override
-//        public void mouseClicked(MouseEvent e) {
-//            removeGreyCard();
-//        }
-//
-//        @Override
-//        public void mousePressed(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseReleased(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseEntered(MouseEvent e) {
-//        }
-//
-//        @Override
-//        public void mouseExited(MouseEvent e) {
-//        }
-//    }
-//    
-//    private class UnselectAllCardsListener implements ActionListener {
-//
-//        private Container container;
-//        private List<Card> selectedCards;   
-//        private List<Component> selectedCardLabels;     
-//
-//        public UnselectAllCardsListener(Container container, List<Card> selectedCards, List<Component> selectedCardLabels) {
-//            this.container = container;
-//            this.selectedCards = selectedCards;
-//            this.selectedCardLabels = selectedCardLabels;
-//        }
-//        
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            for (Component c : selectedCardLabels) {
-//                container.remove(c);
-//            }
-//            
-//            container.repaint();
-//            selectedCards.clear();
-//        }
-//        
-//    }
 }

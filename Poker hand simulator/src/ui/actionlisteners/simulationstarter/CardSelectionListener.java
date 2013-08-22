@@ -21,7 +21,6 @@ import ui.guitools.CardDrawer;
 public class CardSelectionListener implements MouseListener {
 
     private Container container;
-    private List<Component> drawnCards;
     private List<Card> selectedCards;
     private Card card;
     private int xPlace;
@@ -34,7 +33,6 @@ public class CardSelectionListener implements MouseListener {
     public CardSelectionListener(SimulationStarter simulationStarter, Card card, int xPlace, int yPlace, JLabel cardLabel) {
         this.simulationStarter = simulationStarter;        
         this.container = simulationStarter.getContainer();
-        this.drawnCards = simulationStarter.getDrawnCards();
         this.selectedCards = simulationStarter.getSelectedCards();
         this.card = card;
         this.xPlace = xPlace;
@@ -49,7 +47,6 @@ public class CardSelectionListener implements MouseListener {
 
         try {
             JLabel greyCardLabel = cardDrawer.draw(card, xPlace, yPlace, 1, true);
-            drawnCards.add(greyCardLabel);
             selectedCardLabels.add(greyCardLabel);
             greyCardLabel.addMouseListener(
                     new CardDeselectionListener(simulationStarter, card, 
