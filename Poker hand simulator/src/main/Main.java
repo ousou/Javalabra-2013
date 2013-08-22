@@ -11,7 +11,19 @@ import ui.UI;
 public class Main {
 
     public static void main(String[] args) {
-        UI ui = new GUIInvoker();
+        boolean useGraphical = true;
+        if (args.length > 0) {
+            String firstArg = args[0].trim();
+            if (firstArg.equals("-text")) {
+                useGraphical = false;
+            }
+        }
+        UI ui;
+        if (useGraphical) {
+            ui = new GUIInvoker();
+        } else {
+            ui = new TextUI();
+        }
         
         ui.start();
     }

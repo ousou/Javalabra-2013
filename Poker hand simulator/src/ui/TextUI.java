@@ -121,7 +121,7 @@ public class TextUI implements UI {
 
     private void printHelp() {
         System.out.println("");
-        System.out.println("Cards are inputted by giving the two-character representetation of them.");
+        System.out.println("Cards are inputted by giving the two-character representation of them.");
         System.out.println("The first letter represents the rank, and the second represents the suit.");
         System.out.println("Possible ranks: A, 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K");
         System.out.println("Possible suits: h, d, c, s");
