@@ -23,8 +23,10 @@ import poker.startinghands.AbstractStartingHand;
 import poker.startinghands.StartingHandsCreator;
 import poker.startinghands.TexasHoldemStartingHand;
 import ui.actionlisteners.CloseWindow;
+import ui.actionlisteners.simulationstarter.AddCardsToBoard;
 import ui.actionlisteners.simulationstarter.AddCardsToHand;
 import ui.actionlisteners.simulationstarter.CardSelectionListener;
+import ui.actionlisteners.simulationstarter.ClearCardsFromBoard;
 import ui.actionlisteners.simulationstarter.ClearCardsFromHand;
 import ui.actionlisteners.simulationstarter.PicturesNotFoundErrorWindow;
 import ui.actionlisteners.simulationstarter.UnselectAllCardsListener;
@@ -40,7 +42,7 @@ public class SimulationStarter implements Runnable {
 
     private GUI gui;
     private Container container;
-    private JDialog dialog;    
+    private JDialog dialog;
     private CardDrawer cardDrawer;
     // Keeps track of where the cards are drawn in the Available cards-section
     private Map<Card, Component> drawnCards;
@@ -48,12 +50,14 @@ public class SimulationStarter implements Runnable {
     private int numberOfStartingHands;
     private int numberOfSimulations;
     // Array containing all starting hands
-    private AbstractStartingHand[] startingHands;   
+    private AbstractStartingHand[] startingHands;
     // Array containing the labels of the cards added to starting hands
     private List<Component>[] cardLabelsInStartingHands;
     // Keeps track of where to draw a card when it's removed from a hand
     private Map<Card, Integer> indexForCard;
     private FiveCardBoard board;
+    // List containing labels of the cards added to the board
+    private List<Component> cardLabelsInBoard;
     // Contains cards currently selected in the Available cards-section
     private List<Card> selectedCards;
     // Contains labels of cards currently selected in the Available cards-section
@@ -72,6 +76,7 @@ public class SimulationStarter implements Runnable {
         indexForCard = new HashMap<Card, Integer>();
         if (gameType.isCommunityCardGame()) {
             board = new FiveCardBoard();
+            cardLabelsInBoard = new ArrayList<Component>();
         }
     }
 
@@ -103,15 +108,20 @@ public class SimulationStarter implements Runnable {
         createMainButtons();
 
         createGraphicsForStartingHands();
+
+        if (gameType.isCommunityCardGame()) {
+            createGraphicsForBoard();
+        }
     }
 
-/**
- * Draws all cards to the available cards-section.
- * @throws IOException 
- */
+    /**
+     * Draws all cards to the available cards-section.
+     *
+     * @throws IOException
+     */
     private void drawAllCards() throws IOException {
         ICardDeck deck = new CardDeckStandard(false);
-        cardDrawer = new CardDrawer(container, gui.getPictureDirectory(), 
+        cardDrawer = new CardDrawer(container, gui.getPictureDirectory(),
                 gui.getPictureType());
         int index = 0;
         while (!deck.isEmpty()) {
@@ -120,6 +130,31 @@ public class SimulationStarter implements Runnable {
             drawCard(c);
             index++;
         }
+    }
+
+    private void createGraphicsForBoard() {
+        Insets insets = container.getInsets();
+        JLabel boardCardsLabel = new JLabel("Board cards");
+        Dimension size = boardCardsLabel.getPreferredSize();
+        boardCardsLabel.setBounds(480 + insets.left,
+                155 + insets.top, size.width, size.height);
+        container.add(boardCardsLabel);
+
+        JButton addCards = new JButton("Add");
+        size = addCards.getPreferredSize();
+        addCards.setBounds(460 + insets.left,
+                235, size.width, size.height);
+        addCards.addActionListener(new AddCardsToBoard(this,
+                480, 185));
+
+        JButton clear = new JButton("Clear");
+        size = clear.getPreferredSize();
+        clear.setBounds(520 + insets.left,
+                235, size.width, size.height);
+        clear.addActionListener(new ClearCardsFromBoard(this));
+        
+        container.add(addCards);
+        container.add(clear);        
     }
 
     /**
@@ -149,15 +184,15 @@ public class SimulationStarter implements Runnable {
 
             JButton addCards = new JButton("Add");
             size = addCards.getPreferredSize();
-            addCards.setBounds(17 + xDistance * (i % handsOnRow) + insets.left, 
-                    420 + yDistance * (i / handsOnRow), size.width, size.height);
-            addCards.addActionListener(new AddCardsToHand(this, i, 
+            addCards.setBounds(17 + xDistance * (i % handsOnRow) + insets.left,
+                    400 + yDistance * (i / handsOnRow), size.width, size.height);
+            addCards.addActionListener(new AddCardsToHand(this, i,
                     30 + xDistance * (i % handsOnRow), 350 + yDistance * (i / handsOnRow)));
-            
+
             JButton clear = new JButton("Clear");
             size = clear.getPreferredSize();
-            clear.setBounds(77 + xDistance * (i % handsOnRow) + insets.left, 
-                    420 + yDistance * (i / handsOnRow), size.width, size.height);
+            clear.setBounds(77 + xDistance * (i % handsOnRow) + insets.left,
+                    400 + yDistance * (i / handsOnRow), size.width, size.height);
             clear.addActionListener(new ClearCardsFromHand(this, i));
 
             container.add(addCards);
@@ -183,7 +218,7 @@ public class SimulationStarter implements Runnable {
         Dimension size = clearSelection.getPreferredSize();
         clearSelection.setBounds(265 + insets.left, 235 + insets.top, size.width, size.height);
         clearSelection.addActionListener(new UnselectAllCardsListener(container, selectedCards, selectedCardLabels));
-        
+
         container.add(clearSelection);
 
         JButton startSimulation = new JButton("Start simulation");
@@ -201,22 +236,20 @@ public class SimulationStarter implements Runnable {
     }
 
     /**
-     * Draws a card to its original place among
-     * selected cards.
-     * 
+     * Draws a card to its original place among selected cards.
+     *
      * @param c Card
-     * @throws IOException 
+     * @throws IOException
      */
-    
     public void drawCard(Card c) throws IOException {
         int index = indexForCard.get(c);
         int xPlace = (index % 12) * 30 + 30;
         int yPlace = (index / 12) * 50 + 30;
         JLabel cardLabel = cardDrawer.draw(c, xPlace, yPlace, 1, false);
         drawnCards.put(c, cardLabel);
-        cardLabel.addMouseListener(new CardSelectionListener(this, c, 
+        cardLabel.addMouseListener(new CardSelectionListener(this, c,
                 xPlace, yPlace, cardLabel));
-    }    
+    }
 
     public GUI getGui() {
         return gui;
@@ -264,5 +297,12 @@ public class SimulationStarter implements Runnable {
             cardLabelsInStartingHands[i] = new ArrayList<Component>();
         }
     }
-    
+
+    public FiveCardBoard getBoard() {
+        return board;
+    }
+
+    public List<Component> getCardLabelsInBoard() {
+        return cardLabelsInBoard;
+    }
 }

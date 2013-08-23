@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import poker.startinghands.AbstractStartingHand;
 import ui.SimulationStarter;
 
@@ -17,39 +15,44 @@ import ui.SimulationStarter;
  * 
  * @author Sebastian Björkqvist
  */
-public class ClearCardsFromHand implements ActionListener {
+public class ClearCardsFromHand extends ClearCardsFromCollection {
 
     private SimulationStarter simulationStarter;
     private int handNumber;
 
+//    public ClearCardsFromHand(SimulationStarter simulationStarter, int handNumber) {
+//        this.simulationStarter = simulationStarter;
+//        this.handNumber = handNumber;
+//    }
+    
     public ClearCardsFromHand(SimulationStarter simulationStarter, int handNumber) {
-        this.simulationStarter = simulationStarter;
-        this.handNumber = handNumber;
+        super(simulationStarter, simulationStarter.getStartingHands()[handNumber], 
+                simulationStarter.getCardLabelsInStartingHands()[handNumber]);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Container container = simulationStarter.getContainer();
-        
-        AbstractStartingHand hand = simulationStarter.getStartingHands()[handNumber];
-        List<Card> cards = hand.getCards();
-        hand.removeAllCards();
-        
-        List<Component> cardLabelsInHand = simulationStarter.getCardLabelsInStartingHands()[handNumber];
-        for (Component c : cardLabelsInHand) {
-            container.remove(c);
-        }
-        container.repaint();
-        
-        for (Card c: cards) {
-            try {
-                simulationStarter.drawCard(c);
-            } catch (IOException ex) {
-                PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow
-                        (simulationStarter.getDialog(), simulationStarter.getGui());
-                errorWindow.create();
-            }
-        }
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        Container container = simulationStarter.getContainer();
+//        
+//        AbstractStartingHand hand = simulationStarter.getStartingHands()[handNumber];
+//        List<Card> cards = hand.getCards();
+//        hand.removeAllCards();
+//        
+//        List<Component> cardLabelsInHand = simulationStarter.getCardLabelsInStartingHands()[handNumber];
+//        for (Component c : cardLabelsInHand) {
+//            container.remove(c);
+//        }
+//        container.repaint();
+//        
+//        for (Card c: cards) {
+//            try {
+//                simulationStarter.drawCard(c);
+//            } catch (IOException ex) {
+//                PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow
+//                        (simulationStarter.getDialog(), simulationStarter.getGui());
+//                errorWindow.create();
+//            }
+//        }
+//    }
 
 }
