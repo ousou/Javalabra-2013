@@ -21,7 +21,6 @@ import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
 import poker.startinghands.StartingHandsCreator;
-import poker.startinghands.TexasHoldemStartingHand;
 import ui.actionlisteners.CloseWindow;
 import ui.actionlisteners.simulationstarter.AddCardsToBoard;
 import ui.actionlisteners.simulationstarter.AddCardsToHand;

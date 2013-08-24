@@ -28,12 +28,7 @@ public class Combination {
      * @throws IllegalArgumentException if the list is null.
      */
     public static <T> List<List<T>> takeKFromList(List<T> list, int k) {
-        if (list == null) {
-            throw new IllegalArgumentException("List can't be null");
-        }
-        if (k < 0 || k > list.size()) {
-            throw new IllegalArgumentException("n can't be negative or larger than the size of the list");
-        }
+        checkParameters(list, k);
         if (k == 0) {
             return new ArrayList<List<T>>();
         }
@@ -63,39 +58,9 @@ public class Combination {
         Map<Integer, Integer> currentLargestIndexInThisCombination = new HashMap<Integer,Integer>();        
         Map<Integer, Integer> previousLargestIndexInThisCombination;
         
-        /* Here we create the combinations containing one element.
-         * We know we necessarily don't have to make a one-element
-         * list of all the elements in the original list, since we
-         * intend to keep the lexicographic order.
-         */
-        for (int i = 0; i < list.size() - k + 1; i++) {
-            List<T> combination = new ArrayList<T>();
-            combination.add(list.get(i));
-            currentCombinations.add(combination);
-            currentLargestIndexInThisCombination.put(i,i);
-        }
+        createOneElementCombinations(list, k, currentCombinations, currentLargestIndexInThisCombination);
         
-        // Looping to add the necessary amount of elements to each list.
-        int howManyAdded = 1;        
-        while (howManyAdded < k) {
-            previousCombinations = currentCombinations;
-            previousLargestIndexInThisCombination = currentLargestIndexInThisCombination;
-            currentCombinations = new ArrayList<List<T>>();            
-            currentLargestIndexInThisCombination = new HashMap<Integer,Integer>();
-            
-            // We check every previous list and add remaining elements with larger index.  
-            for (int i = 0; i < previousCombinations.size(); i++) {
-                List<T> combination = previousCombinations.get(i);
-                int nextIndex = previousLargestIndexInThisCombination.get(i) + 1;
-                for (int j = nextIndex; j < list.size() + howManyAdded - k + 1; j++) {
-                    List<T> newCombination = new ArrayList<T>(combination);
-                    newCombination.add(list.get(j));
-                    currentCombinations.add(newCombination);
-                    currentLargestIndexInThisCombination.put(currentCombinations.size() - 1, j);
-                }                
-            }
-            howManyAdded++;
-        }        
+        currentCombinations = fillOutCombinations(k, currentCombinations, currentLargestIndexInThisCombination, list);
         
         return currentCombinations;
     }
@@ -124,5 +89,76 @@ public class Combination {
             denominator *= i;
         }
         return (int) (numerator / denominator);
+    }
+
+    private static <T> void checkParameters(List<T> list, int k) throws IllegalArgumentException {
+        if (list == null) {
+            throw new IllegalArgumentException("List can't be null");
+        }
+        if (k < 0 || k > list.size()) {
+            throw new IllegalArgumentException("n can't be negative or larger than the size of the list");
+        }
+    }
+
+    /**
+     * Creates one-element combinations.
+     * 
+     * We know we necessarily don't have to make a one-element
+     * list of all the elements in the original list, since we
+     * intend to keep the lexicographic order.
+     * 
+     * @param <T>
+     * @param list
+     * @param k
+     * @param currentCombinations
+     * @param currentLargestIndexInThisCombination 
+     */
+    
+    private static <T> void createOneElementCombinations(List<T> list, int k, List<List<T>> currentCombinations, Map<Integer, Integer> currentLargestIndexInThisCombination) {
+        for (int i = 0; i < list.size() - k + 1; i++) {
+            List<T> combination = new ArrayList<T>();
+            combination.add(list.get(i));
+            currentCombinations.add(combination);
+            currentLargestIndexInThisCombination.put(i,i);
+        }
+    }
+
+    /**
+     * Fills out all the combinations.
+     * 
+     * Every combination in the returned list will contain k elements.
+     * 
+     * @param <T>
+     * @param k
+     * @param currentCombinations
+     * @param currentLargestIndexInThisCombination
+     * @param list
+     * @return List of combinations.
+     */
+    private static <T> List<List<T>> fillOutCombinations(int k, List<List<T>> currentCombinations, Map<Integer, Integer> currentLargestIndexInThisCombination, List<T> list) {
+        List<List<T>> previousCombinations;
+        Map<Integer, Integer> previousLargestIndexInThisCombination;
+        // Looping to add the necessary amount of elements to each list.
+        int howManyAdded = 1;
+        while (howManyAdded < k) {
+            previousCombinations = currentCombinations;
+            previousLargestIndexInThisCombination = currentLargestIndexInThisCombination;
+            currentCombinations = new ArrayList<List<T>>();            
+            currentLargestIndexInThisCombination = new HashMap<Integer,Integer>();
+            
+            // We check every previous list and add remaining elements with larger index.  
+            for (int i = 0; i < previousCombinations.size(); i++) {
+                List<T> combination = previousCombinations.get(i);
+                int nextIndex = previousLargestIndexInThisCombination.get(i) + 1;
+                for (int j = nextIndex; j < list.size() + howManyAdded - k + 1; j++) {
+                    List<T> newCombination = new ArrayList<T>(combination);
+                    newCombination.add(list.get(j));
+                    currentCombinations.add(newCombination);
+                    currentLargestIndexInThisCombination.put(currentCombinations.size() - 1, j);
+                }                
+            }
+            howManyAdded++;
+        }
+        return currentCombinations;
     }
 }

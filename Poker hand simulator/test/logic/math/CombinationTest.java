@@ -1,6 +1,5 @@
 package logic.math;
 
-import logic.math.Combination;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
