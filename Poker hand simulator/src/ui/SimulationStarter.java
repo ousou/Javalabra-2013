@@ -124,7 +124,7 @@ public class SimulationStarter implements Runnable {
                 gui.getPictureType());
         int index = 0;
         while (!deck.isEmpty()) {
-            Card c = deck.getCard();
+            Card c = deck.takeCard();
             indexForCard.put(c, index);
             drawCard(c);
             index++;

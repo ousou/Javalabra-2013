@@ -68,7 +68,7 @@ public class DrawAllCards implements Runnable {
 
         int index = 0;
         while (!deck.isEmpty()) {
-            Card c = deck.getCard();
+            Card c = deck.takeCard();
             int xPlace = (index % 8) * 90;
             int yPlace = (index / 8) * 75;
             cardDrawer.draw(c, xPlace, yPlace, index, false);

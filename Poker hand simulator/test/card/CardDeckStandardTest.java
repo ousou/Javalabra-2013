@@ -40,13 +40,13 @@ public class CardDeckStandardTest {
         for (int i = 0; i < 52; i++) {
             prevCard = card;
             assertFalse(deck.isEmpty());
-            card = deck.getCard();
+            card = deck.takeCard();
             assertNotNull(card);
             assertNotSame(prevCard, card);
             assertEquals(52 - i - 1, deck.getNumberOfRemainingCards());
         }
 
-        assertNull(deck.getCard());
+        assertNull(deck.takeCard());
         assertTrue(deck.isEmpty());
         assertEquals(0, deck.getNumberOfRemainingCards());
     }
@@ -62,7 +62,7 @@ public class CardDeckStandardTest {
         assertEquals(48, deck.getNumberOfRemainingCards());
         
         while (!deck.isEmpty()) {
-            Card retrieved = deck.getCard();
+            Card retrieved = deck.takeCard();
             assertFalse("A removed card is present in the deck", 
                     removedCards.contains(retrieved));
         }

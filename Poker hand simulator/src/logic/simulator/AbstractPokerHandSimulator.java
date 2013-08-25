@@ -294,7 +294,7 @@ public abstract class AbstractPokerHandSimulator {
     protected FiveCardBoard simulateBoard(ICardDeck deck) throws RuntimeException {
         FiveCardBoard simulatedBoard = copyOfBoard();
         while (!simulatedBoard.isFull()) {
-            Card nextCard = deck.getCard();
+            Card nextCard = deck.takeCard();
             if (nextCard == null) {
                 throw new RuntimeException("The deck ran out of cards!");
             }
@@ -317,7 +317,7 @@ public abstract class AbstractPokerHandSimulator {
         for (int i = 0; i < startingHands.size(); i++) {
             AbstractStartingHand copyOfHand = startingHands.get(i).copyOfHand();
             while (!copyOfHand.isFull()) {
-                Card nextCard = deck.getCard();
+                Card nextCard = deck.takeCard();
                 if (nextCard == null) {
                     throw new RuntimeException("The deck ran out of cards!");
                 }

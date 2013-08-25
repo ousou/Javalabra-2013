@@ -38,32 +38,17 @@ public class StartNewSimulationDialog implements ActionListener {
         dialog.setResizable(false);
 
         JPanel mainPanel = new JPanel();
-        Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
-
-        mainPanel.setBorder(padding);
-        mainPanel.setLayout(new GridLayout(4, 2, 20, 20));
+        setBorderAndLayout(mainPanel);
 
         JLabel gameTypeText = new JLabel("Game type");
         mainPanel.add(gameTypeText);
-
-        PokerGameType[] allGameTypesArray = PokerGameType.getAllGameTypesArray();
-        String[] gameTypeNames = new String[allGameTypesArray.length];
-        for (int i = 0; i < gameTypeNames.length; i++) {
-            gameTypeNames[i] = allGameTypesArray[i].getFullName();
-        }
-
-        JComboBox gameTypeList = new JComboBox(gameTypeNames);
+        
+        PokerGameType[] allGameTypesArray = PokerGameType.getAllGameTypesArray();     
+        
+        JComboBox gameTypeList = createGameTypeList(allGameTypesArray);
         mainPanel.add(gameTypeList);
-
-        JLabel numberOfHandsText = new JLabel("Number of starting hands");
-        mainPanel.add(numberOfHandsText);
-
-        String[] numberOfHands = new String[9];
-        for (int i = 0; i < numberOfHands.length; i++) {
-            numberOfHands[i] = Integer.toString(i + 2);
-        }
-        JComboBox numberOfHandsList = new JComboBox(numberOfHands);
-        mainPanel.add(numberOfHandsList);
+        
+        JComboBox numberOfHandsList = createNumberOfHandsList(mainPanel);
 
         JLabel numberOfSimulationsText = new JLabel("Number of simulations");
         mainPanel.add(numberOfSimulationsText);
@@ -78,6 +63,40 @@ public class StartNewSimulationDialog implements ActionListener {
         mainPanel.add(okButton);
 
         dialog.setContentPane(mainPanel);
+    }
+
+    private void setBorderAndLayout(JPanel mainPanel) {
+        Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
+
+        mainPanel.setBorder(padding);
+        mainPanel.setLayout(new GridLayout(4, 2, 20, 20));
+    }
+    
+    private JComboBox createGameTypeList(PokerGameType[] allGameTypesArray) {
+        String[] gameTypeNames = createAllGameTypesArray(allGameTypesArray);
+
+        JComboBox gameTypeList = new JComboBox(gameTypeNames);
+        return gameTypeList;
+    }
+
+    private String[] createAllGameTypesArray(PokerGameType[] allGameTypesArray) {
+        String[] gameTypeNames = new String[allGameTypesArray.length];
+        for (int i = 0; i < gameTypeNames.length; i++) {
+            gameTypeNames[i] = allGameTypesArray[i].getFullName();
+        }
+        return gameTypeNames;
+    }
+
+    private JComboBox createNumberOfHandsList(JPanel mainPanel) {
+        JLabel numberOfHandsText = new JLabel("Number of starting hands");
+        mainPanel.add(numberOfHandsText);
+        String[] numberOfHands = new String[9];
+        for (int i = 0; i < numberOfHands.length; i++) {
+            numberOfHands[i] = Integer.toString(i + 2);
+        }
+        JComboBox numberOfHandsList = new JComboBox(numberOfHands);
+        mainPanel.add(numberOfHandsList);
+        return numberOfHandsList;
     }
 
     private static class InputValidation implements ActionListener {

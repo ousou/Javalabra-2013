@@ -81,7 +81,7 @@ public final class CardDeckStandard implements ICardDeck {
     }
 
     @Override
-    public Card getCard() {
+    public Card takeCard() {
         return cards.poll();
     }
 

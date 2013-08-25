@@ -185,7 +185,7 @@ public class FiveCardPokerHandComparatorTest {
             ICardDeck deck = new CardDeckStandard();
             FiveCardPokerHand randomHand = new FiveCardPokerHand();
             for (int j = 0; j < 5; j++) {
-                assertTrue(randomHand.addCard(deck.getCard()));
+                assertTrue(randomHand.addCard(deck.takeCard()));
             }
         
             assertEquals("Hand " + randomHand + " doesn't tie with itself"

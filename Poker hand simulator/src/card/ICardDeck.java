@@ -12,7 +12,7 @@ public interface ICardDeck {
      * 
      * @return The card retrieved, or null if deck is empty.
      */
-    Card getCard();
+    Card takeCard();
     
     /**
      * Shuffles the deck.
