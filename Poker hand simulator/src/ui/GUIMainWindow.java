@@ -7,7 +7,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -43,6 +42,7 @@ public class GUIMainWindow implements Runnable {
     private CardDrawer cardDrawer;
     private SimulationResult simulationResult;
     private Settings settings;
+    private List<AbstractStartingHand> startingHands;
 
     @Override
     public void run() {
@@ -51,8 +51,6 @@ public class GUIMainWindow implements Runnable {
         createMenuBar();
         readSettings();
         createLabel("Results", 150, 0);
-//        createLabelsForHands(10);
-//        createWinLossTieEquityLabels();
     }
 
     /**
@@ -124,7 +122,6 @@ public class GUIMainWindow implements Runnable {
     }
 
     public void setSimulationResult(SimulationResult simulationResult) {
-        System.out.println("Result done!");
         this.simulationResult = simulationResult;
     }
 
@@ -135,7 +132,7 @@ public class GUIMainWindow implements Runnable {
      * use.
      */
     private void readSettings() {
-        this.settings = new Settings(2);
+        this.settings = new Settings(2, 4);
     }
 
     public Settings getSettings() {
@@ -146,18 +143,20 @@ public class GUIMainWindow implements Runnable {
         if (simulationResult == null) {
             return;
         }
-        System.out.println("Writing results!");
+        container.removeAll();
+        createLabel("Results", 150, 0);        
         PokerGameType gameType = simulationResult.getGameType();
-        Set<AbstractStartingHand> startingHands = simulationResult.getStartingHands();
 
         if (gameType.isCommunityCardGame()) {
-            createLabel("Board", 10, 50);
+            createLabel("Board", 10, 40);
             drawBoardCards(simulationResult.getBoard());
         }
 
         createLabelsForHands(startingHands.size());
+        drawHandCards();
 
         createWinLossTieEquityLabels();
+        drawWinLossTieEquityResults();
 
         container.repaint();
     }
@@ -185,23 +184,66 @@ public class GUIMainWindow implements Runnable {
         createLabel("Win %", 300, 65);
         createLabel("Loss %", 370, 65);
         createLabel("Tie %", 450, 65);
-        createLabel("Equity", 510, 65);
+        createLabel("Equity", 550, 65);
     }
 
     private void drawBoardCards(FiveCardBoard board) {
         List<Card> boardCards = board.getCards();
         int xChange = 30;
-        int xStart = 25;
-        int yStart = 50;
+        int xStart = 100;
+        int yStart = 35;
 
         for (int i = 0; i < boardCards.size(); i++) {
             try {
-                cardDrawer.draw(boardCards.get(i), xStart + xChange*i, 50, 1, false);
+                cardDrawer.draw(boardCards.get(i), xStart + xChange * i, yStart, 1, false);
             } catch (IOException ex) {
                 Logger.getLogger(GUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow((JDialog) container, this);
                 errorWindow.create();
             }
         }
+    }
+
+    private void drawHandCards() {
+        int startX = 100;
+        int startY = 90;
+        int xChange = 30;
+        int yChange = 45;
+
+
+        for (int j = 0; j < startingHands.size(); j++) {
+            List<Card> cards = startingHands.get(j).getCards();
+            for (int i = 0; i < cards.size(); i++) {
+                try {
+                    cardDrawer.draw(cards.get(i), startX + xChange * i, startY + yChange * j, 1, false);
+                } catch (IOException ex) {
+                    Logger.getLogger(GUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow((JDialog) container, this);
+                    errorWindow.create();
+                }
+            }
+        }
+    }
+
+    private void drawWinLossTieEquityResults() {
+        int yChange = 45;
+        int yStart = 100;
+        int numberOfDigits = settings.getNumberOfDigits();
+
+        for (int j = 0; j < startingHands.size(); j++) {
+            AbstractStartingHand hand = startingHands.get(j);
+            createLabel(Double.toString(simulationResult.getWinPercentageForHand(hand, 
+                    numberOfDigits)), 300, 100 + j*yChange);
+            createLabel(Double.toString(simulationResult.getLossPercentageForHand(hand, 
+                    numberOfDigits)), 370, 100 + j*yChange);
+            createLabel(Double.toString(simulationResult.getTiePercentageForHand(hand, 
+                    numberOfDigits)), 450, 100 + j*yChange);
+            createLabel(Double.toString(simulationResult.getEquityForHand(hand, 
+                    numberOfDigits)), 550, 100 + j*yChange);
+        }
+    }
+
+    public void setStartingHands(List<AbstractStartingHand> startingHands) {
+        this.startingHands = startingHands;
     }
 }

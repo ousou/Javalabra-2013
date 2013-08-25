@@ -73,8 +73,9 @@ public class StartSimulation implements ActionListener {
         }
         
         if (result != null) {
+            simulationStarter.getDialog().dispose();            
             gui.setSimulationResult(result);
-            simulationStarter.getDialog().dispose();
+            gui.setStartingHands(startingHands);
             gui.writeResultsToScreen();
         }
     }
