@@ -28,6 +28,7 @@ import ui.actionlisteners.simulationstarter.CardSelectionListener;
 import ui.actionlisteners.simulationstarter.ClearCardsFromBoard;
 import ui.actionlisteners.simulationstarter.ClearCardsFromHand;
 import ui.actionlisteners.simulationstarter.PicturesNotFoundErrorWindow;
+import ui.actionlisteners.simulationstarter.StartSimulation;
 import ui.actionlisteners.simulationstarter.UnselectAllCardsListener;
 import ui.guitools.CardDrawer;
 import ui.guitools.WindowCreator;
@@ -39,7 +40,7 @@ import ui.guitools.WindowCreator;
  */
 public class SimulationStarter implements Runnable {
 
-    private GUI gui;
+    private GUIMainWindow gui;
     private Container container;
     private JDialog dialog;
     private CardDrawer cardDrawer;
@@ -62,7 +63,7 @@ public class SimulationStarter implements Runnable {
     // Contains labels of cards currently selected in the Available cards-section
     private List<Component> selectedCardLabels;
 
-    public SimulationStarter(GUI gui, PokerGameType gameType,
+    public SimulationStarter(GUIMainWindow gui, PokerGameType gameType,
             int numberOfStartingHands, int numberOfSimulations) {
         this.gui = gui;
         this.gameType = gameType;
@@ -216,13 +217,14 @@ public class SimulationStarter implements Runnable {
         JButton clearSelection = new JButton("Unselect all");
         Dimension size = clearSelection.getPreferredSize();
         clearSelection.setBounds(265 + insets.left, 235 + insets.top, size.width, size.height);
-        clearSelection.addActionListener(new UnselectAllCardsListener(container, selectedCards, selectedCardLabels));
+        clearSelection.addActionListener(new UnselectAllCardsListener(container, selectedCards, selectedCardLabels, this));
 
         container.add(clearSelection);
 
         JButton startSimulation = new JButton("Start simulation");
         size = startSimulation.getPreferredSize();
         startSimulation.setBounds(450 + insets.left, 720 + insets.top, size.width, size.height);
+        startSimulation.addActionListener(new StartSimulation(this, gui));
 
         container.add(startSimulation);
 
@@ -250,7 +252,7 @@ public class SimulationStarter implements Runnable {
                 xPlace, yPlace, cardLabel));
     }
 
-    public GUI getGui() {
+    public GUIMainWindow getGui() {
         return gui;
     }
 
@@ -303,5 +305,13 @@ public class SimulationStarter implements Runnable {
 
     public List<Component> getCardLabelsInBoard() {
         return cardLabelsInBoard;
+    }
+
+    public PokerGameType getGameType() {
+        return gameType;
+    }
+
+    public int getNumberOfSimulations() {
+        return numberOfSimulations;
     }
 }

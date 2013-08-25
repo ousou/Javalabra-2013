@@ -5,7 +5,10 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import ui.SimulationStarter;
 
@@ -41,7 +44,7 @@ public class CardDeselectionListener implements MouseListener {
         selectedCards.remove(card);
         selectedCardLabels.remove(greyCardLabel);
         container.remove(greyCardLabel);
-
+        container.add(cardLabel);
         container.repaint();
     }
 

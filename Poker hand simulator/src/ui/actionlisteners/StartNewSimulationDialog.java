@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import poker.enums.PokerGameType;
-import ui.GUI;
+import ui.GUIMainWindow;
 import ui.guitools.WindowCreator;
 
 /**
@@ -25,9 +25,9 @@ import ui.guitools.WindowCreator;
  */
 public class StartNewSimulationDialog implements ActionListener {
 
-    private GUI gui;
+    private GUIMainWindow gui;
 
-    public StartNewSimulationDialog(GUI gui) {
+    public StartNewSimulationDialog(GUIMainWindow gui) {
         this.gui = gui;
     }
     
@@ -101,14 +101,14 @@ public class StartNewSimulationDialog implements ActionListener {
 
     private static class InputValidation implements ActionListener {
 
-        private GUI gui;
+        private GUIMainWindow gui;
         private JDialog mainDialog;
         private JComboBox gameTypeList;
         private JComboBox numberOfHandsList;
         private JTextField numberOfSimulations;
         private PokerGameType[] allGameTypesArray;
 
-        public InputValidation(GUI gui, JDialog mainDialog, JComboBox gameTypeList,
+        public InputValidation(GUIMainWindow gui, JDialog mainDialog, JComboBox gameTypeList,
                 JComboBox numberOfHandsList, JTextField numberOfSimulations,
                 PokerGameType[] allGameTypesArray) {
             this.gui = gui;

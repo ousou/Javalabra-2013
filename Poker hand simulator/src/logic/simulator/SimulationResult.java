@@ -324,4 +324,12 @@ public class SimulationResult implements Serializable {
                     + totalNumberOfSimulationsToPerform + " simulations have been performed.");
         }        
     }
+
+    public FiveCardBoard getBoard() {
+        return board;
+    }
+
+    public PokerGameType getGameType() {
+        return gameType;
+    }
 }

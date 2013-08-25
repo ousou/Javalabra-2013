@@ -4,19 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import ui.GUI;
+import ui.GUIMainWindow;
 
 /**
- * Shuts down the GUI properly.
+ * Shuts down the GUIMainWindow properly.
  * 
  * @todo Implement settings saving before shutdown.
  * @author Sebastian Björkqvist
  */
 public class ProgramShutdown implements ActionListener, WindowListener {
 
-    private GUI gui;
+    private GUIMainWindow gui;
     
-    public ProgramShutdown(GUI gui) {
+    public ProgramShutdown(GUIMainWindow gui) {
         this.gui = gui;
     }
 

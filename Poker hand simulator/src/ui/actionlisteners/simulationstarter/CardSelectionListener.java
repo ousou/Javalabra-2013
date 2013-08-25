@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -43,19 +44,22 @@ public class CardSelectionListener implements MouseListener {
 
     public void addGreyCard() {
         selectedCards.add(card);
+        Map<Card, Component> drawnCards = simulationStarter.getDrawnCards();
 
+        container.remove(drawnCards.get(card));        
         try {
-            JLabel greyCardLabel = cardDrawer.draw(card, xPlace, yPlace, 1, true);
-            selectedCardLabels.add(greyCardLabel);
+            JLabel greyCardLabel = cardDrawer.draw(card, xPlace, yPlace, 2, true);
             greyCardLabel.addMouseListener(
                     new CardDeselectionListener(simulationStarter, card, 
-                    xPlace, yPlace, greyCardLabel, cardLabel));
+                    xPlace, yPlace, greyCardLabel, cardLabel));            
+            selectedCardLabels.add(greyCardLabel);
         } catch (IOException ex) {
             Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
             PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow
                     (simulationStarter.getDialog(), simulationStarter.getGui());
             errorWindow.create();
         }
+        container.repaint();
     }
 
     @Override

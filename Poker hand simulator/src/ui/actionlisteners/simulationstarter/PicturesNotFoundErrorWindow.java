@@ -7,7 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import ui.GUI;
+import ui.GUIMainWindow;
 import ui.actionlisteners.ProgramShutdown;
 import ui.guitools.WindowCreator;
 
@@ -18,9 +18,9 @@ import ui.guitools.WindowCreator;
 public class PicturesNotFoundErrorWindow {
 
     private JDialog dialog;
-    private GUI gui;
+    private GUIMainWindow gui;
 
-    public PicturesNotFoundErrorWindow(JDialog dialog, GUI gui) {
+    public PicturesNotFoundErrorWindow(JDialog dialog, GUIMainWindow gui) {
         this.dialog = dialog;
         this.gui = gui;
     }
