@@ -158,8 +158,8 @@ public class AbstractCardCollectionTest {
         assertTrue(collection2.addCard(new Card(Suit.CLUB, Rank.ACE)));      
         assertTrue(collection2.addCard(new Card(Suit.SPADE, Rank.ACE)));  
         
-        assertTrue(collection.equals(collection2));
-        assertTrue(collection2.equals(collection));
+        assertFalse(collection.equals(collection2));
+        assertFalse(collection2.equals(collection));
     }
     
     @Test
@@ -192,6 +192,16 @@ public class AbstractCardCollectionTest {
         
         assertFalse(collection.equals(collection2));
         assertFalse(collection2.equals(collection));
+    }
+    
+    @Test
+    public void testEquals4() {
+        AbstractCardCollection collection = new AbstractCardCollectionImpl(4);  
+        
+        assertTrue(collection.addCard(new Card(Suit.CLUB, Rank.ACE)));      
+        assertTrue(collection.addCard(new Card(Suit.SPADE, Rank.ACE)));  
+        
+        assertTrue(collection.equals(collection));
     }
 
     public class AbstractCardCollectionImpl extends AbstractCardCollection {

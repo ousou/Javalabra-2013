@@ -1,6 +1,5 @@
 package ui.actionlisteners.simulationstarter;
 
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +21,6 @@ import poker.startinghands.AbstractStartingHand;
 import ui.GUIMainWindow;
 import ui.SimulationStarter;
 import ui.actionlisteners.CloseWindow;
-import ui.actionlisteners.ProgramShutdown;
 import ui.guitools.WindowCreator;
 
 /**
@@ -49,8 +47,13 @@ public class StartSimulation implements ActionListener {
     }
 
     private void start() {
-        int numberOfThreads = gui.getSettings().getNumberOfThreads();
         List<AbstractStartingHand> startingHands = Arrays.asList(simulationStarter.getStartingHands());
+        
+        if (areAllHandsEmpty(startingHands)) {
+            System.out.println("Need to choose something!");
+            return;
+        }
+        int numberOfThreads = gui.getSettings().getNumberOfThreads();
         FiveCardBoard board = simulationStarter.getBoard();
         int numberOfSimulations = simulationStarter.getNumberOfSimulations();
 
@@ -114,5 +117,15 @@ public class StartSimulation implements ActionListener {
         mainPanel.add(message2);
         mainPanel.add(new JLabel(""));
         mainPanel.add(message3);
+    }
+
+    private boolean areAllHandsEmpty(List<AbstractStartingHand> startingHands) {
+        for (AbstractStartingHand hand : startingHands) {
+            if (hand.getNumberOfCards() != 0) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
