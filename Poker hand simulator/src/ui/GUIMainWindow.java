@@ -23,6 +23,7 @@ import logic.simulator.SimulationResult;
 import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
+import ui.actionlisteners.ModifySettings;
 import ui.guitools.CardDrawer;
 import ui.actionlisteners.ProgramShutdown;
 import ui.actionlisteners.StartNewSimulationDialog;
@@ -97,11 +98,17 @@ public class GUIMainWindow implements Runnable {
 
         menuBar.add(mainMenu);
 
-        JMenuItem startSimulationButton = new JMenuItem("New simulation",
+        JMenuItem startSimulationButton = new JMenuItem("New simulation...",
                 KeyEvent.VK_S);
         startSimulationButton.addActionListener(new StartNewSimulationDialog(this));
         mainMenu.add(startSimulationButton);
         mainMenu.addSeparator();
+        
+        JMenuItem modifySettingsButton = new JMenuItem("Settings...",
+                KeyEvent.VK_S);
+        modifySettingsButton.addActionListener(new ModifySettings(this));
+        mainMenu.add(modifySettingsButton);
+        mainMenu.addSeparator();        
 
         JMenuItem exitProgramButton = new JMenuItem("Exit",
                 KeyEvent.VK_E);
