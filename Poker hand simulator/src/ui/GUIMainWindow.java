@@ -58,6 +58,7 @@ public class GUIMainWindow implements Runnable {
         createMenuBar();
         readSettings();
         createLabel("Results", 150, 0);
+        createStartSimulationButton();
     }
 
     /**
@@ -171,6 +172,7 @@ public class GUIMainWindow implements Runnable {
         }
         container.removeAll();
         createLabel("Results", 150, 0);
+        createStartSimulationButton();        
         PokerGameType gameType = simulationResult.getGameType();
 
         if (gameType.isCommunityCardGame()) {
@@ -308,5 +310,16 @@ public class GUIMainWindow implements Runnable {
         dialog.setContentPane(mainPanel);
         dialog.setResizable(false);
         
+    }
+
+    private void createStartSimulationButton() {
+        JButton startSimulation = new JButton("Start new simulation");
+        
+        Insets insets = container.getInsets();
+        Dimension size = startSimulation.getPreferredSize();
+        startSimulation.setBounds(insets.left + 550, insets.top + 20,
+                size.width, size.height);
+        startSimulation.addActionListener(new StartNewSimulationDialog(this));
+        container.add(startSimulation);
     }
 }

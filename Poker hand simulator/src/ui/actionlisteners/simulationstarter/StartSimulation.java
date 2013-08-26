@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -46,7 +48,7 @@ public class StartSimulation implements ActionListener {
 
     private void start() {
         List<AbstractStartingHand> startingHands = Arrays.asList(simulationStarter.getStartingHands());
-        
+
         if (areAllHandsEmpty(startingHands)) {
             System.out.println("Need to choose something!");
             return;
@@ -57,34 +59,33 @@ public class StartSimulation implements ActionListener {
 
         AbstractPokerHandSimulator simulator;
 
-        if (simulationStarter.getGameType().isCommunityCardGame() 
+        if (simulationStarter.getGameType().isCommunityCardGame()
                 && board != null && board.getNumberOfCards() > 0) {
             simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), numberOfSimulations);
         } else {
             simulator = new PokerHandSimulatorVersion2(startingHands, numberOfSimulations);
         }
-        
+
         SimulationResult result = null;
-        
+
+        simulationStarter.getDialog().dispose();         
         try {
             result = simulator.performSimulation(numberOfThreads);
         } catch (InterruptedException ex) {
             createSimulationInterruptedErrorWindow();
         }
-        
+
         if (result != null) {
-            simulationStarter.getDialog().dispose();            
             gui.setSimulationResult(result);
             gui.setStartingHands(startingHands);
             gui.writeResultsToScreen();
         }
     }
 
-
     private void createSimulationInterruptedErrorWindow() {
-        WindowCreator windowCreator = new WindowCreator(simulationStarter.getDialog());   
+        WindowCreator windowCreator = new WindowCreator(simulationStarter.getDialog());
         JDialog errorWindow = windowCreator.createNewJDialog("Error", 400, 200);
-        
+
         JPanel mainPanel = new JPanel();
         Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
@@ -102,7 +103,7 @@ public class StartSimulation implements ActionListener {
         buttonPanel.add(new JLabel(""));
         mainPanel.add(buttonPanel);
 
-        errorWindow.setContentPane(mainPanel);        
+        errorWindow.setContentPane(mainPanel);
     }
 
     private void writeErrorMessageToPanel(JPanel mainPanel) {
@@ -122,7 +123,7 @@ public class StartSimulation implements ActionListener {
                 return false;
             }
         }
-        
+
         return true;
     }
 }
