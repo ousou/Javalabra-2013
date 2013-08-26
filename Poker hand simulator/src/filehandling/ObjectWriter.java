@@ -1,5 +1,6 @@
 package filehandling;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -28,6 +29,8 @@ public class ObjectWriter {
             throw new IllegalArgumentException("Object can't be null!");            
         }
         try {
+            File file = new File(fileName);
+            file.getParentFile().mkdirs();            
             FileOutputStream fileOut = new FileOutputStream(fileName);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(object);

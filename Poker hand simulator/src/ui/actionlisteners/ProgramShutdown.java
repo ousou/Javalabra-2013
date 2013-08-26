@@ -56,6 +56,9 @@ public class ProgramShutdown implements ActionListener, WindowListener {
     }
     
     private void handleShutdown() {
+        if (!gui.saveSettingsToDisk()) {
+            System.out.println("Settings not saved!");
+        }
         System.exit(0);        
     }
 }

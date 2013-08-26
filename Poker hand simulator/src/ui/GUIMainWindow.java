@@ -1,13 +1,17 @@
 package ui;
 
 import card.Card;
+import filehandling.ObjectReader;
+import filehandling.ObjectWriter;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,11 +25,13 @@ import logic.simulator.SimulationResult;
 import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
+import ui.actionlisteners.CloseWindow;
 import ui.actionlisteners.ModifySettings;
 import ui.guitools.CardDrawer;
 import ui.actionlisteners.ProgramShutdown;
 import ui.actionlisteners.StartNewSimulationDialog;
 import ui.actionlisteners.simulationstarter.PicturesNotFoundErrorWindow;
+import ui.guitools.WindowCreator;
 
 /**
  * Graphical user interface for Poker hand simulator.
@@ -42,6 +48,8 @@ public class GUIMainWindow implements Runnable {
     private SimulationResult simulationResult;
     private Settings settings;
     private List<AbstractStartingHand> startingHands;
+    private String savedSettingsPath = "PHSsettings/settings.dat";
+    private String defaultSettingsPath;
 
     @Override
     public void run() {
@@ -101,12 +109,12 @@ public class GUIMainWindow implements Runnable {
         startSimulationButton.addActionListener(new StartNewSimulationDialog(this));
         mainMenu.add(startSimulationButton);
         mainMenu.addSeparator();
-        
+
         JMenuItem modifySettingsButton = new JMenuItem("Settings...",
                 KeyEvent.VK_S);
         modifySettingsButton.addActionListener(new ModifySettings(this));
         mainMenu.add(modifySettingsButton);
-        mainMenu.addSeparator();        
+        mainMenu.addSeparator();
 
         JMenuItem exitProgramButton = new JMenuItem("Exit",
                 KeyEvent.VK_E);
@@ -137,6 +145,19 @@ public class GUIMainWindow implements Runnable {
      * use.
      */
     private void readSettings() {
+        ObjectReader reader = new ObjectReader();
+        Object savedSettingsObject = reader.readObject(savedSettingsPath);
+
+        if (savedSettingsObject != null) {
+            try {
+                Settings savedSettings = (Settings) savedSettingsObject;
+                this.settings = savedSettings;
+                return;
+            } catch (ClassCastException e) {
+            }
+        }
+        createSettingsNotLoadedWindow();
+        
         this.settings = new Settings(2, 4);
     }
 
@@ -149,7 +170,7 @@ public class GUIMainWindow implements Runnable {
             return;
         }
         container.removeAll();
-        createLabel("Results", 150, 0);        
+        createLabel("Results", 150, 0);
         PokerGameType gameType = simulationResult.getGameType();
 
         if (gameType.isCommunityCardGame()) {
@@ -235,18 +256,57 @@ public class GUIMainWindow implements Runnable {
 
         for (int j = 0; j < startingHands.size(); j++) {
             AbstractStartingHand hand = startingHands.get(j);
-            createLabel(Double.toString(simulationResult.getWinPercentageForHand(hand, 
-                    numberOfDigits)), 300, 100 + j*yChange);
-            createLabel(Double.toString(simulationResult.getLossPercentageForHand(hand, 
-                    numberOfDigits)), 370, 100 + j*yChange);
-            createLabel(Double.toString(simulationResult.getTiePercentageForHand(hand, 
-                    numberOfDigits)), 450, 100 + j*yChange);
-            createLabel(Double.toString(simulationResult.getEquityForHand(hand, 
-                    numberOfDigits)), 550, 100 + j*yChange);
+            createLabel(Double.toString(simulationResult.getWinPercentageForHand(hand,
+                    numberOfDigits)), 300, 100 + j * yChange);
+            createLabel(Double.toString(simulationResult.getLossPercentageForHand(hand,
+                    numberOfDigits)), 370, 100 + j * yChange);
+            createLabel(Double.toString(simulationResult.getTiePercentageForHand(hand,
+                    numberOfDigits)), 450, 100 + j * yChange);
+            createLabel(Double.toString(simulationResult.getEquityForHand(hand,
+                    numberOfDigits)), 550, 100 + j * yChange);
         }
     }
 
     public void setStartingHands(List<AbstractStartingHand> startingHands) {
         this.startingHands = startingHands;
+    }
+    
+    public boolean saveSettingsToDisk() {
+        ObjectWriter writer = new ObjectWriter();
+        
+        return writer.writeObject(settings, savedSettingsPath);
+    }
+
+    private void createSettingsNotLoadedWindow() {
+        WindowCreator creator = new WindowCreator(frame);
+        JDialog dialog = creator.createNewJDialog("Settings not loaded", 325, 150);
+        JPanel mainPanel = new JPanel();
+        
+        Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+
+        mainPanel.setBorder(padding);
+        mainPanel.setLayout(new GridLayout(4, 1));      
+        
+        JLabel message1 = new JLabel("Settings-file not found.");
+        JLabel message2 = new JLabel("Default settings will be used.");
+        JLabel message3 = new JLabel("A new settings file will be created.");
+        
+        mainPanel.add(message1);
+        mainPanel.add(message2);
+        mainPanel.add(message3);
+        
+        JPanel buttonPanel = new JPanel();
+        
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(new CloseWindow(dialog));
+                
+        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(okButton);
+        buttonPanel.add(new JLabel(""));
+        mainPanel.add(buttonPanel);
+        
+        dialog.setContentPane(mainPanel);
+        dialog.setResizable(false);
+        
     }
 }
