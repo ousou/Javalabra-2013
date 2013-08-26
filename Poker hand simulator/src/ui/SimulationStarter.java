@@ -98,7 +98,6 @@ public class SimulationStarter implements Runnable {
         try {
             drawAllCards();
         } catch (IOException ex) {
-            Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
             PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow(dialog, gui);
             errorWindow.create();
             return;

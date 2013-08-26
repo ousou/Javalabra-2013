@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -71,7 +69,6 @@ public class StartSimulation implements ActionListener {
         try {
             result = simulator.performSimulation(numberOfThreads);
         } catch (InterruptedException ex) {
-            Logger.getLogger(StartSimulation.class.getName()).log(Level.SEVERE, null, ex);
             createSimulationInterruptedErrorWindow();
         }
         

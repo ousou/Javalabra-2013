@@ -34,15 +34,7 @@ public class PicturesNotFoundErrorWindow {
 
         mainPanel.setBorder(padding);
         mainPanel.setLayout(new GridLayout(6, 1));
-        JLabel message1 = new JLabel("Card pictures could not be found.");
-        JLabel message2 = new JLabel("The program will shut down.");
-        JLabel message3 = new JLabel("If the problem persists, ");
-        JLabel message4 = new JLabel("please use the text user interface.");
-        mainPanel.add(message1);
-        mainPanel.add(message2);
-        mainPanel.add(new JLabel(""));
-        mainPanel.add(message3);
-        mainPanel.add(message4);
+        createMessage(mainPanel);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3));
@@ -56,5 +48,17 @@ public class PicturesNotFoundErrorWindow {
         mainPanel.add(buttonPanel);
 
         errorWindow.setContentPane(mainPanel);
+    }
+
+    private void createMessage(JPanel mainPanel) {
+        JLabel message1 = new JLabel("Card pictures could not be found.");
+        JLabel message2 = new JLabel("The program will shut down.");
+        JLabel message3 = new JLabel("If the problem persists, ");
+        JLabel message4 = new JLabel("please use the text user interface.");
+        mainPanel.add(message1);
+        mainPanel.add(message2);
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(message3);
+        mainPanel.add(message4);
     }
 }

@@ -1,11 +1,13 @@
 package card;
 
+import java.io.Serializable;
+
 /**
  * Represents a card in a standard 52-card deck.
  * 
  * @author Sebastian Björkqvist
  */
-public class Card implements Comparable<Card> {
+public class Card implements Comparable<Card>, Serializable {
 
     private final Suit suit;   
     private final Rank rank;

@@ -7,8 +7,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -204,7 +202,6 @@ public class GUIMainWindow implements Runnable {
             try {
                 cardDrawer.draw(boardCards.get(i), xStart + xChange * i, yStart, 1, false);
             } catch (IOException ex) {
-                Logger.getLogger(GUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow((JDialog) container, this);
                 errorWindow.create();
             }
@@ -224,7 +221,6 @@ public class GUIMainWindow implements Runnable {
                 try {
                     cardDrawer.draw(cards.get(i), startX + xChange * i, startY + yChange * j, 1, false);
                 } catch (IOException ex) {
-                    Logger.getLogger(GUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow((JDialog) container, this);
                     errorWindow.create();
                 }

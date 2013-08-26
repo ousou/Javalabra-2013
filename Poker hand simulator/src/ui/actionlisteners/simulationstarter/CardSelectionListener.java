@@ -8,8 +8,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import ui.SimulationStarter;
 import ui.guitools.CardDrawer;
@@ -54,7 +52,6 @@ public class CardSelectionListener implements MouseListener {
                     xPlace, yPlace, greyCardLabel, cardLabel));            
             selectedCardLabels.add(greyCardLabel);
         } catch (IOException ex) {
-            Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
             PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow
                     (simulationStarter.getDialog(), simulationStarter.getGui());
             errorWindow.create();
