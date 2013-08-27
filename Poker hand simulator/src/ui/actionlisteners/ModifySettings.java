@@ -10,9 +10,11 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import ui.GUIMainWindow;
 import ui.Settings;
+import ui.guitools.NumberOfSimulationsInputValidator;
 import ui.guitools.WindowCreator;
 
 /**
@@ -38,13 +40,19 @@ public class ModifySettings implements ActionListener {
 
         Settings settings = gui.getSettings();
 
-        JComboBox numberOfThreadsList = createNumberOfThreadsSelection(mainPanel, settings);
-        JComboBox numberOfDigitsList = createNumberOfDigitsSelection(mainPanel, settings);
-        JCheckBox showMinorErrorMessages = createShowMinorErrorMessagesSelection(mainPanel, settings);
+        JComboBox numberOfThreadsList = 
+                createNumberOfThreadsSelection(mainPanel, settings);
+        JComboBox numberOfDigitsList = 
+                createNumberOfDigitsSelection(mainPanel, settings);
+        JTextField defaultNumberOfSimulations = 
+                createDefaultNumberOfSimulationsSelection(mainPanel, settings);
+        JCheckBox showMinorErrorMessages = 
+                createShowMinorErrorMessagesSelection(mainPanel, settings);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 4, 20, 20));
-        createOkButton(buttonPanel, numberOfThreadsList, numberOfDigitsList, showMinorErrorMessages, dialog, settings);
+        createOkButton(buttonPanel, numberOfThreadsList, numberOfDigitsList, 
+                defaultNumberOfSimulations, showMinorErrorMessages, dialog, settings);
         createCancelButton(buttonPanel, dialog);
 
         mainPanel.add(new JLabel(""));
@@ -52,13 +60,25 @@ public class ModifySettings implements ActionListener {
         dialog.setContentPane(mainPanel);
     }
 
+    /**
+     * Creates border and layout for the main panel.
+     * 
+     * @param mainPanel 
+     */
     private void setBorderAndLayout(JPanel mainPanel) {
         Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
 
         mainPanel.setBorder(padding);
-        mainPanel.setLayout(new GridLayout(4, 2, 20, 20));
+        mainPanel.setLayout(new GridLayout(5, 2, 20, 20));
     }
 
+    /**
+     * Creates the list for number of threads-selection.
+     * 
+     * @param mainPanel
+     * @param settings
+     * @return 
+     */
     private JComboBox createNumberOfThreadsSelection(JPanel mainPanel, Settings settings) {
         JLabel numberOfThreadsText = new JLabel("Number of threads to use");
         mainPanel.add(numberOfThreadsText);
@@ -74,6 +94,13 @@ public class ModifySettings implements ActionListener {
         return numberOfThreadsList;
     }
 
+    /**
+     * Creates the list for number of digits-selection.
+     * 
+     * @param mainPanel
+     * @param settings
+     * @return 
+     */
     private JComboBox createNumberOfDigitsSelection(JPanel mainPanel, Settings settings) {
         JLabel numberOfDigitsText = new JLabel("Number of digits in result");
         mainPanel.add(numberOfDigitsText);
@@ -89,10 +116,11 @@ public class ModifySettings implements ActionListener {
         return numberOfDigitsList;
     }
 
-    private void createOkButton(JPanel panel, JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, JCheckBox showMinorErrorMessages, JDialog dialog, Settings settings) {
+    private void createOkButton(JPanel panel, JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, JTextField defaultNumberOfSimulations, JCheckBox showMinorErrorMessages, JDialog dialog, Settings settings) {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new UpdateSettings(numberOfThreadsList,
-                numberOfDigitsList, showMinorErrorMessages, settings, dialog, gui));
+                numberOfDigitsList, defaultNumberOfSimulations, 
+                showMinorErrorMessages, settings, dialog, gui));
 
         panel.add(okButton);
     }
@@ -103,6 +131,13 @@ public class ModifySettings implements ActionListener {
         panel.add(cancelButton);
     }
 
+    /**
+     * Creates check box for show minor errors.
+     * 
+     * @param mainPanel
+     * @param settings
+     * @return 
+     */
     private JCheckBox createShowMinorErrorMessagesSelection(JPanel mainPanel,
             Settings settings) {
         JLabel showMinorErrorLabel = new JLabel("Show minor error messages");
@@ -115,18 +150,39 @@ public class ModifySettings implements ActionListener {
         return showMinorErrors;
     }
 
+    /**
+     * Creates default number of simulations-field.
+     * 
+     * @param mainPanel
+     * @param settings
+     * @return 
+     */
+    private JTextField createDefaultNumberOfSimulationsSelection(JPanel mainPanel, Settings settings) {
+        JLabel label = new JLabel("Default number of simulations");
+        JTextField textField = 
+                new JTextField(Integer.toString(settings.getDefaultNumberOfSimulations()));
+        mainPanel.add(label);
+        mainPanel.add(textField);
+        
+        return textField;
+    }
+
     private static class UpdateSettings implements ActionListener {
 
         private JComboBox numberOfThreadsList;
         private JComboBox numberOfDigitsList;
+        private JTextField defaultNumberOfSimulations;
         private JCheckBox showMinorErrorMessages;
         private Settings settings;
         private JDialog dialog;
         private GUIMainWindow gui;
 
-        public UpdateSettings(JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, JCheckBox showMinorErrorMessages, Settings settings, JDialog dialog, GUIMainWindow gui) {
+        public UpdateSettings(JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, 
+                JTextField defaultNumberOfSimulations, JCheckBox showMinorErrorMessages, 
+                Settings settings, JDialog dialog, GUIMainWindow gui) {
             this.numberOfThreadsList = numberOfThreadsList;
             this.numberOfDigitsList = numberOfDigitsList;
+            this.defaultNumberOfSimulations = defaultNumberOfSimulations;
             this.showMinorErrorMessages = showMinorErrorMessages;
             this.settings = settings;
             this.dialog = dialog;
@@ -135,6 +191,14 @@ public class ModifySettings implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            NumberOfSimulationsInputValidator validator = new NumberOfSimulationsInputValidator();
+            
+            Integer numberOfSims = parseInput(validator);
+            if (numberOfSims == null) {
+                validator.createErrorWindow(dialog);
+                return;
+            }
+            
             int numberOfThreads = numberOfThreadsList.getSelectedIndex() + 1;
             int numberOfDigits = numberOfDigitsList.getSelectedIndex() + 2;
             boolean showMinorErrors = showMinorErrorMessages.isSelected();
@@ -142,9 +206,15 @@ public class ModifySettings implements ActionListener {
             settings.setNumberOfThreads(numberOfThreads);
             settings.setNumberOfDigits(numberOfDigits);
             settings.setShowMinorErrorDialogs(showMinorErrors);
+            settings.setDefaultNumberOfSimulations(numberOfSims);
 
             dialog.dispose();
             gui.writeResultsToScreen();
+        }
+
+        private Integer parseInput(NumberOfSimulationsInputValidator validator) {
+            Integer numberOfSimulations = validator.parseInput(defaultNumberOfSimulations.getText());
+            return numberOfSimulations;
         }
     }
 }

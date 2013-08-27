@@ -11,11 +11,13 @@ public class Settings implements Serializable {
 
     private int numberOfThreads;
     private int numberOfDigits;
+    private int defaultNumberOfSimulations;
     private boolean showMinorErrorDialogs;
 
-    public Settings(int numberOfThreads, int numberOfDigits, boolean showMinorErrorDialogs) {
+    public Settings(int numberOfThreads, int numberOfDigits, int defaultNumberOfSimulations, boolean showMinorErrorDialogs) {
         this.numberOfThreads = numberOfThreads;
         this.numberOfDigits = numberOfDigits;
+        this.defaultNumberOfSimulations = defaultNumberOfSimulations;
         this.showMinorErrorDialogs = showMinorErrorDialogs;
     }
 
@@ -41,5 +43,13 @@ public class Settings implements Serializable {
 
     public void setShowMinorErrorDialogs(boolean showMinorErrorDialogs) {
         this.showMinorErrorDialogs = showMinorErrorDialogs;
+    }
+
+    public int getDefaultNumberOfSimulations() {
+        return defaultNumberOfSimulations;
+    }
+
+    public void setDefaultNumberOfSimulations(int defaultNumberOfSimulations) {
+        this.defaultNumberOfSimulations = defaultNumberOfSimulations;
     }
 }

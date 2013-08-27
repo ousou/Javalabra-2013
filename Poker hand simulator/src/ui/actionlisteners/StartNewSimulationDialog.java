@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import poker.enums.PokerGameType;
 import ui.GUIMainWindow;
+import ui.guitools.NumberOfSimulationsInputValidator;
 import ui.guitools.WindowCreator;
 
 /**
@@ -51,7 +52,8 @@ public class StartNewSimulationDialog implements ActionListener {
         JLabel numberOfSimulationsText = new JLabel("Number of simulations");
         mainPanel.add(numberOfSimulationsText);
 
-        JTextField numberOfSimulations = new JTextField("10000");
+        JTextField numberOfSimulations = new JTextField(
+                Integer.toString(gui.getSettings().getDefaultNumberOfSimulations()));
         mainPanel.add(numberOfSimulations);
 
         mainPanel.add(new JLabel(""));
@@ -63,6 +65,11 @@ public class StartNewSimulationDialog implements ActionListener {
         dialog.setContentPane(mainPanel);
     }
 
+    /**
+     * Sets the border and layout for the main panel.
+     * 
+     * @param mainPanel 
+     */
     private void setBorderAndLayout(JPanel mainPanel) {
         Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
 
@@ -70,6 +77,12 @@ public class StartNewSimulationDialog implements ActionListener {
         mainPanel.setLayout(new GridLayout(4, 2, 20, 20));
     }
     
+    /**
+     * Creates the game type list.
+     * 
+     * @param allGameTypesArray
+     * @return 
+     */
     private JComboBox createGameTypeList(PokerGameType[] allGameTypesArray) {
         String[] gameTypeNames = createAllGameTypesArray(allGameTypesArray);
 
@@ -77,6 +90,11 @@ public class StartNewSimulationDialog implements ActionListener {
         return gameTypeList;
     }
 
+    /**
+     * Creates the content array for the game type list.
+     * @param allGameTypesArray
+     * @return 
+     */
     private String[] createAllGameTypesArray(PokerGameType[] allGameTypesArray) {
         String[] gameTypeNames = new String[allGameTypesArray.length];
         for (int i = 0; i < gameTypeNames.length; i++) {
@@ -85,6 +103,13 @@ public class StartNewSimulationDialog implements ActionListener {
         return gameTypeNames;
     }
 
+    
+    /**
+     * Creates the number of hands list.
+     * 
+     * @param mainPanel
+     * @return 
+     */
     private JComboBox createNumberOfHandsList(JPanel mainPanel) {
         JLabel numberOfHandsText = new JLabel("Number of starting hands");
         mainPanel.add(numberOfHandsText);
@@ -127,18 +152,17 @@ public class StartNewSimulationDialog implements ActionListener {
                 createErrorWindow("Seven card stud simulations can have a maximum of seven starting hands.", 580, 140);
                 return;
             }
-            int selectedNumberOfSimulations;
-            try {
-                selectedNumberOfSimulations = Integer.parseInt(numberOfSimulations.getText());
-            } catch (NumberFormatException ex) {
-                createErrorWindow("Number of simulations has to be a positive integer.", 470, 140);
-                return;
+            NumberOfSimulationsInputValidator validator = new NumberOfSimulationsInputValidator();
+            
+            Integer selectedNumberOfSimulations = validator.parseInput(numberOfSimulations.getText());
+            
+            if (selectedNumberOfSimulations == null) {
+                validator.createErrorWindow(mainDialog);
+                return;                
             }
-            if (selectedNumberOfSimulations <= 0) {
-                createErrorWindow("Number of simulations has to be a positive integer.", 470, 140);
-                return;
-            }
-            SimulationStarter starter = new SimulationStarter(gui, gameType, selectedNumberOfHands, selectedNumberOfSimulations);
+            
+            SimulationStarter starter = new SimulationStarter(gui, gameType, 
+                    selectedNumberOfHands, selectedNumberOfSimulations);
             SwingUtilities.invokeLater(starter);
             mainDialog.dispose();
         }
