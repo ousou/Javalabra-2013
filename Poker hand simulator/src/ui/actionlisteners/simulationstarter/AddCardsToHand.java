@@ -1,5 +1,7 @@
 package ui.actionlisteners.simulationstarter;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import ui.SimulationStarter;
 
 /**
@@ -14,5 +16,12 @@ public class AddCardsToHand extends AddCardsToCollection {
         super(simulationStarter, xStart, yStart,
                 simulationStarter.getStartingHands()[handNumber], 
                 simulationStarter.getCardLabelsInStartingHands()[handNumber]);
+    }
+
+    @Override
+    protected void createErrorMessageForDialog(JPanel panel) {
+        panel.add(new JLabel("Couldn't add cards to hand."));        
+        panel.add(new JLabel("The hand can take a maximum of " + 
+                collection.getMaximumAmountOfCardsInCollection() +" cards."));              
     }
 }

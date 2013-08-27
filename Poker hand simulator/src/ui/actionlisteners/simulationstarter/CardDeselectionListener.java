@@ -5,10 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import ui.SimulationStarter;
 
@@ -40,6 +37,9 @@ public class CardDeselectionListener implements MouseListener {
         this.selectedCardLabels = simulationStarter.getSelectedCardLabels();
     }
 
+    /**
+     * Removes the grey card from the screen and adds the white card.
+     */
     public void removeGreyCard() {
         selectedCards.remove(card);
         selectedCardLabels.remove(greyCardLabel);

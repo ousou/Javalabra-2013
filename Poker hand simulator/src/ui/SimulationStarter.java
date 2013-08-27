@@ -62,6 +62,7 @@ public class SimulationStarter implements Runnable {
     private List<Card> selectedCards;
     // Contains labels of cards currently selected in the Available cards-section
     private List<Component> selectedCardLabels;
+    private boolean showMinorErrorDialogs;
 
     public SimulationStarter(GUIMainWindow gui, PokerGameType gameType,
             int numberOfStartingHands, int numberOfSimulations) {
@@ -78,6 +79,7 @@ public class SimulationStarter implements Runnable {
             board = new FiveCardBoard();
             cardLabelsInBoard = new ArrayList<Component>();
         }
+        showMinorErrorDialogs = gui.getSettings().isShowMinorErrorDialogs();
     }
 
     @Override
@@ -312,5 +314,9 @@ public class SimulationStarter implements Runnable {
 
     public int getNumberOfSimulations() {
         return numberOfSimulations;
+    }
+
+    public boolean isShowMinorErrorDialogs() {
+        return showMinorErrorDialogs;
     }
 }

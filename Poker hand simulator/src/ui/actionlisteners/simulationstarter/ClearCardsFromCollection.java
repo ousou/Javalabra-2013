@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 import poker.AbstractCardCollection;
-import poker.startinghands.AbstractStartingHand;
 import ui.SimulationStarter;
 
 /**
@@ -41,7 +40,10 @@ public abstract class ClearCardsFromCollection implements ActionListener {
             container.remove(c);
         }
         container.repaint();
-        
+        drawCardsToAvailableCardsSection(cards);        
+    }
+
+    private void drawCardsToAvailableCardsSection(List<Card> cards) {
         for (Card c: cards) {
             try {
                 simulationStarter.drawCard(c);

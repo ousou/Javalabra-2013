@@ -50,7 +50,7 @@ public class StartSimulation implements ActionListener {
         List<AbstractStartingHand> startingHands = Arrays.asList(simulationStarter.getStartingHands());
 
         if (areAllHandsEmpty(startingHands)) {
-            System.out.println("Need to choose something!");
+            openAllHandsAreEmptyErrorDialog();
             return;
         }
         int numberOfThreads = gui.getSettings().getNumberOfThreads();
@@ -125,5 +125,38 @@ public class StartSimulation implements ActionListener {
         }
 
         return true;
+    }
+
+    private void openAllHandsAreEmptyErrorDialog() {
+        WindowCreator creator = new WindowCreator(simulationStarter.getDialog());
+        JDialog errorDialog = creator.createNewJDialog("Error", 270, 140);
+
+        JPanel mainPanel = new JPanel();
+        Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+
+        mainPanel.setBorder(padding);
+        mainPanel.setLayout(new GridLayout(3, 1));
+
+        createErrorMessageForDialog(mainPanel);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3));
+        buttonPanel.add(new JLabel(""));        
+
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(new CloseWindow(errorDialog));
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(new JLabel(""));
+        mainPanel.add(buttonPanel);
+
+        errorDialog.setContentPane(mainPanel);        
+    }
+
+    private void createErrorMessageForDialog(JPanel mainPanel) {
+        JLabel message1 = new JLabel("All starting hands are empty!");
+        JLabel message2 = new JLabel("Add some cards before starting.");        
+        mainPanel.add(message1);
+        mainPanel.add(message2);
     }
 }

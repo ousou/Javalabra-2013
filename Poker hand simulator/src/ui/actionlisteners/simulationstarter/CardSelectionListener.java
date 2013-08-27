@@ -40,6 +40,10 @@ public class CardSelectionListener implements MouseListener {
         this.cardDrawer = simulationStarter.getCardDrawer();
     }
 
+    /**
+     * Draws the grey card to the screen and removes the white card.
+     */
+    
     public void addGreyCard() {
         selectedCards.add(card);
         Map<Card, Component> drawnCards = simulationStarter.getDrawnCards();

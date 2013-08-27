@@ -159,7 +159,7 @@ public class GUIMainWindow implements Runnable {
         }
         createSettingsNotLoadedWindow();
         
-        this.settings = new Settings(2, 4);
+        this.settings = new Settings(2, 4, true);
     }
 
     public Settings getSettings() {
