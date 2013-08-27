@@ -19,7 +19,7 @@ public class AddCardsToHand extends AddCardsToCollection {
     }
 
     @Override
-    protected void createErrorMessageForDialog(JPanel panel) {
+    protected void createErrorMessageForTooManyCardsDialog(JPanel panel) {
         panel.add(new JLabel("Couldn't add cards to hand."));        
         panel.add(new JLabel("The hand can take a maximum of " + 
                 collection.getMaximumAmountOfCardsInCollection() +" cards."));              

@@ -9,9 +9,13 @@ import java.io.Serializable;
  */
 public class Settings implements Serializable {
 
+    // Number of threads to use in simulation
     private int numberOfThreads;
+    // Number of significant digits that the displayed results have
     private int numberOfDigits;
+    // Default number of simulations to use
     private int defaultNumberOfSimulations;
+    // Show minor error dialogs or not
     private boolean showMinorErrorDialogs;
 
     public Settings(int numberOfThreads, int numberOfDigits, int defaultNumberOfSimulations, boolean showMinorErrorDialogs) {

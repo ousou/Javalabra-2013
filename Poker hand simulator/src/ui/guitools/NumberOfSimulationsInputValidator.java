@@ -44,7 +44,7 @@ public class NumberOfSimulationsInputValidator {
      * Creates error window telling the user that
      * the parsing failed.
      * 
-     * @param owner 
+     * @param owner Parent window
      */
     
     public void createErrorWindow(Window owner) {

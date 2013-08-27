@@ -18,7 +18,8 @@ import ui.guitools.NumberOfSimulationsInputValidator;
 import ui.guitools.WindowCreator;
 
 /**
- *
+ * Class that handles the Modify settings-window.
+ * 
  * @author Sebastian Björkqvist
  */
 public class ModifySettings implements ActionListener {
@@ -63,7 +64,7 @@ public class ModifySettings implements ActionListener {
     /**
      * Creates border and layout for the main panel.
      * 
-     * @param mainPanel 
+     * @param mainPanel The main panel. 
      */
     private void setBorderAndLayout(JPanel mainPanel) {
         Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
@@ -75,13 +76,13 @@ public class ModifySettings implements ActionListener {
     /**
      * Creates the list for number of threads-selection.
      * 
-     * @param mainPanel
-     * @param settings
+     * @param panel The panel to which the list is added.
+     * @param settings The Settings-object to be modified.
      * @return 
      */
-    private JComboBox createNumberOfThreadsSelection(JPanel mainPanel, Settings settings) {
+    private JComboBox createNumberOfThreadsSelection(JPanel panel, Settings settings) {
         JLabel numberOfThreadsText = new JLabel("Number of threads to use");
-        mainPanel.add(numberOfThreadsText);
+        panel.add(numberOfThreadsText);
 
         String[] numberOfThreads = new String[16];
         for (int i = 0; i < numberOfThreads.length; i++) {
@@ -89,21 +90,21 @@ public class ModifySettings implements ActionListener {
         }
         JComboBox numberOfThreadsList = new JComboBox(numberOfThreads);
         numberOfThreadsList.setSelectedIndex(settings.getNumberOfThreads() - 1);
-        mainPanel.add(numberOfThreadsList);
+        panel.add(numberOfThreadsList);
 
         return numberOfThreadsList;
     }
 
     /**
-     * Creates the list for number of digits-selection.
+     * Creates the list for number of digits-selection and adds it to the panel.
      * 
-     * @param mainPanel
-     * @param settings
+     * @param panel The panel to which the list is added.
+     * @param settings The settings-object to be modified.
      * @return 
      */
-    private JComboBox createNumberOfDigitsSelection(JPanel mainPanel, Settings settings) {
+    private JComboBox createNumberOfDigitsSelection(JPanel panel, Settings settings) {
         JLabel numberOfDigitsText = new JLabel("Number of digits in result");
-        mainPanel.add(numberOfDigitsText);
+        panel.add(numberOfDigitsText);
 
         String[] numberOfDigits = new String[5];
         for (int i = 0; i < numberOfDigits.length; i++) {
@@ -111,12 +112,25 @@ public class ModifySettings implements ActionListener {
         }
         JComboBox numberOfDigitsList = new JComboBox(numberOfDigits);
         numberOfDigitsList.setSelectedIndex(settings.getNumberOfDigits() - 2);
-        mainPanel.add(numberOfDigitsList);
+        panel.add(numberOfDigitsList);
 
         return numberOfDigitsList;
     }
 
-    private void createOkButton(JPanel panel, JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, JTextField defaultNumberOfSimulations, JCheckBox showMinorErrorMessages, JDialog dialog, Settings settings) {
+    /**
+     * Creates OK-button and adds it to the panel.
+     * 
+     * @param panel The panel to which the button is added
+     * @param numberOfThreadsList 
+     * @param numberOfDigitsList
+     * @param defaultNumberOfSimulations
+     * @param showMinorErrorMessages
+     * @param dialog The dialog that will be closed when the button is pressed
+     * @param settings The Settings-object to be modified
+     */
+    private void createOkButton(JPanel panel, JComboBox numberOfThreadsList, 
+            JComboBox numberOfDigitsList, JTextField defaultNumberOfSimulations, 
+            JCheckBox showMinorErrorMessages, JDialog dialog, Settings settings) {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new UpdateSettings(numberOfThreadsList,
                 numberOfDigitsList, defaultNumberOfSimulations, 
@@ -125,6 +139,12 @@ public class ModifySettings implements ActionListener {
         panel.add(okButton);
     }
 
+    /**
+     * Creates Cancel-button and adds it to panel.
+     * 
+     * @param panel The panel to which the button is added.
+     * @param dialog The dialog to close when this button is pressed.
+     */
     private void createCancelButton(JPanel panel, JDialog dialog) {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new CloseWindow(dialog));
@@ -191,7 +211,8 @@ public class ModifySettings implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            NumberOfSimulationsInputValidator validator = new NumberOfSimulationsInputValidator();
+            NumberOfSimulationsInputValidator validator = 
+                    new NumberOfSimulationsInputValidator();
             
             Integer numberOfSims = parseInput(validator);
             if (numberOfSims == null) {

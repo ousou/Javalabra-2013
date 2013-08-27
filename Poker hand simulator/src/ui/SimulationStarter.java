@@ -95,7 +95,6 @@ public class SimulationStarter implements Runnable {
         dialog = creator.createNewJDialog("Simulation starter", 700, 800);
 
         container = dialog.getLayeredPane();
-//        container.setLayout(null);
 
         try {
             drawAllCards();
@@ -201,6 +200,10 @@ public class SimulationStarter implements Runnable {
         }
     }
 
+    /**
+     * Creates available cards-label.
+     */
+    
     private void createAvailableCardsLabel() {
         JLabel cardsLabel = new JLabel("Available cards");
         Dimension size = cardsLabel.getPreferredSize();
@@ -289,6 +292,10 @@ public class SimulationStarter implements Runnable {
         return cardLabelsInStartingHands;
     }
 
+    /**
+     * Initializes the starting hand arrays.
+     */
+    
     private void initStartingHandArrays() {
         startingHands = new AbstractStartingHand[numberOfStartingHands];
         for (int i = 0; i < startingHands.length; i++) {

@@ -20,6 +20,15 @@ public class WindowCreator {
         this.owner = owner;
     }
     
+    /**
+     * Creates a new JDialog-object (a new window).
+     * 
+     * @param title Title of the window
+     * @param width Width of the window
+     * @param height Height of the window
+     * @return JDialog The created dialog
+     */
+    
     public JDialog createNewJDialog(String title, int width, int height) {
         JDialog dialog = new JDialog(owner);
 

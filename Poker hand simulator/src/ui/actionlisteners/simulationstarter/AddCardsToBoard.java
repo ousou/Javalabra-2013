@@ -1,20 +1,12 @@
 package ui.actionlisteners.simulationstarter;
 
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import ui.SimulationStarter;
-import ui.actionlisteners.CloseWindow;
-import ui.actionlisteners.ProgramShutdown;
-import ui.guitools.WindowCreator;
 
 /**
- *
+ * Handles adding cards to the board.
+ * 
  * @author Sebastian Björkqvist
  */
 public class AddCardsToBoard extends AddCardsToCollection {
@@ -24,7 +16,7 @@ public class AddCardsToBoard extends AddCardsToCollection {
     }
 
     @Override
-    protected void createErrorMessageForDialog(JPanel panel) {
+    protected void createErrorMessageForTooManyCardsDialog(JPanel panel) {
         panel.add(new JLabel("Couldn't add cards to board."));        
         panel.add(new JLabel("The board can take a maximum of " + 
                 collection.getMaximumAmountOfCardsInCollection() +" cards."));        

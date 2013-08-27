@@ -100,7 +100,7 @@ public abstract class AddCardsToCollection implements ActionListener {
         mainPanel.setBorder(padding);
         mainPanel.setLayout(new GridLayout(3, 1));
 
-        createErrorMessageForDialog(mainPanel);
+        createErrorMessageForTooManyCardsDialog(mainPanel);
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3));
@@ -117,7 +117,12 @@ public abstract class AddCardsToCollection implements ActionListener {
 
     }
 
-    protected abstract void createErrorMessageForDialog(JPanel panel);
+    /**
+     * Creates the error message for the too many cards in collection-dialog.
+     * 
+     * @param panel Panel to which the message is added.
+     */
+    protected abstract void createErrorMessageForTooManyCardsDialog(JPanel panel);
     
     /**
      * Creates an error dialog for a serious error.

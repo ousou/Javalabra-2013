@@ -12,7 +12,8 @@ import ui.actionlisteners.ProgramShutdown;
 import ui.guitools.WindowCreator;
 
 /**
- *
+ * Creates the Pictures not found error window.
+ * 
  * @author Sebastian Björkqvist
  */
 public class PicturesNotFoundErrorWindow {
@@ -25,6 +26,12 @@ public class PicturesNotFoundErrorWindow {
         this.gui = gui;
     }
 
+    /**
+     * Creates the error window.
+     * 
+     * If this method is called, the program will shut down, since
+     * the program can't be used if the pictures are not found.
+     */
     public void create() {
         WindowCreator creator = new WindowCreator(dialog);
         JDialog errorWindow = creator.createNewJDialog("Error", 300, 200);
@@ -50,15 +57,20 @@ public class PicturesNotFoundErrorWindow {
         errorWindow.setContentPane(mainPanel);
     }
 
-    private void createMessage(JPanel mainPanel) {
+    /**
+     * Creates the message for the error dialog.
+     * 
+     * @param panel The panel to which the error messages are added. 
+     */
+    private void createMessage(JPanel panel) {
         JLabel message1 = new JLabel("Card pictures could not be found.");
         JLabel message2 = new JLabel("The program will shut down.");
         JLabel message3 = new JLabel("If the problem persists, ");
         JLabel message4 = new JLabel("please use the text user interface.");
-        mainPanel.add(message1);
-        mainPanel.add(message2);
-        mainPanel.add(new JLabel(""));
-        mainPanel.add(message3);
-        mainPanel.add(message4);
+        panel.add(message1);
+        panel.add(message2);
+        panel.add(new JLabel(""));
+        panel.add(message3);
+        panel.add(message4);
     }
 }

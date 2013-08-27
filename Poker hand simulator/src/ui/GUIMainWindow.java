@@ -106,7 +106,7 @@ public class GUIMainWindow implements Runnable {
         menuBar.add(mainMenu);
 
         JMenuItem startSimulationButton = new JMenuItem("New simulation...",
-                KeyEvent.VK_S);
+                KeyEvent.VK_N);
         startSimulationButton.addActionListener(new StartNewSimulationDialog(this));
         mainMenu.add(startSimulationButton);
         mainMenu.addSeparator();
@@ -166,6 +166,10 @@ public class GUIMainWindow implements Runnable {
         return settings;
     }
 
+    /**
+     * Writes the results from the latest simulation to the screen.
+     */
+    
     public void writeResultsToScreen() {
         if (simulationResult == null) {
             return;
@@ -189,6 +193,12 @@ public class GUIMainWindow implements Runnable {
         container.repaint();
     }
 
+    /**
+     * Creates labels for hands.
+     * 
+     * @param numberOfHands 
+     */
+    
     private void createLabelsForHands(int numberOfHands) {
         int startX = 10;
         int startY = 100;
@@ -199,6 +209,14 @@ public class GUIMainWindow implements Runnable {
         }
     }
 
+    /**
+     * Creates and adds labels to the container.
+     * 
+     * @param message Text to write to screen
+     * @param x Place, x-coordinate
+     * @param y Place, y-coordinate
+     */
+    
     private void createLabel(String message, int x, int y) {
         Insets insets = container.getInsets();
         JLabel label = new JLabel(message);
@@ -208,6 +226,9 @@ public class GUIMainWindow implements Runnable {
         container.add(label);
     }
 
+    /**
+     * Creates Win, Loss, Tie and Equity-labels
+     */
     private void createWinLossTieEquityLabels() {
         createLabel("Win %", 300, 65);
         createLabel("Loss %", 370, 65);
@@ -215,6 +236,11 @@ public class GUIMainWindow implements Runnable {
         createLabel("Equity", 550, 65);
     }
 
+    /**
+     * Draws the board cards to the container.
+     * @param board 
+     */
+    
     private void drawBoardCards(FiveCardBoard board) {
         List<Card> boardCards = board.getCards();
         int xChange = 30;
@@ -231,6 +257,9 @@ public class GUIMainWindow implements Runnable {
         }
     }
 
+    /**
+     * Draws the cards from the starting hands to the screen.
+     */
     private void drawHandCards() {
         int startX = 100;
         int startY = 90;
@@ -251,6 +280,10 @@ public class GUIMainWindow implements Runnable {
         }
     }
 
+    /**
+     * Writes the win, loss and tie percentages and the equity for each hand
+     * to the screen.
+     */
     private void drawWinLossTieEquityResults() {
         int yChange = 45;
         int yStart = 100;
@@ -273,12 +306,22 @@ public class GUIMainWindow implements Runnable {
         this.startingHands = startingHands;
     }
     
+    /**
+     * Saves settings to disk.
+     * 
+     * @return true if saving succeeded, false otherwise.
+     */
     public boolean saveSettingsToDisk() {
         ObjectWriter writer = new ObjectWriter();
         
         return writer.writeObject(settings, savedSettingsPath);
     }
 
+    
+    /**
+     * Creates dialog that is shown if the settings couldn't
+     * be loaded at startup.
+     */
     private void createSettingsNotLoadedWindow() {
         WindowCreator creator = new WindowCreator(frame);
         JDialog dialog = creator.createNewJDialog("Settings not loaded", 325, 150);
@@ -312,6 +355,9 @@ public class GUIMainWindow implements Runnable {
         
     }
 
+    /**
+     * Creates and adds 'Start new simulation'-button to the container.
+     */
     private void createStartSimulationButton() {
         JButton startSimulation = new JButton("Start new simulation");
         

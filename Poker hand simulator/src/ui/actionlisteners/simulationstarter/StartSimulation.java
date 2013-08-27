@@ -46,6 +46,12 @@ public class StartSimulation implements ActionListener {
         start();
     }
 
+    /**
+     * Starts the simulation.
+     * 
+     * If all starting hands are empty, the method opens an error dialog and
+     * the simulation does not start.
+     */
     private void start() {
         List<AbstractStartingHand> startingHands = Arrays.asList(simulationStarter.getStartingHands());
 
@@ -61,7 +67,8 @@ public class StartSimulation implements ActionListener {
 
         if (simulationStarter.getGameType().isCommunityCardGame()
                 && board != null && board.getNumberOfCards() > 0) {
-            simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), numberOfSimulations);
+            simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), 
+                    numberOfSimulations);
         } else {
             simulator = new PokerHandSimulatorVersion2(startingHands, numberOfSimulations);
         }
@@ -82,6 +89,9 @@ public class StartSimulation implements ActionListener {
         }
     }
 
+    /**
+     * Creates the Simulation interrupted error window.
+     */
     private void createSimulationInterruptedErrorWindow() {
         WindowCreator windowCreator = new WindowCreator(simulationStarter.getDialog());
         JDialog errorWindow = windowCreator.createNewJDialog("Error", 400, 200);
@@ -106,17 +116,28 @@ public class StartSimulation implements ActionListener {
         errorWindow.setContentPane(mainPanel);
     }
 
-    private void writeErrorMessageToPanel(JPanel mainPanel) {
-        mainPanel.setLayout(new GridLayout(5, 1));
+    /**
+     * Writes the 'Simulation interrupted'-message to the given panel.
+     * 
+     * @param panel 
+     */
+    private void writeErrorMessageToPanel(JPanel panel) {
+        panel.setLayout(new GridLayout(5, 1));
         JLabel message1 = new JLabel("One of the simulation threads were interrupted.");
         JLabel message2 = new JLabel("Please try again.");
         JLabel message3 = new JLabel("If the problem persists, try using only one thread.");
-        mainPanel.add(message1);
-        mainPanel.add(message2);
-        mainPanel.add(new JLabel(""));
-        mainPanel.add(message3);
+        panel.add(message1);
+        panel.add(message2);
+        panel.add(new JLabel(""));
+        panel.add(message3);
     }
 
+    /**
+     * Checks if all hands are empty.
+     * 
+     * @param startingHands List of starting hands
+     * @return true if all hands are empty.
+     */
     private boolean areAllHandsEmpty(List<AbstractStartingHand> startingHands) {
         for (AbstractStartingHand hand : startingHands) {
             if (hand.getNumberOfCards() != 0) {
@@ -127,6 +148,9 @@ public class StartSimulation implements ActionListener {
         return true;
     }
 
+    /**
+     * Opens 'All hands are empty'-error dialog.
+     */
     private void openAllHandsAreEmptyErrorDialog() {
         WindowCreator creator = new WindowCreator(simulationStarter.getDialog());
         JDialog errorDialog = creator.createNewJDialog("Error", 270, 140);
@@ -153,10 +177,16 @@ public class StartSimulation implements ActionListener {
         errorDialog.setContentPane(mainPanel);        
     }
 
-    private void createErrorMessageForDialog(JPanel mainPanel) {
+    /**
+     * Writes 'All hands are empty'-message to given panel.
+     * 
+     * @param panel 
+     */
+    
+    private void createErrorMessageForDialog(JPanel panel) {
         JLabel message1 = new JLabel("All starting hands are empty!");
         JLabel message2 = new JLabel("Add some cards before starting.");        
-        mainPanel.add(message1);
-        mainPanel.add(message2);
+        panel.add(message1);
+        panel.add(message2);
     }
 }

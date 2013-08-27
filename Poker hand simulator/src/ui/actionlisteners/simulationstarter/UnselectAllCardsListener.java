@@ -10,7 +10,8 @@ import java.util.List;
 import ui.SimulationStarter;
 
 /**
- *
+ * ActionListener for Unselect all-button in class SimulationStarter.
+ * 
  * @author Sebastian Björkqvist
  */
 public class UnselectAllCardsListener implements ActionListener {
