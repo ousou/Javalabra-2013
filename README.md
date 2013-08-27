@@ -6,4 +6,6 @@ Project: Poker hand simulator
 The program can pit two or more poker hands against each other with given
 board cards, and simulate the result multiple times.
 
+The program supports Texas hold'em, Omaha hold'em, Five card draw, Five card stud and Seven card stud-simulations.
+
 See project [Wiki](https://github.com/ousou/Javalabra-2013/wiki) for more details.
