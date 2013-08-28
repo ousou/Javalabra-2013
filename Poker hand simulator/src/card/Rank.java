@@ -34,6 +34,9 @@ public enum Rank {
     KING("K", 13);
     
     private String shortName;
+    /**
+     * The value of the rank.
+     */
     private int value;        
     private static Map<String, Rank> stringToRankMap;
 

@@ -193,6 +193,9 @@ public class ModifySettings implements ActionListener {
         return textField;
     }
 
+    /**
+     * Handles settings updating.
+     */
     private static class UpdateSettings implements ActionListener {
 
         private JComboBox numberOfThreadsList;
@@ -203,6 +206,17 @@ public class ModifySettings implements ActionListener {
         private JDialog dialog;
         private GUIMainWindow gui;
 
+        /**
+         * Creates a new UpdateSettings.
+         * 
+         * @param numberOfThreadsList
+         * @param numberOfDigitsList
+         * @param defaultNumberOfSimulations
+         * @param showMinorErrorMessages
+         * @param settings The settings-object to update
+         * @param dialog The dialog to be closed when settings have been updated
+         * @param gui The gui main window
+         */
         public UpdateSettings(JComboBox numberOfThreadsList, JComboBox numberOfDigitsList, 
                 JTextField defaultNumberOfSimulations, JCheckBox showMinorErrorMessages, 
                 Settings settings, JDialog dialog, GUIMainWindow gui) {

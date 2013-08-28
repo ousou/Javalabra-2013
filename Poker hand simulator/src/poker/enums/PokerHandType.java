@@ -18,6 +18,9 @@ public enum PokerHandType {
     FOUR_OF_A_KIND(7),
     STRAIGHT_FLUSH(8);
     
+    /**
+     * The value of the hand type, higher means a better hand type.
+     */
     private int value;
 
     private PokerHandType(int value) {

@@ -16,6 +16,9 @@ public enum PokerGameType {
     FIVE_DRAW("Five card draw / stud", false);
     
     private String fullName;
+    /**
+     * Tells if the game is a community card game.
+     */
     private boolean communityCardGame;
 
     private PokerGameType(String fullName, boolean communityCardGame) {

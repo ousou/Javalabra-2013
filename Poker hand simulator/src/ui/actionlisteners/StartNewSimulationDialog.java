@@ -134,6 +134,9 @@ public class StartNewSimulationDialog implements ActionListener {
         return numberOfHandsList;
     }
 
+    /**
+     * Handles input validation.
+     */
     private static class InputValidation implements ActionListener {
 
         private GUIMainWindow gui;

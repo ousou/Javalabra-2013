@@ -184,6 +184,13 @@ public class SameHandTypeComparator implements Comparator<FiveCardPokerHand>, Se
         return 0;        
     }
     
+    /**
+     * Checks which of two paired hands are better.
+     *
+     * @param cards1
+     * @param cards2
+     * @return 
+     */
     private int checkBetterPairedHand(List<Card> cards1, List<Card> cards2) {
         cards1 = pairedHandSorter(cards1);
         cards2 = pairedHandSorter(cards2);        
@@ -253,12 +260,12 @@ public class SameHandTypeComparator implements Comparator<FiveCardPokerHand>, Se
     private static class CardListComparator implements Comparator<List<Card>>, Serializable {
 
         /**
-         * Sorts lists of cards.
+         * Sorts lists of cards for the pairedHandSorter-method.
          * 
          * This method assumes that the cards in each of the lists
          * are of the same rank.
          * 
-         * @see pairedHandSorter for details.
+         * @see SameHandTypeComparator.pairedHandSorter
          * 
          * @param o1
          * @param o2

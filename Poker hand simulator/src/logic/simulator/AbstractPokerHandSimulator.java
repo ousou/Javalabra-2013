@@ -345,6 +345,12 @@ public abstract class AbstractPokerHandSimulator {
         private SimulationResult simulationResult;
         private int timesToRun;
 
+        /**
+         * Creates a new HandSimulationThread.
+         * @param simulator The AbstractPokerHandSimulator-object
+         * @param simulationResult The simulationResult-object
+         * @param timesToRun How many times to run the simulation in this thread.
+         */
         public HandSimulationThread(AbstractPokerHandSimulator simulator, SimulationResult simulationResult, int timesToRun) {
             this.simulator = simulator;
             this.simulationResult = simulationResult;
