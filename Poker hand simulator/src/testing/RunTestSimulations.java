@@ -14,7 +14,10 @@ import poker.startinghands.OmahaHoldemStartingHand;
 import poker.startinghands.TexasHoldemStartingHand;
 
 /**
- *
+ * Method that runs some test simulations.
+ * 
+ * Used mainly to see how fast the simulations are.
+ * 
  * @author Sebastian Björkqvist
  */
 public class RunTestSimulations {

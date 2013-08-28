@@ -81,7 +81,7 @@ public class StartNewSimulationDialog implements ActionListener {
      * Creates the game type list.
      * 
      * @param allGameTypesArray
-     * @return 
+     * @return JComboBox The list created
      */
     private JComboBox createGameTypeList(PokerGameType[] allGameTypesArray) {
         String[] gameTypeNames = createAllGameTypesArray(allGameTypesArray);
@@ -93,7 +93,7 @@ public class StartNewSimulationDialog implements ActionListener {
     /**
      * Creates the content array for the game type list.
      * @param allGameTypesArray
-     * @return 
+     * @return String[] The created array
      */
     private String[] createAllGameTypesArray(PokerGameType[] allGameTypesArray) {
         String[] gameTypeNames = new String[allGameTypesArray.length];
@@ -108,7 +108,7 @@ public class StartNewSimulationDialog implements ActionListener {
      * Creates the number of hands list.
      * 
      * @param mainPanel
-     * @return 
+     * @return JComboBox The list created
      */
     private JComboBox createNumberOfHandsList(JPanel mainPanel) {
         JLabel numberOfHandsText = new JLabel("Number of starting hands");
