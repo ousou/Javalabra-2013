@@ -1,0 +1,15 @@
+card
+filehandling
+logic.math
+logic.parsing
+logic.simulator
+main
+poker
+poker.comparators
+poker.enums
+poker.startinghands
+testing
+ui
+ui.actionlisteners
+ui.actionlisteners.simulationstarter
+ui.guitools
