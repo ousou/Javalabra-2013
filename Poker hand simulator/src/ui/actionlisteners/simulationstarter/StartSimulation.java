@@ -36,6 +36,12 @@ public class StartSimulation implements ActionListener {
     private SimulationStarter simulationStarter;
     private GUIMainWindow gui;
 
+    /**
+     * Creates a new StartSimulation.
+     * 
+     * @param simulationStarter The simulation starter.
+     * @param gui The gui main window.
+     */
     public StartSimulation(SimulationStarter simulationStarter, GUIMainWindow gui) {
         this.simulationStarter = simulationStarter;
         this.gui = gui;
@@ -59,19 +65,14 @@ public class StartSimulation implements ActionListener {
             openAllHandsAreEmptyErrorDialog();
             return;
         }
+        
         int numberOfThreads = gui.getSettings().getNumberOfThreads();
         FiveCardBoard board = simulationStarter.getBoard();
         int numberOfSimulations = simulationStarter.getNumberOfSimulations();
 
         AbstractPokerHandSimulator simulator;
-
-        if (simulationStarter.getGameType().isCommunityCardGame()
-                && board != null && board.getNumberOfCards() > 0) {
-            simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), 
-                    numberOfSimulations);
-        } else {
-            simulator = new PokerHandSimulatorVersion2(startingHands, numberOfSimulations);
-        }
+        
+        simulator = createSimulatorObject(board, startingHands, numberOfSimulations);
 
         SimulationResult result = null;
 
@@ -83,9 +84,7 @@ public class StartSimulation implements ActionListener {
         }
 
         if (result != null) {
-            gui.setSimulationResult(result);
-            gui.setStartingHands(startingHands);
-            gui.writeResultsToScreen();
+            outputResults(result, startingHands);
         }
     }
 
@@ -188,5 +187,39 @@ public class StartSimulation implements ActionListener {
         JLabel message2 = new JLabel("Add some cards before starting.");        
         panel.add(message1);
         panel.add(message2);
+    }
+
+    /**
+     * Creates the AbstractPokerHandSimulator-object.
+     * 
+     * @param board
+     * @param startingHands
+     * @param numberOfSimulations
+     * @return Created AbstractPokerHandSimulator
+     */
+    private AbstractPokerHandSimulator createSimulatorObject(FiveCardBoard board, 
+            List<AbstractStartingHand> startingHands, int numberOfSimulations) {
+        AbstractPokerHandSimulator simulator;
+        if (simulationStarter.getGameType().isCommunityCardGame()
+                && board != null && board.getNumberOfCards() > 0) {
+            simulator = new PokerHandSimulatorVersion2(startingHands, board.getCards(), 
+                    numberOfSimulations);
+        } else {
+            simulator = new PokerHandSimulatorVersion2(startingHands, numberOfSimulations);
+        }
+        return simulator;
+    }
+
+    /**
+     * Writes the results to the screen.
+     * 
+     * @param result
+     * @param startingHands 
+     */
+    private void outputResults(SimulationResult result, 
+            List<AbstractStartingHand> startingHands) {
+        gui.setSimulationResult(result);
+        gui.setStartingHands(startingHands);
+        gui.writeResultsToScreen();
     }
 }

@@ -21,6 +21,12 @@ public class PicturesNotFoundErrorWindow {
     private JDialog dialog;
     private GUIMainWindow gui;
 
+    /**
+     * Creates a new PicturesNotFoundErrorWindow.
+     * 
+     * @param dialog The owner dialog
+     * @param gui The gui
+     */
     public PicturesNotFoundErrorWindow(JDialog dialog, GUIMainWindow gui) {
         this.dialog = dialog;
         this.gui = gui;

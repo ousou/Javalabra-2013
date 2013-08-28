@@ -11,6 +11,15 @@ import ui.SimulationStarter;
  */
 public class AddCardsToHand extends AddCardsToCollection {
 
+    /**
+     * Creates a new AddCardsToHand.
+     * 
+     * @param simulationStarter The simulation starter
+     * @param handNumber Number of hand in the Starting hands-array of the
+     * SimulationStarter-object.
+     * @param xStart The starting x-coordinate for the images
+     * @param yStart The starting y-coordinate for the images
+     */
     public AddCardsToHand(SimulationStarter simulationStarter, int handNumber, 
             int xStart, int yStart) {
         super(simulationStarter, xStart, yStart,

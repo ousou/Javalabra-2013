@@ -11,6 +11,13 @@ import ui.SimulationStarter;
  */
 public class AddCardsToBoard extends AddCardsToCollection {
 
+    /**
+     * Creates a new AddCardsToBoard.
+     * 
+     * @param simulationStarter The simulation starter.
+     * @param xStart Starting x-coordinate for the card labels.
+     * @param yStart Starting y-coordinate for the card labels. 
+     */
     public AddCardsToBoard(SimulationStarter simulationStarter, int xStart, int yStart) {
         super(simulationStarter, xStart, yStart, simulationStarter.getBoard(), simulationStarter.getCardLabelsInBoard());
     }

@@ -44,23 +44,37 @@ public class SimulationStarter implements Runnable {
     private Container container;
     private JDialog dialog;
     private CardDrawer cardDrawer;
-    // Keeps track of where the cards are drawn in the Available cards-section
+    /**
+     * Keeps track of where the cards are drawn in the Available cards-section.
+     */
     private Map<Card, Component> drawnCards;
     private PokerGameType gameType;
     private int numberOfStartingHands;
     private int numberOfSimulations;
-    // Array containing all starting hands
+    /**
+     * Array containing all starting hands.
+     */
     private AbstractStartingHand[] startingHands;
-    // Array containing the labels of the cards added to starting hands
+    /**
+     * Array containing the labels of the cards added to starting hands.
+     */
     private List<Component>[] cardLabelsInStartingHands;
-    // Keeps track of where to draw a card when it's removed from a hand
+    /**
+     * Keeps track of where to draw a card when it's removed from a hand.
+     */
     private Map<Card, Integer> indexForCard;
     private FiveCardBoard board;
-    // List containing labels of the cards added to the board
+    /**
+     * List containing labels of the cards added to the board.
+     */
     private List<Component> cardLabelsInBoard;
-    // Contains cards currently selected in the Available cards-section
+    /**
+     * Contains cards currently selected in the Available cards-section.
+     */
     private List<Card> selectedCards;
-    // Contains labels of cards currently selected in the Available cards-section
+    /**
+     * Contains labels of cards currently selected in the Available cards-section.
+     */
     private List<Component> selectedCardLabels;
     private boolean showMinorErrorDialogs;
 

@@ -26,12 +26,23 @@ public class StartNewSimulationDialog implements ActionListener {
 
     private GUIMainWindow gui;
 
+    /**
+     * Creates a new StartNewSimulationDialog.
+     * @param gui The gui main window.
+     */
     public StartNewSimulationDialog(GUIMainWindow gui) {
         this.gui = gui;
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        openDialog();
+    }
+    
+    /**
+     * Opens the Start new simulation-dialog.
+     */
+    private void openDialog() {
         WindowCreator creator = new WindowCreator(gui.getFrame());
         JDialog dialog = creator.createNewJDialog("Select parameters", 450, 250);
         dialog.setResizable(false);
@@ -64,6 +75,7 @@ public class StartNewSimulationDialog implements ActionListener {
 
         dialog.setContentPane(mainPanel);
     }
+    
 
     /**
      * Sets the border and layout for the main panel.

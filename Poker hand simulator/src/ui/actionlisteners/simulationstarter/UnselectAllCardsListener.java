@@ -21,6 +21,14 @@ public class UnselectAllCardsListener implements ActionListener {
     private List<Component> selectedCardLabels;
     private SimulationStarter simulationStarter;
 
+    /**
+     * Creates a new UnselectAllCardsListener.
+     * 
+     * @param container The container where the cards are.
+     * @param selectedCards The selected cards.
+     * @param selectedCardLabels The labels for the selected cards.
+     * @param simulationStarter The simulation starter.
+     */
     public UnselectAllCardsListener(Container container, List<Card> selectedCards,
             List<Component> selectedCardLabels, SimulationStarter simulationStarter) {
         this.container = container;
@@ -34,6 +42,16 @@ public class UnselectAllCardsListener implements ActionListener {
         for (Component c : selectedCardLabels) {
             container.remove(c);
         }
+        drawWhiteCards();
+
+        container.repaint();
+        selectedCards.clear();
+    }
+
+    /**
+     * Draws the white cards to the Available cards-section.
+     */
+    private void drawWhiteCards() {
         for (Card c : selectedCards) {
             try {
                 simulationStarter.drawCard(c);
@@ -42,8 +60,5 @@ public class UnselectAllCardsListener implements ActionListener {
                 errorWindow.create();
             }
         }
-
-        container.repaint();
-        selectedCards.clear();
     }
 }

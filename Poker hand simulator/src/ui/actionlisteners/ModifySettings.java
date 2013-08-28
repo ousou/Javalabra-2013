@@ -26,6 +26,12 @@ public class ModifySettings implements ActionListener {
 
     private GUIMainWindow gui;
 
+    /**
+     * Creates a new ModifySettings.
+     * 
+     * @param gui The gui main window
+     */
+     
     public ModifySettings(GUIMainWindow gui) {
         this.gui = gui;
     }

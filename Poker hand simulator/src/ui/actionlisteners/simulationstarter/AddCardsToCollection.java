@@ -36,6 +36,15 @@ public abstract class AddCardsToCollection implements ActionListener {
     protected AbstractCardCollection collection;
     protected List<Component> cardLabels;
 
+    /**
+     * Creates a new AddCardsToCollection.
+     * 
+     * @param simulationStarter The simulation starter
+     * @param xStart The starting x-coordinate for the images
+     * @param yStart The starting y-coordinate for the images
+     * @param collection The collection to which cards are added
+     * @param cardLabels List of added labels
+     */
     public AddCardsToCollection(SimulationStarter simulationStarter, int xStart, int yStart, AbstractCardCollection collection, List<Component> cardLabels) {
         this.simulationStarter = simulationStarter;
         this.xStart = xStart;

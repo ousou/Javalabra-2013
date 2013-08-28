@@ -9,6 +9,11 @@ import ui.SimulationStarter;
  */
 public class ClearCardsFromBoard extends ClearCardsFromCollection {
 
+    /**
+     * Creates a new ClearCardsFromBoard.
+     * 
+     * @param simulationStarter The simulation starter.
+     */
     public ClearCardsFromBoard(SimulationStarter simulationStarter) {
         super(simulationStarter, simulationStarter.getBoard(), 
                 simulationStarter.getCardLabelsInBoard());

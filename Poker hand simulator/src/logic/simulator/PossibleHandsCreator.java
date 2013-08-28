@@ -7,7 +7,6 @@ import logic.math.Combination;
 import poker.startinghands.AbstractStartingHand;
 import poker.FiveCardBoard;
 import poker.FiveCardPokerHand;
-import poker.enums.PokerGameType;
 
 /**
  * Creates all possible hands by combining cards from the starting hand with the

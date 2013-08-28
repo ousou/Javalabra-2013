@@ -27,8 +27,15 @@ import poker.enums.PokerGameType;
  */
 public abstract class AbstractPokerHandSimulator {
 
+    /**
+     * List containing all starting hands.
+     */
     protected final List<AbstractStartingHand> startingHands;
     protected FiveCardBoard board;
+    /**
+     * List containing cards that are removed from the deck
+     * when each simulation starts.
+     */
     protected List<Card> removedCards;
     protected int numberOfSimulations;
     protected PokerGameType gameType;

@@ -23,6 +23,13 @@ public abstract class ClearCardsFromCollection implements ActionListener {
     protected AbstractCardCollection collection;
     protected List<Component> cardLabels;    
 
+    /**
+     * Creates a new ClearCardsFromCollection.
+     * 
+     * @param simulationStarter The simulation starter-class.
+     * @param collection The collection to clear cards from.
+     * @param cardLabels The list of labels of the cleared cards.
+     */
     public ClearCardsFromCollection(SimulationStarter simulationStarter, AbstractCardCollection collection, List<Component> cardLabels) {
         this.simulationStarter = simulationStarter;
         this.collection = collection;

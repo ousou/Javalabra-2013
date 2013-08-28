@@ -13,7 +13,10 @@ import ui.SimulationStarter;
 import ui.guitools.CardDrawer;
 
 /**
- *
+ * Listener for unselected cards in the Available cards-section in SimulationStarter.
+ * 
+ * Handles selecting of cards, i.e. it removes the white card and draws the grey card.
+ * 
  * @author Sebastian Björkqvist
  */
 public class CardSelectionListener implements MouseListener {
@@ -28,6 +31,15 @@ public class CardSelectionListener implements MouseListener {
     private CardDrawer cardDrawer;
     private SimulationStarter simulationStarter;
 
+    /**
+     * Creates a new CardSelectionListener.
+     * 
+     * @param simulationStarter The simulation starter.
+     * @param card The card to which the listener is added.
+     * @param xPlace The x-coordinate for the card label.
+     * @param yPlace The y-coordinate for the card label.
+     * @param cardLabel The card label corresponding to the card.
+     */
     public CardSelectionListener(SimulationStarter simulationStarter, Card card, int xPlace, int yPlace, JLabel cardLabel) {
         this.simulationStarter = simulationStarter;        
         this.container = simulationStarter.getContainer();
@@ -53,7 +65,7 @@ public class CardSelectionListener implements MouseListener {
             JLabel greyCardLabel = cardDrawer.draw(card, xPlace, yPlace, 2, true);
             greyCardLabel.addMouseListener(
                     new CardDeselectionListener(simulationStarter, card, 
-                    xPlace, yPlace, greyCardLabel, cardLabel));            
+                    greyCardLabel, cardLabel));            
             selectedCardLabels.add(greyCardLabel);
         } catch (IOException ex) {
             PicturesNotFoundErrorWindow errorWindow = new PicturesNotFoundErrorWindow

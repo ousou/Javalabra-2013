@@ -13,6 +13,11 @@ public class CloseWindow implements ActionListener {
 
     private Window window;
 
+    /**
+     * Creates a new CloseWindow.
+     * 
+     * @param window The window to be closed.
+     */
     public CloseWindow(Window window) {
         this.window = window;
     }

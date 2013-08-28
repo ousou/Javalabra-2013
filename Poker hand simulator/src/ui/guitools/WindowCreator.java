@@ -13,6 +13,12 @@ public class WindowCreator {
 
     private Window owner;
 
+    /**
+     * Creates a new WindowCreator-object.
+     * 
+     * @param owner Owner of the window(s) to be created.
+     * @throws IllegalArgumentException if owner is null.
+     */
     public WindowCreator(Window owner) {
         if (owner == null) {
             throw new IllegalArgumentException("The owner window can't be null!");

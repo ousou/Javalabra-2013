@@ -47,9 +47,14 @@ public class GUIMainWindow implements Runnable {
     private CardDrawer cardDrawer;
     private SimulationResult simulationResult;
     private Settings settings;
+    /**
+     * List containing all starting hands used in the latest simulation.
+     */
     private List<AbstractStartingHand> startingHands;
+    /**
+     * Path where the settings are saved.
+     */
     private String savedSettingsPath = "PHSsettings/settings.dat";
-    private String defaultSettingsPath;
 
     @Override
     public void run() {

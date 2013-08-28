@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
+ * A comparator for cards where aces have rank 14.
+ * 
+ * This means when a list of cards is sorted with this comparator,
+ * aces will be last on the list.
  * 
  * @author Sebastian Björkqvist
  */

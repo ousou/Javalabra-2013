@@ -25,8 +25,10 @@ public class SimulationResult implements Serializable {
     private int totalNumberOfSimulationsToPerform;
     private int performedSimulations;
     private PokerGameType gameType;
-    /* The map resultForHand contains the result for each of the
-     * starting hands. The value is an integer array with the same
+    /** Map containing the results for each of the
+     * starting hands. 
+     * 
+     * The value is an integer array with the same
      * size as the set of the starting hands. 
      * 
      * The number that is in index 0 of the array are the number of times 
