@@ -24,6 +24,10 @@ The program supports Texas hold'em, Omaha hold'em, Five card draw, Five card stu
 
 * [Time usage](https://github.com/ousou/Javalabra-2013/wiki/Time-usage)
 
+### To do
 
+* [Issues](https://github.com/ousou/Javalabra-2013/wiki/Issues)
+
+* [Things to improve](https://github.com/ousou/Javalabra-2013/wiki/Things-to-improve)
 
 
