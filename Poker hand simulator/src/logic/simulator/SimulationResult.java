@@ -334,4 +334,9 @@ public class SimulationResult implements Serializable {
     public PokerGameType getGameType() {
         return gameType;
     }
+
+    public int getTotalNumberOfSimulationsToPerform() {
+        return totalNumberOfSimulationsToPerform;
+    }
+        
 }

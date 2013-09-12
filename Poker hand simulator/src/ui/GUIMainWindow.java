@@ -26,6 +26,7 @@ import poker.FiveCardBoard;
 import poker.enums.PokerGameType;
 import poker.startinghands.AbstractStartingHand;
 import ui.actionlisteners.CloseWindow;
+import ui.actionlisteners.ModifyLastSimulation;
 import ui.actionlisteners.ModifySettings;
 import ui.guitools.CardDrawer;
 import ui.actionlisteners.ProgramShutdown;
@@ -181,7 +182,8 @@ public class GUIMainWindow implements Runnable {
         }
         container.removeAll();
         createLabel("Results", 150, 0);
-        createStartSimulationButton();        
+        createStartSimulationButton();   
+        createModifyLastSimulationButton();
         PokerGameType gameType = simulationResult.getGameType();
 
         if (gameType.isCommunityCardGame()) {
@@ -372,5 +374,20 @@ public class GUIMainWindow implements Runnable {
                 size.width, size.height);
         startSimulation.addActionListener(new StartNewSimulationDialog(this));
         container.add(startSimulation);
+    }
+    
+    /**
+     * Creates and adds 'Modify last simulation'-button to the container.
+     */
+    private void createModifyLastSimulationButton() {
+        JButton modifyLastSimulation = new JButton("Modify last simulation");
+        
+        Insets insets = container.getInsets();
+        Dimension size = modifyLastSimulation.getPreferredSize();
+        modifyLastSimulation.setBounds(insets.left + 300, insets.top + 20,
+                size.width, size.height);
+        modifyLastSimulation.addActionListener(new ModifyLastSimulation(this, startingHands, 
+                simulationResult));
+        container.add(modifyLastSimulation);        
     }
 }

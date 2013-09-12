@@ -73,10 +73,12 @@ public class SimulationStarter implements Runnable {
      */
     private List<Card> selectedCards;
     /**
-     * Contains labels of cards currently selected in the Available cards-section.
+     * Contains labels of cards currently selected in the Available
+     * cards-section.
      */
     private List<Component> selectedCardLabels;
     private boolean showMinorErrorDialogs;
+    private boolean isRerun;
 
     public SimulationStarter(GUIMainWindow gui, PokerGameType gameType,
             int numberOfStartingHands, int numberOfSimulations) {
@@ -84,16 +86,47 @@ public class SimulationStarter implements Runnable {
         this.gameType = gameType;
         this.numberOfStartingHands = numberOfStartingHands;
         this.numberOfSimulations = numberOfSimulations;
-        drawnCards = new HashMap<Card, Component>();
+        this.drawnCards = new HashMap<Card, Component>();
         initStartingHandArrays();
-        selectedCards = new ArrayList<Card>();
-        selectedCardLabels = new ArrayList<Component>();
-        indexForCard = new HashMap<Card, Integer>();
+        this.selectedCards = new ArrayList<Card>();
+        this.selectedCardLabels = new ArrayList<Component>();
+        this.indexForCard = new HashMap<Card, Integer>();
         if (gameType.isCommunityCardGame()) {
-            board = new FiveCardBoard();
-            cardLabelsInBoard = new ArrayList<Component>();
+            this.board = new FiveCardBoard();
+            this.cardLabelsInBoard = new ArrayList<Component>();
         }
-        showMinorErrorDialogs = gui.getSettings().isShowMinorErrorDialogs();
+        this.showMinorErrorDialogs = gui.getSettings().isShowMinorErrorDialogs();
+    }
+
+    public SimulationStarter(GUIMainWindow gui, PokerGameType gameType, int numberOfStartingHands,
+            int numberOfSimulations, List<AbstractStartingHand> startingHands, FiveCardBoard board) {
+        this.gui = gui;
+        this.gameType = gameType;
+        this.numberOfStartingHands = numberOfStartingHands;
+        this.numberOfSimulations = numberOfSimulations;
+        this.drawnCards = new HashMap<Card, Component>();
+        this.selectedCards = new ArrayList<Card>();
+        this.selectedCardLabels = new ArrayList<Component>();
+        this.indexForCard = new HashMap<Card, Integer>();
+
+        this.showMinorErrorDialogs = gui.getSettings().isShowMinorErrorDialogs();
+
+        this.startingHands = new AbstractStartingHand[startingHands.size()];
+        for (int i = 0; i < this.startingHands.length; i++) {
+            this.startingHands[i] = startingHands.get(i);
+        }
+
+        cardLabelsInStartingHands = new List[numberOfStartingHands];
+        for (int i = 0; i < cardLabelsInStartingHands.length; i++) {
+            cardLabelsInStartingHands[i] = new ArrayList<Component>();
+        }
+
+        if (gameType.isCommunityCardGame()) {
+            this.board = board;
+            this.cardLabelsInBoard = new ArrayList<Component>();
+        }
+
+        this.isRerun = true;
     }
 
     @Override
@@ -125,6 +158,13 @@ public class SimulationStarter implements Runnable {
 
         if (gameType.isCommunityCardGame()) {
             createGraphicsForBoard();
+        }
+
+        if (isRerun) {
+            drawInitialCardsToStartingHands();
+            if (gameType.isCommunityCardGame()) {
+                drawInitialCardsToBoard();
+            }
         }
     }
 
@@ -166,9 +206,9 @@ public class SimulationStarter implements Runnable {
         clear.setBounds(520 + insets.left,
                 235, size.width, size.height);
         clear.addActionListener(new ClearCardsFromBoard(this));
-        
+
         container.add(addCards);
-        container.add(clear);        
+        container.add(clear);
     }
 
     /**
@@ -217,7 +257,6 @@ public class SimulationStarter implements Runnable {
     /**
      * Creates available cards-label.
      */
-    
     private void createAvailableCardsLabel() {
         JLabel cardsLabel = new JLabel("Available cards");
         Dimension size = cardsLabel.getPreferredSize();
@@ -309,7 +348,6 @@ public class SimulationStarter implements Runnable {
     /**
      * Initializes the starting hand arrays.
      */
-    
     private void initStartingHandArrays() {
         startingHands = new AbstractStartingHand[numberOfStartingHands];
         for (int i = 0; i < startingHands.length; i++) {
@@ -339,5 +377,55 @@ public class SimulationStarter implements Runnable {
 
     public boolean isShowMinorErrorDialogs() {
         return showMinorErrorDialogs;
+    }
+
+    private void drawInitialCardsToStartingHands() {
+        int xDistance = 150;
+        int yDistance = 140;
+        int handsOnRow = 4;
+        switch (gameType) {
+            case SEVEN_STUD:
+                xDistance = 220;
+                handsOnRow = 3;
+                break;
+            case FIVE_DRAW:
+                xDistance = 160;
+                break;
+        }
+
+        Insets insets = container.getInsets();
+        for (int i = 0; i < numberOfStartingHands; i++) {
+            AbstractStartingHand hand = startingHands[i];
+            List<Card> cards = hand.getCards();
+
+            for (int j = 0; j < cards.size(); j++) {
+                JLabel cardLabel;
+                try {
+                    cardLabel = cardDrawer.draw(cards.get(j), 30 + xDistance * (i % handsOnRow)
+                            + insets.left + 30 * j, 350 + yDistance * (i / handsOnRow), 0, false);
+                    cardLabelsInStartingHands[i].add(cardLabel);
+                } catch (IOException ex) {
+                    Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                container.remove(drawnCards.get(cards.get(j)));
+            }
+        }
+    }
+
+    private void drawInitialCardsToBoard() {
+        List<Card> cards = board.getCards();
+        Insets insets = container.getInsets();
+        
+        for (int j = 0; j < cards.size(); j++) {
+            JLabel cardLabel;
+            try {
+                cardLabel = cardDrawer.draw(cards.get(j), 480
+                        + insets.left + 30 * j, 185, 0, false);
+                cardLabelsInBoard.add(cardLabel);
+            } catch (IOException ex) {
+                Logger.getLogger(SimulationStarter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            container.remove(drawnCards.get(cards.get(j)));
+        }
     }
 }
